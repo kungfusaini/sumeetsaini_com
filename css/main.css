@@ -1,0 +1,39 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, sans-serif;
+  background: #fff;
+  color: #111;
+  line-height: 1.4;
+}
+
+#name {
+  position: fixed;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(2rem, 5vw + 1rem, 4rem);
+  white-space: nowrap;
+  transition: all 0.6s cubic-bezier(.4,0,.2,1);
+}
+#name.top {
+  left: 2rem; top: 1.2rem;
+  transform: translate(0, 0);
+  font-size: clamp(1.2rem, 2vw + 0.5rem, 2rem);
+}
+
+
+.hidden { display: none; }
+main {
+  padding: 8rem 2rem 2rem;   /* leave room for fixed name */
+  max-width: 70rem;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  #name.top { left: 1rem; top: 1rem; }
+  main { padding-top: 6rem; }
+}
+
+.cursor { animation: blink 1s steps(2,start) infinite; }
+@keyframes blink { to { visibility: hidden; } }
+
+.cursor.hide { opacity: 0; animation: none; }
