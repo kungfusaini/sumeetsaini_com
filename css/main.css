@@ -1,7 +1,22 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
+@font-face {
+  font-family: 'ProFontIIx';
+  src: url('../fonts/ProFontIIxNerdFontMono-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+    --cream: #fbf1c7; 
+	--orange: #d65d03;
+  --font-mono: 'ProFontIIx', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+}
+
 body {
-  font-family: system-ui, sans-serif;
-  background: #fff;
+  font-family: var(--font-mono);
+  background: var(--cream);
   color: #111;
   line-height: 1.4;
 }
@@ -13,6 +28,7 @@ body {
   font-size: clamp(2rem, 5vw + 1rem, 4rem);
   white-space: nowrap;
   transition: all 0.6s cubic-bezier(.4,0,.2,1);
+  color: var(--orange);
 }
 #name.top {
   left: 2rem; top: 1.2rem;
