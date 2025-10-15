@@ -43,26 +43,23 @@ const startIdleTimer = () => {
 function createTextSprite(text) {
 	const canvas = document.createElement("canvas");
 	const context = canvas.getContext("2d");
-	canvas.width = 256;
-	canvas.height = 128;
+	canvas.width = 1536; // Ultra high resolution
+	canvas.height = 768;
 
-	context.font = "Bold 24px Arial";
+	context.font = 'Bold 128px "ProFontIIx", "SF Mono", Monaco, monospace';
 	context.fillStyle = "white";
-	context.strokeStyle = "black";
-	context.lineWidth = 4;
 	context.textAlign = "center";
 	context.textBaseline = "middle";
 
-	// Draw text with outline
+	// Draw text
 	const x = canvas.width / 2;
 	const y = canvas.height / 2;
-	context.strokeText(text, x, y);
 	context.fillText(text, x, y);
 
 	const texture = new THREE.CanvasTexture(canvas);
 	const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
 	const sprite = new THREE.Sprite(spriteMaterial);
-	sprite.scale.set(2, 1, 1); // Adjust size as needed
+	sprite.scale.set(3, 1.5, 1); // Even larger scale
 
 	return sprite;
 }
