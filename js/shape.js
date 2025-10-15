@@ -5,10 +5,10 @@ const PYRAMID_EDGE = 3;
 const CAMERA_FOV_BASE = 50;
 const CAMERA_Z_BASE = 8;
 const CAMERA_Y_BASE = 2;
-const BASE_ROT_SPEED = { x: 0.002, y: 0.003 };
+const BASE_ROT_SPEED = { x: 0.003, y: 0.002 };
 const DRAG_SENSITIVITY = 0.008;
-const VELOCITY_DAMPING = 0.95;
-const IDLE_TIMEOUT_MS = 2000;
+const VELOCITY_DAMPING = 0.96;
+const IDLE_TIMEOUT_MS = 6000;
 const FACES = [
 	{
 		text: "Projects",
@@ -60,6 +60,7 @@ let dragging = false;
 let lastPointer = { x: 0, y: 0 };
 let idleTimer = null;
 let hasInteracted = false;
+let autoRotateMultiplier = 0;
 /* ---------- helpers ------------------------------------------------- */
 const $ = (sel) => document.querySelector(sel);
 const clearIdleTimer = () => {
@@ -254,16 +255,18 @@ function onPointerDown(x, y) {
 	dragging = true;
 	lastPointer = { x, y };
 	clearIdleTimer();
+	autoRotateMultiplier = 0;
 }
 
 function onPointerMove(x, y) {
 	if (!dragging) return;
-	userVel.y = (x - lastPointer.x) * DRAG_SENSITIVITY;
+	userVel.y = -(x - lastPointer.x) * DRAG_SENSITIVITY;
 	userVel.x = (y - lastPointer.y) * DRAG_SENSITIVITY;
 	pyramid.rotation.y += userVel.y;
 	pyramid.rotation.x += userVel.x;
 	lastPointer = { x, y };
 	hasInteracted = true;
+	autoRotateMultiplier = 0;
 }
 
 function onPointerUp() {
@@ -305,8 +308,9 @@ function onResize(container) {
 function animate() {
 	requestAnimationFrame(animate);
 	if (!hasInteracted) {
-		pyramid.rotation.x += baseSpeed.x;
-		pyramid.rotation.y += baseSpeed.y;
+		autoRotateMultiplier = Math.min(autoRotateMultiplier + 0.01, 1);
+		pyramid.rotation.x += baseSpeed.x * autoRotateMultiplier;
+		pyramid.rotation.y += baseSpeed.y * autoRotateMultiplier;
 	} else if (!dragging) {
 		pyramid.rotation.x += userVel.x;
 		pyramid.rotation.y += userVel.y;
