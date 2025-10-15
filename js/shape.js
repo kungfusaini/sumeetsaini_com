@@ -17,7 +17,7 @@ const TEXT_SCALE_BASE = { x: 3, y: 1.5, z: 1 };
 const FACE_CANVAS_WIDTH = 4096;
 const FACE_CANVAS_HEIGHT = 4096;
 const FACE_IMG_SIZE = 1500;
-const FACE_IMG_OFFSET_Y = 600;
+const FACE_IMG_OFFSET_Y = -600;
 const TEXT_POS_MULTIPLIER_BASE = 1.1;
 const PYRAMID_SIZE_MULTIPLIER_BASE = 0.6;
 const MOBILE_PYRAMID_SIZE_MULTIPLIER = 1.0;
@@ -181,14 +181,14 @@ function buildPyramid(loadedTextures) {
 		]);
 		geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
-		// Add UV coordinates for texture mapping
+		// Add UV coordinates for texture mapping (flipped vertically to correct orientation)
 		const uvs = new Float32Array([
 			0,
-			0, // bottom left
+			1, // bottom left flipped
 			1,
-			0, // bottom right
+			1, // bottom right flipped
 			0.5,
-			1, // top middle
+			0, // top middle flipped
 		]);
 		geom.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
 
@@ -214,7 +214,15 @@ function buildPyramid(loadedTextures) {
 		const y = (canvas.height - imgSize) / 2 + FACE_IMG_OFFSET_Y;
 		ctx.globalCompositeOperation = "multiply";
 		ctx.globalAlpha = 1.0; // Full opacity since multiply handles blending
-		ctx.drawImage(img, x, y, imgSize, imgSize);
+
+		// Rotate image 180 degrees around its center
+		const centerX = x + imgSize / 2;
+		const centerY = y + imgSize / 2;
+		ctx.save();
+		ctx.translate(centerX, centerY);
+		ctx.rotate(Math.PI); // 180 degrees
+		ctx.drawImage(img, -imgSize / 2, -imgSize / 2, imgSize, imgSize);
+		ctx.restore();
 
 		const texture = new THREE.CanvasTexture(canvas);
 		texture.minFilter = THREE.LinearMipmapLinearFilter;
