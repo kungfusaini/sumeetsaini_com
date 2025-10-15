@@ -13,6 +13,10 @@
 }
 
 :root {
+	--black-grey: #1d2021;
+	--dark-grey: #282828;
+	--mid-grey: #3c3836;
+	--light-grey: #504945;
 	--cream: #fbf1c7;
 	--orange: #d65d03;
 	--font-mono:
@@ -21,7 +25,7 @@
 
 body {
 	font-family: var(--font-mono);
-	background: var(--cream);
+	background: var(--dark-grey);
 	color: #111;
 	line-height: 1.4;
 }

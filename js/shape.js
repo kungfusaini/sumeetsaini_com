@@ -12,25 +12,25 @@ const IDLE_TIMEOUT_MS = 2000;
 const FACES = [
 	{
 		text: "Projects",
-		color: "#ff6b6b",
+		color: "--black-grey",
 		link: "#projects",
 		image: "assets/dice_images/book.svg",
 	},
 	{
 		text: "About me",
-		color: "#4ecdc4",
+		color: "--dark-grey",
 		link: "#about",
 		image: "assets/dice_images/sun.svg",
 	},
 	{
 		text: "Contact",
-		color: "#45b7d1",
+		color: "--mid-grey",
 		link: "#contact",
 		image: "assets/dice_images/book.svg",
 	},
 	{
 		text: "Blog",
-		color: "#f7b731",
+		color: "--light-grey",
 		link: "#blog",
 		image: "assets/dice_images/sun.svg",
 	},
@@ -152,8 +152,11 @@ function buildPyramid(loadedTextures) {
 		canvas.height = FACE_CANVAS_HEIGHT;
 		const ctx = canvas.getContext("2d");
 
-		// Fill with face color
-		ctx.fillStyle = FACES[colorIndex].color;
+		// Fill with face color from CSS variable
+		const colorValue = getComputedStyle(document.documentElement)
+			.getPropertyValue(FACES[colorIndex].color)
+			.trim();
+		ctx.fillStyle = colorValue;
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 		// Draw image on top with multiply blend for better color integration
