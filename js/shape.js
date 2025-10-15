@@ -324,15 +324,19 @@ async function init() {
 	window.addEventListener("resize", () => onResize(container));
 
 	/* ---- first frame ---- */
-	// Wait for content to be visible before sizing, rendering, and fading in
+	// Wait for content to be visible and intro text to finish moving before fading in
 	const waitForVisible = () => {
 		if (container.offsetWidth > 0 && container.offsetHeight > 0) {
 			onResize(container);
 			renderer.render(scene, camera);
-			// Fade in the container
-			setTimeout(() => {
-				container.style.opacity = "1";
-			}, 100);
+			// Check if intro text has finished moving
+			if ($("#name")?.classList.contains("top")) {
+				setTimeout(() => {
+					container.style.opacity = "1";
+				}, 100);
+			} else {
+				setTimeout(waitForVisible, 50);
+			}
 		} else {
 			setTimeout(waitForVisible, 50);
 		}
@@ -343,8 +347,6 @@ async function init() {
 
 /* ---------- boot ---------------------------------------------------- */
 function bootPyramid() {
-	if (!$("#name")?.classList.contains("top"))
-		return setTimeout(bootPyramid, 100);
 	init();
 }
 bootPyramid();
