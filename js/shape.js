@@ -26,36 +26,12 @@ let dragging = false;
 let lastPointer = { x: 0, y: 0 };
 let idleTimer = null;
 let hasInteracted = false;
-let fadeInProgress = false;
-
 /* ---------- helpers ------------------------------------------------- */
 const $ = (sel) => document.querySelector(sel);
 const clearIdleTimer = () => {
 	clearTimeout(idleTimer);
 	idleTimer = null;
 };
-/* ---------- fade in -------------------------------------------------- */
-function fadeInPyramid() {
-	if (fadeInProgress) return;
-	fadeInProgress = true;
-	let opacity = 0;
-	const fadeDuration = 2000;
-	const fadeStep = 16; // ~60fps
-	const opacityStep = fadeStep / fadeDuration;
-
-	const fade = () => {
-		opacity = Math.min(1, opacity + opacityStep);
-		pyramid.children.forEach((face) => {
-			face.material.opacity = opacity;
-		});
-		if (opacity < 1) {
-			setTimeout(fade, fadeStep);
-		} else {
-			fadeInProgress = false;
-		}
-	};
-	fade();
-}
 const startIdleTimer = () => {
 	clearIdleTimer();
 	idleTimer = setTimeout(() => {
@@ -64,21 +40,97 @@ const startIdleTimer = () => {
 	}, IDLE_TIMEOUT_MS);
 };
 
+function createTextSprite(text) {
+	const canvas = document.createElement("canvas");
+	const context = canvas.getContext("2d");
+	canvas.width = 256;
+	canvas.height = 128;
+
+	context.font = "Bold 24px Arial";
+	context.fillStyle = "white";
+	context.strokeStyle = "black";
+	context.lineWidth = 4;
+	context.textAlign = "center";
+	context.textBaseline = "middle";
+
+	// Draw text with outline
+	const x = canvas.width / 2;
+	const y = canvas.height / 2;
+	context.strokeText(text, x, y);
+	context.fillText(text, x, y);
+
+	const texture = new THREE.CanvasTexture(canvas);
+	const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+	const sprite = new THREE.Sprite(spriteMaterial);
+	sprite.scale.set(2, 1, 1); // Adjust size as needed
+
+	return sprite;
+}
+
 /* ---------- geometry ------------------------------------------------ */
 function buildPyramid() {
 	const group = new THREE.Group();
-	const geom = new THREE.TetrahedronGeometry(PYRAMID_EDGE);
-	FACES.forEach((f) => {
+	const size = PYRAMID_EDGE * 0.6;
+
+	// Tetrahedron vertices (scaled to match TetrahedronGeometry radius)
+	const vertices = [
+		new THREE.Vector3(size, size, size),
+		new THREE.Vector3(size, -size, -size),
+		new THREE.Vector3(-size, size, -size),
+		new THREE.Vector3(-size, -size, size),
+	];
+
+	// Face definitions with correct vertex order for outward normals
+	const faceDefs = [
+		{ indices: [0, 2, 1], colorIndex: 0 }, // Projects
+		{ indices: [0, 1, 3], colorIndex: 1 }, // About me
+		{ indices: [0, 3, 2], colorIndex: 2 }, // Contact
+		{ indices: [1, 2, 3], colorIndex: 3 }, // Blog
+	];
+
+	faceDefs.forEach(({ indices, colorIndex }) => {
+		const geom = new THREE.BufferGeometry();
+		const positions = new Float32Array([
+			vertices[indices[0]].x,
+			vertices[indices[0]].y,
+			vertices[indices[0]].z,
+			vertices[indices[1]].x,
+			vertices[indices[1]].y,
+			vertices[indices[1]].z,
+			vertices[indices[2]].x,
+			vertices[indices[2]].y,
+			vertices[indices[2]].z,
+		]);
+		geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+		geom.computeVertexNormals();
+
 		const mat = new THREE.MeshBasicMaterial({
-			color: f.color,
+			color: FACES[colorIndex].color,
 			side: THREE.DoubleSide,
-			transparent: true,
-			opacity: 0,
 		});
+
 		const face = new THREE.Mesh(geom, mat);
-		face.userData = { url: f.link, text: f.text };
+		face.renderOrder = colorIndex;
+		face.userData = {
+			url: FACES[colorIndex].link,
+			text: FACES[colorIndex].text,
+			faceIndex: colorIndex,
+		};
 		group.add(face);
+
+		// Create text sprite for the face
+		const textSprite = createTextSprite(FACES[colorIndex].text);
+		// Position text at the center of the face
+		const center = new THREE.Vector3();
+		center.add(vertices[indices[0]]);
+		center.add(vertices[indices[1]]);
+		center.add(vertices[indices[2]]);
+		center.divideScalar(3);
+		center.normalize().multiplyScalar(size * 1.1); // Position slightly outside the face
+		textSprite.position.copy(center);
+		group.add(textSprite);
 	});
+
 	return group;
 }
 
@@ -114,7 +166,10 @@ function onClick(ev, container) {
 	const ray = new THREE.Raycaster();
 	ray.setFromCamera(mouse, camera);
 	const hits = ray.intersectObjects(pyramid.children);
-	if (hits.length) window.location = hits[0].object.userData.url;
+	if (hits.length) {
+		const faceData = hits[0].object.userData;
+		if (faceData) window.location = faceData.url;
+	}
 }
 
 /* ---------- resize -------------------------------------------------- */
@@ -151,6 +206,8 @@ function init() {
 		height: "calc(100vh - 4rem)",
 		display: "block",
 		position: "relative",
+		opacity: "0",
+		transition: "opacity 1s ease-in-out",
 	});
 
 	$("main").prepend(container);
@@ -193,12 +250,15 @@ function init() {
 	window.addEventListener("resize", () => onResize(container));
 
 	/* ---- first frame ---- */
-	// Wait for content to be visible before sizing and rendering
+	// Wait for content to be visible before sizing, rendering, and fading in
 	const waitForVisible = () => {
 		if (container.offsetWidth > 0 && container.offsetHeight > 0) {
 			onResize(container);
 			renderer.render(scene, camera);
-			fadeInPyramid();
+			// Fade in the container
+			setTimeout(() => {
+				container.style.opacity = "1";
+			}, 100);
 		} else {
 			setTimeout(waitForVisible, 50);
 		}
