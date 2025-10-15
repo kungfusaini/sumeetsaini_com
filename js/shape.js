@@ -1,6 +1,7 @@
 /* ------------------------------------------------------------------ */
-/*  CONFIG – tweak these, nothing else                                */
+/*  CONFIG                                                            */
 /* ------------------------------------------------------------------ */
+
 const PYRAMID_EDGE = 3;
 const CAMERA_FOV_BASE = 50;
 const CAMERA_Z_BASE = 8;
@@ -9,43 +10,43 @@ const BASE_ROT_SPEED = { x: 0.003, y: 0.002 };
 const DRAG_SENSITIVITY = 0.008;
 const VELOCITY_DAMPING = 0.96;
 const IDLE_TIMEOUT_MS = 6000;
-const FACES = [
-	{
-		text: "Projects",
-		color: "--black-grey",
-		link: "#projects",
-		image: "assets/dice_images/book.svg",
-	},
-	{
-		text: "About me",
-		color: "--dark-grey",
-		link: "#about",
-		image: "assets/dice_images/sun.svg",
-	},
-	{
-		text: "Contact",
-		color: "--mid-grey",
-		link: "#contact",
-		image: "assets/dice_images/book.svg",
-	},
-	{
-		text: "Blog",
-		color: "--light-grey",
-		link: "#blog",
-		image: "assets/dice_images/sun.svg",
-	},
-];
 const TEXT_CANVAS_WIDTH = 1536;
 const TEXT_CANVAS_HEIGHT = 768;
 const TEXT_FONT = 'Bold 128px "ProFontIIx", "SF Mono", Monaco, monospace';
 const TEXT_SCALE_BASE = { x: 3, y: 1.5, z: 1 };
 const FACE_CANVAS_WIDTH = 4096;
 const FACE_CANVAS_HEIGHT = 4096;
-const FACE_IMG_SIZE = 2000;
+const FACE_IMG_SIZE = 1500;
 const FACE_IMG_OFFSET_Y = 600;
 const TEXT_POS_MULTIPLIER_BASE = 1.1;
 const PYRAMID_SIZE_MULTIPLIER_BASE = 0.6;
 const MOBILE_PYRAMID_SIZE_MULTIPLIER = 1.0;
+const FACES = [
+	{
+		text: "About",
+		color: "--black-grey",
+		link: "#projects",
+		image: "assets/dice_images/book.svg",
+	},
+	{
+		text: "Contact",
+		color: "--dark-grey",
+		link: "#about",
+		image: "assets/dice_images/ball.svg",
+	},
+	{
+		text: "Blog",
+		color: "--mid-grey",
+		link: "#contact",
+		image: "assets/dice_images/quill.svg",
+	},
+	{
+		text: "Now",
+		color: "--light-grey",
+		link: "#blog",
+		image: "assets/dice_images/sun.svg",
+	},
+];
 
 /* ------------------------------------------------------------------ */
 
