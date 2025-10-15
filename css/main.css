@@ -1,61 +1,83 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
 
 @font-face {
-  font-family: 'ProFontIIx';
-  src: url('../fonts/ProFontIIxNerdFontMono-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+	font-family: "ProFontIIx";
+	src: url("../fonts/ProFontIIxNerdFontMono-Regular.woff2") format("woff2");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
 }
 
 :root {
-    --cream: #fbf1c7; 
+	--cream: #fbf1c7;
 	--orange: #d65d03;
-  --font-mono: 'ProFontIIx', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+	--font-mono:
+		"ProFontIIx", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
 }
 
 body {
-  font-family: var(--font-mono);
-  background: var(--cream);
-  color: #111;
-  line-height: 1.4;
+	font-family: var(--font-mono);
+	background: var(--cream);
+	color: #111;
+	line-height: 1.4;
 }
 
 #name {
-  position: fixed;
-  left: 50%; top: 50%;
-  transform: translate(-50%, -50%);
-  font-size: clamp(2rem, 5vw + 1rem, 4rem);
-  white-space: nowrap;
-  transition: all 0.6s cubic-bezier(.4,0,.2,1);
-  color: var(--orange);
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	font-size: clamp(2rem, 5vw + 1rem, 4rem);
+	white-space: nowrap;
+	transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+	color: var(--orange);
 }
 #name.top {
-  left: 2rem; top: 1.2rem;
-  transform: translate(0, 0);
-  font-size: clamp(1.2rem, 2vw + 0.5rem, 2rem);
+	left: 2rem;
+	top: 1.2rem;
+	transform: translate(0, 0);
+	font-size: clamp(1.2rem, 2vw + 0.5rem, 2rem);
 }
 
-
-.hidden { display: none; }
+.hidden {
+	display: none;
+}
 main {
-  padding: 8rem 2rem 2rem;   /* leave room for fixed name */
-  max-width: 70rem;
-  margin: 0 auto;
+	padding: 4rem 2rem 2rem; /* leave room for fixed name */
+	max-width: 70rem;
+	margin: 0 auto;
 }
 
 @media (max-width: 600px) {
-  #name.top { left: 1rem; top: 1rem; }
-  main { padding-top: 6rem; }
+	#name.top { left: 1rem; top: 1rem; }
+	main { padding-top: 3rem; }
+	.three-box { height: calc(100vh - 3rem); }
+}
+	main {
+		padding-top: 3rem;
+	}
 }
 
-.cursor { animation: blink 1s steps(2,start) infinite; }
-@keyframes blink { to { visibility: hidden; } }
+.cursor {
+	animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink {
+	to {
+		visibility: hidden;
+	}
+}
 
-.cursor.hide { opacity: 0; animation: none; }
+.cursor.hide {
+	opacity: 0;
+	animation: none;
+}
 
-.three-box{
-  width:100%;
-  height:50vh;
-  margin:2rem 0;
+.three-box {
+	width: 100%;
+	height: calc(100vh - 4rem);
+	margin: 0;
 }
