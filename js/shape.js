@@ -2,9 +2,9 @@
 /*  CONFIG – tweak these, nothing else                                */
 /* ------------------------------------------------------------------ */
 const PYRAMID_EDGE = 3;
-const CAMERA_FOV = 50;
-const CAMERA_Z = 8;
-const CAMERA_Y = 2;
+const CAMERA_FOV_BASE = 50;
+const CAMERA_Z_BASE = 8;
+const CAMERA_Y_BASE = 2;
 const BASE_ROT_SPEED = { x: 0.002, y: 0.003 };
 const DRAG_SENSITIVITY = 0.008;
 const VELOCITY_DAMPING = 0.95;
@@ -38,13 +38,14 @@ const FACES = [
 const TEXT_CANVAS_WIDTH = 1536;
 const TEXT_CANVAS_HEIGHT = 768;
 const TEXT_FONT = 'Bold 128px "ProFontIIx", "SF Mono", Monaco, monospace';
-const TEXT_SCALE = { x: 3, y: 1.5, z: 1 };
+const TEXT_SCALE_BASE = { x: 3, y: 1.5, z: 1 };
 const FACE_CANVAS_WIDTH = 4096;
 const FACE_CANVAS_HEIGHT = 4096;
 const FACE_IMG_SIZE = 2000;
 const FACE_IMG_OFFSET_Y = 600;
-const TEXT_POS_MULTIPLIER = 1.1;
-const PYRAMID_SIZE_MULTIPLIER = 0.6;
+const TEXT_POS_MULTIPLIER_BASE = 1.1;
+const PYRAMID_SIZE_MULTIPLIER_BASE = 0.6;
+const MOBILE_PYRAMID_SIZE_MULTIPLIER = 1.0;
 
 /* ------------------------------------------------------------------ */
 
@@ -72,6 +73,50 @@ const startIdleTimer = () => {
 		userVel = { x: 0, y: 0 };
 	}, IDLE_TIMEOUT_MS);
 };
+const getResponsiveCameraZ = (width) => {
+	if (width <= 768) return CAMERA_Z_BASE * 1.5; // Mobile: farther back
+	if (width <= 1200) return CAMERA_Z_BASE * 1.2; // Tablet: slightly back
+	return CAMERA_Z_BASE; // Desktop: default
+};
+const getResponsiveCameraY = (width) => {
+	if (width <= 768) return CAMERA_Y_BASE * 2.5; // Mobile: higher up
+	if (width <= 1200) return CAMERA_Y_BASE * 1.5; // Tablet: slightly higher
+	return CAMERA_Y_BASE; // Desktop: default
+};
+const getResponsiveLookAtY = (width) => {
+	if (width <= 768) return -1; // Mobile: look down to bring shape up
+	return 0; // Desktop: center
+};
+const getResponsiveFOV = (width) => {
+	if (width <= 768) return 60; // Mobile: wider FOV to see more horizontally
+	return CAMERA_FOV_BASE; // Desktop: default
+};
+const getResponsivePyramidSize = (width) => {
+	if (width <= 768)
+		return PYRAMID_SIZE_MULTIPLIER_BASE * MOBILE_PYRAMID_SIZE_MULTIPLIER; // Mobile: smaller to fit narrow viewport
+	if (width <= 1200) return PYRAMID_SIZE_MULTIPLIER_BASE * 0.85; // Tablet: slightly smaller
+	return PYRAMID_SIZE_MULTIPLIER_BASE; // Desktop: default
+};
+const getResponsiveTextScale = (width) => {
+	if (width <= 768)
+		return {
+			x: TEXT_SCALE_BASE.x * 1.0,
+			y: TEXT_SCALE_BASE.y * 1.0,
+			z: TEXT_SCALE_BASE.z * 1.0,
+		};
+	if (width <= 1200)
+		return {
+			x: TEXT_SCALE_BASE.x * 0.85,
+			y: TEXT_SCALE_BASE.y * 0.85,
+			z: TEXT_SCALE_BASE.z * 0.85,
+		};
+	return TEXT_SCALE_BASE;
+};
+const getResponsiveTextPosMultiplier = (width) => {
+	if (width <= 768) return TEXT_POS_MULTIPLIER_BASE * 1.0; // Adjusted for smaller pyramid
+	if (width <= 1200) return TEXT_POS_MULTIPLIER_BASE * 0.9;
+	return TEXT_POS_MULTIPLIER_BASE;
+};
 
 function createTextSprite(text) {
 	const canvas = document.createElement("canvas");
@@ -92,7 +137,8 @@ function createTextSprite(text) {
 	const texture = new THREE.CanvasTexture(canvas);
 	const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
 	const sprite = new THREE.Sprite(spriteMaterial);
-	sprite.scale.set(TEXT_SCALE.x, TEXT_SCALE.y, TEXT_SCALE.z);
+	const textScale = getResponsiveTextScale(window.innerWidth);
+	sprite.scale.set(textScale.x, textScale.y, textScale.z);
 
 	return sprite;
 }
@@ -100,7 +146,7 @@ function createTextSprite(text) {
 /* ---------- geometry ------------------------------------------------ */
 function buildPyramid(loadedTextures) {
 	const group = new THREE.Group();
-	const size = PYRAMID_EDGE * PYRAMID_SIZE_MULTIPLIER;
+	const size = PYRAMID_EDGE * getResponsivePyramidSize(window.innerWidth);
 
 	// Tetrahedron vertices (scaled to match TetrahedronGeometry radius)
 	const vertices = [
@@ -194,7 +240,8 @@ function buildPyramid(loadedTextures) {
 		center.add(vertices[indices[1]]);
 		center.add(vertices[indices[2]]);
 		center.divideScalar(3);
-		center.normalize().multiplyScalar(size * TEXT_POS_MULTIPLIER);
+		const textPosMultiplier = getResponsiveTextPosMultiplier(window.innerWidth);
+		center.normalize().multiplyScalar(size * textPosMultiplier);
 		textSprite.position.copy(center);
 		group.add(textSprite);
 	});
@@ -242,11 +289,15 @@ function onClick(ev, container) {
 
 /* ---------- resize -------------------------------------------------- */
 function onResize(container) {
-	const rect = container.getBoundingClientRect();
-	const w = rect.width;
-	const h = rect.height;
+	const w = container.clientWidth;
+	const h = container.clientHeight;
 	renderer.setSize(w, h);
 	camera.aspect = w / h;
+	camera.fov = getResponsiveFOV(w);
+	camera.position.z = getResponsiveCameraZ(w);
+	camera.position.y = getResponsiveCameraY(w);
+	const lookAtY = getResponsiveLookAtY(w);
+	camera.lookAt(0, lookAtY, 0);
 	camera.updateProjectionMatrix();
 }
 
@@ -285,14 +336,18 @@ async function init() {
 	container.appendChild(renderer.domElement);
 
 	/* ---- create camera early ---- */
+	const cameraZ = getResponsiveCameraZ(window.innerWidth);
+	const cameraY = getResponsiveCameraY(window.innerWidth);
+	const lookAtY = getResponsiveLookAtY(window.innerWidth);
+	const fov = getResponsiveFOV(window.innerWidth);
 	camera = new THREE.PerspectiveCamera(
-		CAMERA_FOV,
+		fov,
 		container.clientWidth / container.clientHeight,
 		0.1,
 		100,
 	);
-	camera.position.set(0, CAMERA_Y, CAMERA_Z);
-	camera.lookAt(0, 0, 0);
+	camera.position.set(0, cameraY, cameraZ);
+	camera.lookAt(0, lookAtY, 0);
 
 	// Load textures asynchronously
 	const texturePromises = FACES.map(
