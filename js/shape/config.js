@@ -18,7 +18,7 @@ export const FACE_IMG_OFFSET_Y = -600;
 export const TEXT_POS_MULTIPLIER_BASE = 1.1;
 export const PYRAMID_SIZE_MULTIPLIER_BASE = 0.6;
 export const MOBILE_PYRAMID_SIZE_MULTIPLIER = 1.0;
-export const GRAIN_INTENSITY_FACE = 0.12;
+export const GRAIN_INTENSITY_FACE = 0.15;
 export const GRAIN_SIZE_FACE = 20;
 export const INITIAL_PYRAMID_ROTATION = { x: -4.2, y: -0.378, z: 0.0 };
 -3.981 - 0.116;
