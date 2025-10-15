@@ -1,12 +1,8 @@
-/* ------------------------------------------------------------------ */
-/*  CONFIG                                                            */
-/* ------------------------------------------------------------------ */
-
 export const PYRAMID_EDGE = 3;
 export const CAMERA_FOV_BASE = 50;
 export const CAMERA_Z_BASE = 8;
 export const CAMERA_Y_BASE = 2;
-export const BASE_ROT_SPEED = { x: 0.003, y: 0.002 };
+export const BASE_ROT_SPEED = { x: 0.002, y: 0.002 };
 export const DRAG_SENSITIVITY = 0.01;
 export const VELOCITY_DAMPING = 0.95;
 export const IDLE_TIMEOUT_MS = 6000;
@@ -22,8 +18,10 @@ export const FACE_IMG_OFFSET_Y = -600;
 export const TEXT_POS_MULTIPLIER_BASE = 1.1;
 export const PYRAMID_SIZE_MULTIPLIER_BASE = 0.6;
 export const MOBILE_PYRAMID_SIZE_MULTIPLIER = 1.0;
-export const GRAIN_INTENSITY_FACE = 0.1;
+export const GRAIN_INTENSITY_FACE = 0.12;
 export const GRAIN_SIZE_FACE = 20;
+export const INITIAL_PYRAMID_ROTATION = { x: -4.2, y: -0.378, z: 0.0 };
+-3.981 - 0.116;
 export const FACES = [
 	{
 		text: "About",

@@ -1,6 +1,11 @@
 import * as THREE from "three";
 import { animate, onResize } from "./animation.js";
-import { FACES, GRAIN_INTENSITY_FACE, GRAIN_SIZE_FACE } from "./config.js";
+import {
+	FACES,
+	GRAIN_INTENSITY_FACE,
+	GRAIN_SIZE_FACE,
+	INITIAL_PYRAMID_ROTATION,
+} from "./config.js";
 import { buildPyramid } from "./geometry.js";
 import {
 	$,
@@ -70,6 +75,11 @@ export async function init() {
 	const loadedTextures = await Promise.all(texturePromises);
 
 	state.pyramid = buildPyramid(loadedTextures, grainCanvas);
+	state.pyramid.rotation.set(
+		INITIAL_PYRAMID_ROTATION.x,
+		INITIAL_PYRAMID_ROTATION.y,
+		INITIAL_PYRAMID_ROTATION.z,
+	);
 	state.scene.add(state.pyramid);
 
 	/* ---- events ---- */
