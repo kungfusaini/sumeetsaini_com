@@ -53,12 +53,15 @@ main {
 }
 
 @media (max-width: 600px) {
-	#name.top { left: 1rem; top: 1rem; }
-	main { padding-top: 3rem; }
-	.three-box { height: calc(100vh - 3rem); }
-}
+	#name.top {
+		left: 1rem;
+		top: 1rem;
+	}
 	main {
 		padding-top: 3rem;
+	}
+	.three-box {
+		height: calc(100vh - 3rem);
 	}
 }
 

@@ -10,17 +10,50 @@ const DRAG_SENSITIVITY = 0.008;
 const VELOCITY_DAMPING = 0.95;
 const IDLE_TIMEOUT_MS = 2000;
 const FACES = [
-	{ text: "Projects", color: "#ff6b6b", link: "#projects" },
-	{ text: "About me", color: "#4ecdc4", link: "#about" },
-	{ text: "Contact", color: "#45b7d1", link: "#contact" },
-	{ text: "Blog", color: "#f7b731", link: "#blog" },
+	{
+		text: "Projects",
+		color: "#ff6b6b",
+		link: "#projects",
+		image: "assets/dice_images/book.svg",
+	},
+	{
+		text: "About me",
+		color: "#4ecdc4",
+		link: "#about",
+		image: "assets/dice_images/sun.svg",
+	},
+	{
+		text: "Contact",
+		color: "#45b7d1",
+		link: "#contact",
+		image: "assets/dice_images/book.svg",
+	},
+	{
+		text: "Blog",
+		color: "#f7b731",
+		link: "#blog",
+		image: "assets/dice_images/sun.svg",
+	},
 ];
+const TEXT_CANVAS_WIDTH = 1536;
+const TEXT_CANVAS_HEIGHT = 768;
+const TEXT_FONT = 'Bold 128px "ProFontIIx", "SF Mono", Monaco, monospace';
+const TEXT_SCALE = { x: 3, y: 1.5, z: 1 };
+const FACE_CANVAS_WIDTH = 4096;
+const FACE_CANVAS_HEIGHT = 4096;
+const FACE_IMG_SIZE = 2000;
+const FACE_IMG_OFFSET_Y = 600;
+const TEXT_POS_MULTIPLIER = 1.1;
+const PYRAMID_SIZE_MULTIPLIER = 0.6;
+
 /* ------------------------------------------------------------------ */
 
 import * as THREE from "three";
 
+const loader = new THREE.TextureLoader();
+
 let scene, camera, renderer, pyramid;
-let baseSpeed = { ...BASE_ROT_SPEED };
+const baseSpeed = { ...BASE_ROT_SPEED };
 let userVel = { x: 0, y: 0 };
 let dragging = false;
 let lastPointer = { x: 0, y: 0 };
@@ -43,10 +76,10 @@ const startIdleTimer = () => {
 function createTextSprite(text) {
 	const canvas = document.createElement("canvas");
 	const context = canvas.getContext("2d");
-	canvas.width = 1536; // Ultra high resolution
-	canvas.height = 768;
+	canvas.width = TEXT_CANVAS_WIDTH;
+	canvas.height = TEXT_CANVAS_HEIGHT;
 
-	context.font = 'Bold 128px "ProFontIIx", "SF Mono", Monaco, monospace';
+	context.font = TEXT_FONT;
 	context.fillStyle = "white";
 	context.textAlign = "center";
 	context.textBaseline = "middle";
@@ -59,15 +92,15 @@ function createTextSprite(text) {
 	const texture = new THREE.CanvasTexture(canvas);
 	const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
 	const sprite = new THREE.Sprite(spriteMaterial);
-	sprite.scale.set(3, 1.5, 1); // Even larger scale
+	sprite.scale.set(TEXT_SCALE.x, TEXT_SCALE.y, TEXT_SCALE.z);
 
 	return sprite;
 }
 
 /* ---------- geometry ------------------------------------------------ */
-function buildPyramid() {
+function buildPyramid(loadedTextures) {
 	const group = new THREE.Group();
-	const size = PYRAMID_EDGE * 0.6;
+	const size = PYRAMID_EDGE * PYRAMID_SIZE_MULTIPLIER;
 
 	// Tetrahedron vertices (scaled to match TetrahedronGeometry radius)
 	const vertices = [
@@ -99,10 +132,45 @@ function buildPyramid() {
 			vertices[indices[2]].z,
 		]);
 		geom.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+		// Add UV coordinates for texture mapping
+		const uvs = new Float32Array([
+			0,
+			0, // bottom left
+			1,
+			0, // bottom right
+			0.5,
+			1, // top middle
+		]);
+		geom.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
+
 		geom.computeVertexNormals();
 
+		// Create composite texture
+		const canvas = document.createElement("canvas");
+		canvas.width = FACE_CANVAS_WIDTH;
+		canvas.height = FACE_CANVAS_HEIGHT;
+		const ctx = canvas.getContext("2d");
+
+		// Fill with face color
+		ctx.fillStyle = FACES[colorIndex].color;
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+		// Draw image on top with multiply blend for better color integration
+		const img = loadedTextures[colorIndex].image;
+		const imgSize = FACE_IMG_SIZE;
+		const x = (canvas.width - imgSize) / 2;
+		const y = (canvas.height - imgSize) / 2 + FACE_IMG_OFFSET_Y;
+		ctx.globalCompositeOperation = "multiply";
+		ctx.globalAlpha = 1.0; // Full opacity since multiply handles blending
+		ctx.drawImage(img, x, y, imgSize, imgSize);
+
+		const texture = new THREE.CanvasTexture(canvas);
+		texture.minFilter = THREE.LinearMipmapLinearFilter;
+		texture.magFilter = THREE.LinearFilter;
+
 		const mat = new THREE.MeshBasicMaterial({
-			color: FACES[colorIndex].color,
+			map: texture,
 			side: THREE.DoubleSide,
 		});
 
@@ -123,7 +191,7 @@ function buildPyramid() {
 		center.add(vertices[indices[1]]);
 		center.add(vertices[indices[2]]);
 		center.divideScalar(3);
-		center.normalize().multiplyScalar(size * 1.1); // Position slightly outside the face
+		center.normalize().multiplyScalar(size * TEXT_POS_MULTIPLIER);
 		textSprite.position.copy(center);
 		group.add(textSprite);
 	});
@@ -195,7 +263,7 @@ function animate() {
 }
 
 /* ---------- init ---------------------------------------------------- */
-function init() {
+async function init() {
 	const container = document.createElement("div");
 	container.className = "three-box";
 	Object.assign(container.style, {
@@ -223,7 +291,16 @@ function init() {
 	camera.position.set(0, CAMERA_Y, CAMERA_Z);
 	camera.lookAt(0, 0, 0);
 
-	pyramid = buildPyramid();
+	// Load textures asynchronously
+	const texturePromises = FACES.map(
+		(face) =>
+			new Promise((resolve, reject) => {
+				loader.load(face.image, resolve, undefined, reject);
+			}),
+	);
+	const loadedTextures = await Promise.all(texturePromises);
+
+	pyramid = buildPyramid(loadedTextures);
 	scene.add(pyramid);
 
 	/* ---- events ---- */
