@@ -21,6 +21,8 @@ const FACE_IMG_OFFSET_Y = -600;
 const TEXT_POS_MULTIPLIER_BASE = 1.1;
 const PYRAMID_SIZE_MULTIPLIER_BASE = 0.6;
 const MOBILE_PYRAMID_SIZE_MULTIPLIER = 1.0;
+const GRAIN_INTENSITY_FACE = 0.1;
+const GRAIN_SIZE_FACE = 20;
 const FACES = [
 	{
 		text: "About",
@@ -75,6 +77,47 @@ const startIdleTimer = () => {
 		userVel = { x: 0, y: 0 };
 	}, IDLE_TIMEOUT_MS);
 };
+// Shaders for blending grain texture with face texture
+const vertexShader = `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const fragmentShader = `
+  uniform sampler2D faceTexture;
+  uniform sampler2D grainTexture;
+  varying vec2 vUv;
+  void main() {
+    vec4 faceColor = texture2D(faceTexture, vUv);
+    vec4 grainColor = texture2D(grainTexture, vUv);
+    gl_FragColor = faceColor + abs(grainColor) * 0.5; // Additive blend to avoid darkening
+  }
+`;
+
+const addGrainToCanvas = (canvas, intensity = 0.1, grainSize = 4) => {
+	const ctx = canvas.getContext("2d");
+	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	const data = imageData.data;
+	for (let y = 0; y < canvas.height; y += grainSize) {
+		for (let x = 0; x < canvas.width; x += grainSize) {
+			const noise = (Math.random() - 0.5) * intensity * 255;
+			for (let dy = 0; dy < grainSize && y + dy < canvas.height; dy++) {
+				for (let dx = 0; dx < grainSize && x + dx < canvas.width; dx++) {
+					const i = ((y + dy) * canvas.width + (x + dx)) * 4;
+					data[i] += noise; // Red
+					data[i + 1] += noise; // Green
+					data[i + 2] += noise; // Blue
+					// Alpha unchanged
+				}
+			}
+		}
+	}
+	ctx.putImageData(imageData, 0, 0);
+};
+
 const getResponsiveCameraZ = (width) => {
 	if (width <= 768) return CAMERA_Z_BASE * 1.5; // Mobile: farther back
 	if (width <= 1200) return CAMERA_Z_BASE * 1.2; // Tablet: slightly back
@@ -146,7 +189,7 @@ function createTextSprite(text) {
 }
 
 /* ---------- geometry ------------------------------------------------ */
-function buildPyramid(loadedTextures) {
+function buildPyramid(loadedTextures, grainCanvas) {
 	const group = new THREE.Group();
 	const size = PYRAMID_EDGE * getResponsivePyramidSize(window.innerWidth);
 
@@ -206,6 +249,11 @@ function buildPyramid(loadedTextures) {
 			.trim();
 		ctx.fillStyle = colorValue;
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+		// Draw grain on the color
+		ctx.globalCompositeOperation = "overlay";
+		ctx.globalAlpha = 1.0;
+		ctx.drawImage(grainCanvas, 0, 0, canvas.width, canvas.height);
 
 		// Draw image on top with multiply blend for better color integration
 		const img = loadedTextures[colorIndex].image;
@@ -348,6 +396,16 @@ async function init() {
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 	container.appendChild(renderer.domElement);
 
+	// Create static grain texture
+	const grainCanvas = document.createElement("canvas");
+	grainCanvas.width = 512;
+	grainCanvas.height = 512;
+	const ctx = grainCanvas.getContext("2d");
+	ctx.fillStyle = "gray";
+	ctx.fillRect(0, 0, 512, 512);
+	addGrainToCanvas(grainCanvas, GRAIN_INTENSITY_FACE, GRAIN_SIZE_FACE);
+	const grainTexture = new THREE.CanvasTexture(grainCanvas);
+
 	/* ---- create camera early ---- */
 	const cameraZ = getResponsiveCameraZ(window.innerWidth);
 	const cameraY = getResponsiveCameraY(window.innerWidth);
@@ -371,7 +429,7 @@ async function init() {
 	);
 	const loadedTextures = await Promise.all(texturePromises);
 
-	pyramid = buildPyramid(loadedTextures);
+	pyramid = buildPyramid(loadedTextures, grainCanvas);
 	scene.add(pyramid);
 
 	/* ---- events ---- */
