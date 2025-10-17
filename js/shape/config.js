@@ -22,6 +22,8 @@ export const GRAIN_INTENSITY_FACE = 0.15;
 export const GRAIN_SIZE_FACE = 10;
 export const INITIAL_PYRAMID_ROTATION = { x: -4.2, y: -0.378, z: 0.0 };
 -3.981 - 0.116;
+export const TRANSITION_SPEED = 0.05;
+export const PAUSE_DURATION_MS = 3000;
 export const FACES = [
 	{
 		text: "About",

@@ -17,4 +17,5 @@ export const state = {
 	autoRotateMultiplier: 0,
 	autoRotateEnabled: true,
 	debugMode: false,
+	transitionTimer: null,
 };

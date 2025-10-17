@@ -8,6 +8,10 @@ export function onPointerDown(x, y) {
 	state.lastPointer = { x, y };
 	clearIdleTimer();
 	state.autoRotateMultiplier = 0;
+	if (state.transitioning) {
+		state.transitioning = false;
+		if (state.transitionTimer) clearTimeout(state.transitionTimer);
+	}
 }
 
 export function onPointerMove(x, y) {
@@ -77,13 +81,10 @@ export function onClick(ev, container) {
 		if (userData && userData.faceIndex !== undefined) {
 			const faceIndex = userData.faceIndex;
 			const faceConfig = FACES[faceIndex];
-			if (faceConfig.rotation) {
-				state.pyramid.rotation.set(
-					faceConfig.rotation.x,
-					faceConfig.rotation.y,
-					faceConfig.rotation.z,
-				);
-			}
+			state.transitioning = true;
+			state.targetRotation = { ...faceConfig.rotation };
+			if (state.transitionTimer) clearTimeout(state.transitionTimer);
+			state.autoRotateMultiplier = 0;
 			if (userData.url) {
 				window.location = userData.url;
 			}

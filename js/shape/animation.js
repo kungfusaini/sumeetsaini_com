@@ -1,4 +1,9 @@
-import { VELOCITY_DAMPING } from "./config.js";
+import * as THREE from "three";
+import {
+	PAUSE_DURATION_MS,
+	TRANSITION_SPEED,
+	VELOCITY_DAMPING,
+} from "./config.js";
 import {
 	getResponsiveCameraY,
 	getResponsiveCameraZ,
@@ -13,6 +18,34 @@ export function animate() {
 		state.autoRotateMultiplier = Math.min(state.autoRotateMultiplier + 0.01, 1);
 		state.pyramid.rotation.x += state.baseSpeed.x * state.autoRotateMultiplier;
 		state.pyramid.rotation.y += state.baseSpeed.y * state.autoRotateMultiplier;
+	} else if (state.transitioning) {
+		state.pyramid.rotation.x = THREE.MathUtils.lerp(
+			state.pyramid.rotation.x,
+			state.targetRotation.x,
+			TRANSITION_SPEED,
+		);
+		state.pyramid.rotation.y = THREE.MathUtils.lerp(
+			state.pyramid.rotation.y,
+			state.targetRotation.y,
+			TRANSITION_SPEED,
+		);
+		state.pyramid.rotation.z = THREE.MathUtils.lerp(
+			state.pyramid.rotation.z,
+			state.targetRotation.z,
+			TRANSITION_SPEED,
+		);
+		const xClose =
+			Math.abs(state.pyramid.rotation.x - state.targetRotation.x) < 0.01;
+		const yClose =
+			Math.abs(state.pyramid.rotation.y - state.targetRotation.y) < 0.01;
+		const zClose =
+			Math.abs(state.pyramid.rotation.z - state.targetRotation.z) < 0.01;
+		if (xClose && yClose && zClose && !state.transitionTimer) {
+			state.transitionTimer = setTimeout(() => {
+				state.transitioning = false;
+				state.hasInteracted = false;
+			}, PAUSE_DURATION_MS);
+		}
 	} else if (!state.dragging) {
 		state.pyramid.rotation.x += state.userVel.x;
 		state.pyramid.rotation.y += state.userVel.y;
