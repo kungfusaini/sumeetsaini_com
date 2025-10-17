@@ -9,7 +9,7 @@ import { state } from "./state.js";
 
 export function animate() {
 	requestAnimationFrame(animate);
-	if (!state.hasInteracted) {
+	if (!state.hasInteracted && state.autoRotateEnabled) {
 		state.autoRotateMultiplier = Math.min(state.autoRotateMultiplier + 0.01, 1);
 		state.pyramid.rotation.x += state.baseSpeed.x * state.autoRotateMultiplier;
 		state.pyramid.rotation.y += state.baseSpeed.y * state.autoRotateMultiplier;
@@ -19,24 +19,25 @@ export function animate() {
 		state.userVel.x *= VELOCITY_DAMPING;
 		state.userVel.y *= VELOCITY_DAMPING;
 	}
-	// Debug: Log position and rotation
-	console.log(
-		"Pyramid Position:",
-		state.pyramid.position.x.toFixed(3),
-		state.pyramid.position.y.toFixed(3),
-		state.pyramid.position.z.toFixed(3),
-	);
-	console.log(
-		"Pyramid Rotation:",
-		state.pyramid.rotation.x.toFixed(3),
-		state.pyramid.rotation.y.toFixed(3),
-		state.pyramid.rotation.z.toFixed(3),
-	);
-	console.log(
-		"User Velocity:",
-		state.userVel.x.toFixed(3),
-		state.userVel.y.toFixed(3),
-	);
+	if (state.debugMode) {
+		console.log(
+			"Pyramid Position:",
+			state.pyramid.position.x.toFixed(3),
+			state.pyramid.position.y.toFixed(3),
+			state.pyramid.position.z.toFixed(3),
+		);
+		console.log(
+			"Pyramid Rotation:",
+			state.pyramid.rotation.x.toFixed(3),
+			state.pyramid.rotation.y.toFixed(3),
+			state.pyramid.rotation.z.toFixed(3),
+		);
+		console.log(
+			"User Velocity:",
+			state.userVel.x.toFixed(3),
+			state.userVel.y.toFixed(3),
+		);
+	}
 	state.renderer.render(state.scene, state.camera);
 }
 

@@ -19,7 +19,7 @@ export const TEXT_POS_MULTIPLIER_BASE = 1.1;
 export const PYRAMID_SIZE_MULTIPLIER_BASE = 0.6;
 export const MOBILE_PYRAMID_SIZE_MULTIPLIER = 1.0;
 export const GRAIN_INTENSITY_FACE = 0.15;
-export const GRAIN_SIZE_FACE = 20;
+export const GRAIN_SIZE_FACE = 10;
 export const INITIAL_PYRAMID_ROTATION = { x: -4.2, y: -0.378, z: 0.0 };
 -3.981 - 0.116;
 export const FACES = [
@@ -28,23 +28,27 @@ export const FACES = [
 		color: "--black-grey",
 		link: "#projects",
 		image: "assets/dice_images/book.svg",
+		rotation: { x: -4, y: 0.8, z: 0 },
 	},
 	{
 		text: "Contact",
 		color: "--dark-grey",
 		link: "#about",
 		image: "assets/dice_images/ball.svg",
+		rotation: { x: 2.48, y: 8.65, z: -4.7 },
 	},
 	{
 		text: "Blog",
 		color: "--mid-grey",
 		link: "#contact",
 		image: "assets/dice_images/quill.svg",
+		rotation: { x: -2.34, y: -3.14, z: 2.35 },
 	},
 	{
 		text: "Now",
 		color: "--light-grey",
 		link: "#blog",
 		image: "assets/dice_images/sun.svg",
+		rotation: { x: 0.89, y: 9.415, z: -2.4 },
 	},
 ];

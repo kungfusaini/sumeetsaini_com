@@ -116,6 +116,7 @@ export function buildPyramid(loadedTextures, grainCanvas) {
 
 		// Create text sprite for the face
 		const textSprite = createTextSprite(FACES[colorIndex].text);
+		textSprite.userData = { faceIndex: colorIndex };
 		// Position text at the center of the face
 		const center = new THREE.Vector3();
 		center.add(vertices[indices[0]]);

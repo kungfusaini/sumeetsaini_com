@@ -15,4 +15,6 @@ export const state = {
 	idleTimer: null,
 	hasInteracted: false,
 	autoRotateMultiplier: 0,
+	autoRotateEnabled: true,
+	debugMode: false,
 };
