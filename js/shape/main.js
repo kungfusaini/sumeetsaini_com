@@ -16,6 +16,7 @@ import {
 	getResponsiveLookAtY,
 } from "./helpers.js";
 import {
+	closeContent,
 	onClick,
 	onPointerDown,
 	onPointerMove,
@@ -36,7 +37,7 @@ export async function init() {
 		transition: "opacity 1s ease-in-out",
 	});
 
-	$("main").prepend(container);
+	document.body.insertBefore(container, $("main"));
 
 	state.scene = new THREE.Scene();
 	state.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -100,6 +101,11 @@ export async function init() {
 	window.addEventListener("touchend", onPointerUp);
 
 	container.addEventListener("click", (e) => onClick(e, container));
+	document.addEventListener("click", (e) => {
+		if (e.target.id === "close-content") {
+			closeContent();
+		}
+	});
 	window.addEventListener("resize", () => onResize(container));
 
 	/* ---- first frame ---- */

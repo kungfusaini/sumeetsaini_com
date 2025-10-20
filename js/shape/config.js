@@ -31,6 +31,8 @@ export const FACES = [
 		link: "#projects",
 		image: "assets/dice_images/book.svg",
 		rotation: { x: -4, y: 0.8, z: 0 },
+		content:
+			"<h2>About</h2><p>This is the about section. More content here.</p>",
 	},
 	{
 		text: "Contact",
@@ -38,6 +40,7 @@ export const FACES = [
 		link: "#about",
 		image: "assets/dice_images/ball.svg",
 		rotation: { x: 2.48, y: 8.65, z: -4.7 },
+		content: "<h2>Contact</h2><p>Get in touch via email or social media.</p>",
 	},
 	{
 		text: "Blog",
@@ -45,6 +48,7 @@ export const FACES = [
 		link: "#contact",
 		image: "assets/dice_images/quill.svg",
 		rotation: { x: -2.34, y: -3.14, z: 2.35 },
+		content: "<h2>Blog</h2><p>Read my latest posts on tech and life.</p>",
 	},
 	{
 		text: "Now",
@@ -52,5 +56,6 @@ export const FACES = [
 		link: "#blog",
 		image: "assets/dice_images/sun.svg",
 		rotation: { x: 0.89, y: 9.415, z: -2.4 },
+		content: "<h2>Now</h2><p>What I'm up to currently.</p>",
 	},
 ];
