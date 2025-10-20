@@ -21,9 +21,15 @@ export const MOBILE_PYRAMID_SIZE_MULTIPLIER = 1.0;
 export const GRAIN_INTENSITY_FACE = 0.15;
 export const GRAIN_SIZE_FACE = 10;
 export const INITIAL_PYRAMID_ROTATION = { x: -4.2, y: -0.378, z: 0.0 };
--3.981 - 0.116;
 export const TRANSITION_SPEED = 0.05;
 export const PAUSE_DURATION_MS = 3000;
+export const POPUP_CLOSE_TRANSITION_MS = 1000;
+export const TRANSITION_CLOSENESS_THRESHOLD = 0.01;
+export const DEBUG_ROTATION_INCREMENT = 0.05;
+export const MOBILE_BREAKPOINT = 600;
+export const POPUP_POSITION_DESKTOP = { x: -3.5, y: 0, z: 0 };
+export const POPUP_POSITION_MOBILE = { x: 0, y: 1, z: 0 };
+export const POPUP_SCALE = 0.7;
 export const FACES = [
 	{
 		text: "About",

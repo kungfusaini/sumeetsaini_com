@@ -1,5 +1,13 @@
 import * as THREE from "three";
-import { DRAG_SENSITIVITY, FACES } from "./config.js";
+import {
+	DEBUG_ROTATION_INCREMENT,
+	DRAG_SENSITIVITY,
+	FACES,
+	MOBILE_BREAKPOINT,
+	POPUP_POSITION_DESKTOP,
+	POPUP_POSITION_MOBILE,
+	POPUP_SCALE,
+} from "./config.js";
 import { clearIdleTimer, startIdleTimer } from "./helpers.js";
 import { state } from "./state.js";
 
@@ -43,7 +51,7 @@ export function onKeyDown(event) {
 			break;
 		default:
 			if (state.debugMode) {
-				const increment = 0.05; // small increment for precision
+				const increment = DEBUG_ROTATION_INCREMENT; // small increment for precision
 				switch (event.key) {
 					case "ArrowLeft":
 						state.pyramid.rotation.x -= increment;
@@ -113,14 +121,14 @@ export function onClick(ev, container) {
 			state.hasInteracted = true; // Stop autorotate immediately
 			state.targetRotation = { ...faceConfig.rotation };
 			// Set target position based on screen size
-			const isMobile = window.innerWidth <= 600;
+			const isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
 			state.targetPosition = isMobile
-				? { x: 0, y: 1, z: 0 } // Up on mobile
-				: { x: -3.5, y: 0, z: 0 }; // Left on desktop
+				? POPUP_POSITION_MOBILE // Up on mobile
+				: POPUP_POSITION_DESKTOP; // Left on desktop
 			if (state.transitionTimer) clearTimeout(state.transitionTimer);
 			state.autoRotateMultiplier = 0;
 			state.contentVisible = true;
-			state.targetScale = 0.7;
+			state.targetScale = POPUP_SCALE;
 			// Show and populate content
 			const main = document.querySelector("main");
 			main.style.display = "block";

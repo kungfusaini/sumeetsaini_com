@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import {
 	PAUSE_DURATION_MS,
+	POPUP_CLOSE_TRANSITION_MS,
+	TRANSITION_CLOSENESS_THRESHOLD,
 	TRANSITION_SPEED,
 	VELOCITY_DAMPING,
 } from "./config.js";
@@ -66,38 +68,47 @@ export function animate() {
 		);
 		// Check rotation closeness
 		const xClose =
-			Math.abs(state.pyramid.rotation.x - state.targetRotation.x) < 0.01;
+			Math.abs(state.pyramid.rotation.x - state.targetRotation.x) <
+			TRANSITION_CLOSENESS_THRESHOLD;
 		const yClose =
-			Math.abs(state.pyramid.rotation.y - state.targetRotation.y) < 0.01;
+			Math.abs(state.pyramid.rotation.y - state.targetRotation.y) <
+			TRANSITION_CLOSENESS_THRESHOLD;
 		const zClose =
-			Math.abs(state.pyramid.rotation.z - state.targetRotation.z) < 0.01;
+			Math.abs(state.pyramid.rotation.z - state.targetRotation.z) <
+			TRANSITION_CLOSENESS_THRESHOLD;
 
 		// For popup close transitions, use timer-based completion instead of position/scale checks
 		if (state.skipPause && state.popupCloseTime > 0) {
 			const timeSinceClose = Date.now() - state.popupCloseTime;
-			if (timeSinceClose >= 1000) {
-				// 1 second should be enough for transition
+			if (timeSinceClose >= POPUP_CLOSE_TRANSITION_MS) {
+				// Configurable transition time
 				// Start autorotation with normal ramp-up after popup close
 				state.transitioning = false;
 				state.hasInteracted = false;
-				// Don't set autoRotateMultiplier - let it ramp up naturally from 0
+				state.autoRotateMultiplier = 0; // Reset for proper ramp-up
 				state.skipPause = false; // Reset flag
 				state.popupCloseTime = 0; // Reset timer
 			}
 		} else {
 			// For normal transitions, use position/scale/rotation closeness checks
 			const posXClose =
-				Math.abs(state.pyramid.position.x - state.targetPosition.x) < 0.01;
+				Math.abs(state.pyramid.position.x - state.targetPosition.x) <
+				TRANSITION_CLOSENESS_THRESHOLD;
 			const posYClose =
-				Math.abs(state.pyramid.position.y - state.targetPosition.y) < 0.01;
+				Math.abs(state.pyramid.position.y - state.targetPosition.y) <
+				TRANSITION_CLOSENESS_THRESHOLD;
 			const posZClose =
-				Math.abs(state.pyramid.position.z - state.targetPosition.z) < 0.01;
+				Math.abs(state.pyramid.position.z - state.targetPosition.z) <
+				TRANSITION_CLOSENESS_THRESHOLD;
 			const scaleXClose =
-				Math.abs(state.pyramid.scale.x - state.targetScale) < 0.01;
+				Math.abs(state.pyramid.scale.x - state.targetScale) <
+				TRANSITION_CLOSENESS_THRESHOLD;
 			const scaleYClose =
-				Math.abs(state.pyramid.scale.y - state.targetScale) < 0.01;
+				Math.abs(state.pyramid.scale.y - state.targetScale) <
+				TRANSITION_CLOSENESS_THRESHOLD;
 			const scaleZClose =
-				Math.abs(state.pyramid.scale.z - state.targetScale) < 0.01;
+				Math.abs(state.pyramid.scale.z - state.targetScale) <
+				TRANSITION_CLOSENESS_THRESHOLD;
 
 			// Transition completes when all properties are close to targets
 			if (
