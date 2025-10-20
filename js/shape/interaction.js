@@ -74,6 +74,13 @@ export function closeContent() {
 	state.contentVisible = false;
 	state.targetPosition = { x: 0, y: 0, z: 0 };
 	state.targetScale = 1;
+	// Preserve current rotation - don't change it during close transition
+	state.targetRotation = {
+		x: state.pyramid.rotation.x,
+		y: state.pyramid.rotation.y,
+		z: state.pyramid.rotation.z,
+	};
+	state.hasInteracted = true; // Force transition branch instead of autorotation branch
 	state.transitioning = true;
 	const main = document.querySelector("main");
 	main.style.display = "none";

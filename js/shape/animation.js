@@ -76,6 +76,100 @@ export function animate() {
 				state.hasInteracted = false;
 			}, PAUSE_DURATION_MS);
 		}
+
+		// Always lerp position and scale for both transition types
+		state.pyramid.position.x = THREE.MathUtils.lerp(
+			state.pyramid.position.x,
+			state.targetPosition.x,
+			TRANSITION_SPEED,
+		);
+		state.pyramid.position.y = THREE.MathUtils.lerp(
+			state.pyramid.position.y,
+			state.targetPosition.y,
+			TRANSITION_SPEED,
+		);
+		state.pyramid.position.z = THREE.MathUtils.lerp(
+			state.pyramid.position.z,
+			state.targetPosition.z,
+			TRANSITION_SPEED,
+		);
+		state.pyramid.scale.x = THREE.MathUtils.lerp(
+			state.pyramid.scale.x,
+			state.targetScale,
+			TRANSITION_SPEED,
+		);
+		state.pyramid.scale.y = THREE.MathUtils.lerp(
+			state.pyramid.scale.y,
+			state.targetScale,
+			TRANSITION_SPEED,
+		);
+		state.pyramid.scale.z = THREE.MathUtils.lerp(
+			state.pyramid.scale.z,
+			state.targetScale,
+			TRANSITION_SPEED,
+		);
+
+		// Check completion based on transition type
+		let transitionComplete = false;
+		if (state.transitionType === "close") {
+			// For close transitions, only check position and scale
+			const posXClose =
+				Math.abs(state.pyramid.position.x - state.targetPosition.x) < 0.01;
+			const posYClose =
+				Math.abs(state.pyramid.position.y - state.targetPosition.y) < 0.01;
+			const posZClose =
+				Math.abs(state.pyramid.position.z - state.targetPosition.z) < 0.01;
+			const scaleXClose =
+				Math.abs(state.pyramid.scale.x - state.targetScale) < 0.01;
+			const scaleYClose =
+				Math.abs(state.pyramid.scale.y - state.targetScale) < 0.01;
+			const scaleZClose =
+				Math.abs(state.pyramid.scale.z - state.targetScale) < 0.01;
+			transitionComplete =
+				posXClose &&
+				posYClose &&
+				posZClose &&
+				scaleXClose &&
+				scaleYClose &&
+				scaleZClose;
+		} else {
+			// For open transitions, check rotation, position, and scale
+			const xClose =
+				Math.abs(state.pyramid.rotation.x - state.targetRotation.x) < 0.01;
+			const yClose =
+				Math.abs(state.pyramid.rotation.y - state.targetRotation.y) < 0.01;
+			const zClose =
+				Math.abs(state.pyramid.rotation.z - state.targetRotation.z) < 0.01;
+			const posXClose =
+				Math.abs(state.pyramid.position.x - state.targetPosition.x) < 0.01;
+			const posYClose =
+				Math.abs(state.pyramid.position.y - state.targetPosition.y) < 0.01;
+			const posZClose =
+				Math.abs(state.pyramid.position.z - state.targetPosition.z) < 0.01;
+			const scaleXClose =
+				Math.abs(state.pyramid.scale.x - state.targetScale) < 0.01;
+			const scaleYClose =
+				Math.abs(state.pyramid.scale.y - state.targetScale) < 0.01;
+			const scaleZClose =
+				Math.abs(state.pyramid.scale.z - state.targetScale) < 0.01;
+			transitionComplete =
+				xClose &&
+				yClose &&
+				zClose &&
+				posXClose &&
+				posYClose &&
+				posZClose &&
+				scaleXClose &&
+				scaleYClose &&
+				scaleZClose;
+		}
+
+		if (transitionComplete && !state.transitionTimer) {
+			state.transitionTimer = setTimeout(() => {
+				state.transitioning = false;
+				state.hasInteracted = false;
+			}, PAUSE_DURATION_MS);
+		}
 	} else if (!state.dragging) {
 		state.pyramid.rotation.x += state.userVel.x;
 		state.pyramid.rotation.y += state.userVel.y;
