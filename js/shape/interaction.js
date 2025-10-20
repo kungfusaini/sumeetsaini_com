@@ -81,6 +81,8 @@ export function closeContent() {
 		z: state.pyramid.rotation.z,
 	};
 	state.hasInteracted = true; // Force transition branch instead of autorotation branch
+	state.skipPause = true; // Skip pause for immediate autorotation after popup close
+	state.popupCloseTime = Date.now(); // Record when popup was closed
 	state.transitioning = true;
 	const main = document.querySelector("main");
 	main.style.display = "none";
