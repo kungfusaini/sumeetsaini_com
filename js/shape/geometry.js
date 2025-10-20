@@ -108,7 +108,6 @@ export function buildPyramid(loadedTextures, grainCanvas) {
 		const face = new THREE.Mesh(geom, mat);
 		face.renderOrder = colorIndex;
 		face.userData = {
-			url: FACES[colorIndex].link,
 			text: FACES[colorIndex].text,
 			faceIndex: colorIndex,
 		};

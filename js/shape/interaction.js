@@ -117,12 +117,9 @@ export function onClick(ev, container) {
 			main.style.display = "block";
 			main.style.opacity = "1";
 			main.innerHTML = `
-				<button id="close-content" style="position: absolute; top: 1rem; right: 1rem; background: var(--dark-grey); color: var(--cream); border: none; padding: 0.5rem; cursor: pointer;">×</button>
-				${faceConfig.content || "<p>No content available.</p>"}
-			`;
-			if (userData.url) {
-				window.location = userData.url;
-			}
+ 				<button id="close-content" style="position: absolute; top: 1rem; right: 1rem; background: var(--dark-grey); color: var(--cream); border: none; padding: 0.5rem; cursor: pointer;">×</button>
+ 				${faceConfig.content || "<p>No content available.</p>"}
+ 			`;
 			startIdleTimer(); // Start timer to reset hasInteracted for autorotation
 		}
 	}
