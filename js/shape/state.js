@@ -22,4 +22,5 @@ export const state = {
 	wasDragging: false,
 	contentVisible: false,
 	targetPosition: { x: 0, y: 0, z: 0 },
+	targetScale: 1,
 };

@@ -49,6 +49,21 @@ export function animate() {
 			state.targetPosition.z,
 			TRANSITION_SPEED,
 		);
+		state.pyramid.scale.x = THREE.MathUtils.lerp(
+			state.pyramid.scale.x,
+			state.targetScale,
+			TRANSITION_SPEED,
+		);
+		state.pyramid.scale.y = THREE.MathUtils.lerp(
+			state.pyramid.scale.y,
+			state.targetScale,
+			TRANSITION_SPEED,
+		);
+		state.pyramid.scale.z = THREE.MathUtils.lerp(
+			state.pyramid.scale.z,
+			state.targetScale,
+			TRANSITION_SPEED,
+		);
 		const xClose =
 			Math.abs(state.pyramid.rotation.x - state.targetRotation.x) < 0.01;
 		const yClose =

@@ -72,11 +72,12 @@ export function onKeyDown(event) {
 /* ---------- raycast click ------------------------------------------- */
 export function closeContent() {
 	state.contentVisible = false;
-	document.body.classList.remove("content-mode");
 	state.targetPosition = { x: 0, y: 0, z: 0 };
+	state.targetScale = 1;
 	state.transitioning = true;
 	const main = document.querySelector("main");
-	main.classList.add("hidden");
+	main.style.display = "none";
+	main.style.opacity = "0";
 	main.innerHTML = "";
 }
 
@@ -105,17 +106,18 @@ export function onClick(ev, container) {
 			// Set target position based on screen size
 			const isMobile = window.innerWidth <= 600;
 			state.targetPosition = isMobile
-				? { x: 0, y: 2, z: 0 } // Up on mobile
-				: { x: -3, y: 0, z: 0 }; // Left on desktop
+				? { x: 0, y: 1, z: 0 } // Up on mobile
+				: { x: -3.5, y: 0, z: 0 }; // Left on desktop
 			if (state.transitionTimer) clearTimeout(state.transitionTimer);
 			state.autoRotateMultiplier = 0;
 			state.contentVisible = true;
-			document.body.classList.add("content-mode");
+			state.targetScale = 0.7;
 			// Show and populate content
 			const main = document.querySelector("main");
-			main.classList.remove("hidden");
+			main.style.display = "block";
+			main.style.opacity = "1";
 			main.innerHTML = `
-				<button id="close-content" style="position: absolute; top: 1rem; right: 1rem; background: var(--orange); color: white; border: none; padding: 0.5rem; cursor: pointer;">×</button>
+				<button id="close-content" style="position: absolute; top: 1rem; right: 1rem; background: var(--dark-grey); color: var(--cream); border: none; padding: 0.5rem; cursor: pointer;">×</button>
 				${faceConfig.content || "<p>No content available.</p>"}
 			`;
 			if (userData.url) {
