@@ -90,6 +90,7 @@ export function onClick(ev, container) {
 			const faceIndex = userData.faceIndex;
 			const faceConfig = FACES[faceIndex];
 			state.transitioning = true;
+			state.hasInteracted = true; // Stop autorotate immediately
 			state.targetRotation = { ...faceConfig.rotation };
 			if (state.transitionTimer) clearTimeout(state.transitionTimer);
 			state.autoRotateMultiplier = 0;
