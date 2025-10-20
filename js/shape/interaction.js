@@ -5,6 +5,8 @@ import { state } from "./state.js";
 
 export function onPointerDown(x, y) {
 	state.dragging = true;
+	state.pointerDown = true;
+	state.wasDragging = false;
 	state.lastPointer = { x, y };
 	clearIdleTimer();
 	state.autoRotateMultiplier = 0;
@@ -16,6 +18,7 @@ export function onPointerDown(x, y) {
 
 export function onPointerMove(x, y) {
 	if (!state.dragging) return;
+	state.wasDragging = true;
 	state.userVel.y = -(x - state.lastPointer.x) * DRAG_SENSITIVITY;
 	state.userVel.x = (y - state.lastPointer.y) * DRAG_SENSITIVITY;
 	state.pyramid.rotation.y += state.userVel.y;
@@ -27,6 +30,7 @@ export function onPointerMove(x, y) {
 
 export function onPointerUp() {
 	state.dragging = false;
+	state.pointerDown = false;
 	startIdleTimer();
 }
 
@@ -67,6 +71,10 @@ export function onKeyDown(event) {
 
 /* ---------- raycast click ------------------------------------------- */
 export function onClick(ev, container) {
+	if (state.wasDragging) {
+		state.wasDragging = false;
+		return;
+	}
 	const rect = container.getBoundingClientRect();
 	const mouse = new THREE.Vector2(
 		((ev.clientX - rect.left) / rect.width) * 2 - 1,

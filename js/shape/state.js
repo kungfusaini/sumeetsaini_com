@@ -18,4 +18,6 @@ export const state = {
 	autoRotateEnabled: true,
 	debugMode: false,
 	transitionTimer: null,
+	pointerDown: false,
+	wasDragging: false,
 };
