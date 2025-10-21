@@ -1,7 +1,9 @@
+import * as THREE from "three";
 import {
 	CONTENT_POSITION_DESKTOP,
 	CONTENT_POSITION_MOBILE,
 	CONTENT_SCALE,
+	INITIAL_PYRAMID_ROTATION,
 	MOBILE_BREAKPOINT,
 } from "../shape/config.js";
 import { updateTextSprite } from "../shape/helpers.js";
@@ -59,8 +61,18 @@ export function handleFaceClick(faceIndex) {
 		updateTextSprite(shapeState.textSprites[faceIndex], face.text, true);
 	}
 
+	// Convert Euler rotation to quaternion for smooth interpolation
+	const targetEuler = new THREE.Euler(
+		face.rotation.x,
+		face.rotation.y,
+		face.rotation.z,
+	);
+	const targetQuaternion = new THREE.Quaternion();
+	targetQuaternion.setFromEuler(targetEuler);
+
 	emit("shape:moveToPosition", {
 		rotation: face.rotation,
+		quaternion: targetQuaternion,
 		position:
 			window.innerWidth <= MOBILE_BREAKPOINT
 				? CONTENT_POSITION_MOBILE
@@ -93,7 +105,17 @@ export function handlePopupClose() {
 	}
 
 	// Tell shape to reset to center
-	emit("shape:resetPosition");
+	const resetEuler = new THREE.Euler(
+		INITIAL_PYRAMID_ROTATION.x,
+		INITIAL_PYRAMID_ROTATION.y,
+		INITIAL_PYRAMID_ROTATION.z,
+	);
+	const resetQuaternion = new THREE.Quaternion();
+	resetQuaternion.setFromEuler(resetEuler);
+
+	emit("shape:resetPosition", {
+		quaternion: resetQuaternion,
+	});
 
 	// Update controller state
 	controllerState.contentVisible = false;

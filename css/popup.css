@@ -29,7 +29,6 @@ body.content-mode main {
 		visibility var(--popup-fade-in-duration) ease;
 }
 
-
 /* ---------- Mobile Styles ---------- */
 @media (max-width: 600px) {
 	main {

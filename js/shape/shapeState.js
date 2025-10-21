@@ -30,6 +30,7 @@ export const shapeState = {
 	targetPosition: { x: 0, y: 0, z: 0 },
 	targetScale: 1,
 	targetRotation: { x: 0, y: 0, z: 0 },
+	targetQuaternion: new THREE.Quaternion(),
 	transitionType: null, // 'toContent' or 'toCenter'
 
 	// Debug state

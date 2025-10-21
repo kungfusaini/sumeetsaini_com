@@ -114,6 +114,7 @@ export async function init() {
 	// Listen for controller events
 	on("shape:moveToPosition", (data) => {
 		shapeState.targetRotation = { ...data.rotation };
+		shapeState.targetQuaternion.copy(data.quaternion);
 		shapeState.targetPosition = { ...data.position };
 		shapeState.targetScale = data.scale;
 		shapeState.transitioning = true;
@@ -121,12 +122,8 @@ export async function init() {
 		shapeState.hasInteracted = true;
 	});
 
-	on("shape:resetPosition", () => {
-		shapeState.targetRotation = {
-			x: shapeState.pyramid.rotation.x,
-			y: shapeState.pyramid.rotation.y,
-			z: shapeState.pyramid.rotation.z,
-		};
+	on("shape:resetPosition", (data) => {
+		shapeState.targetQuaternion.copy(data.quaternion);
 		shapeState.targetPosition = { x: 0, y: 0, z: 0 };
 		shapeState.targetScale = 1;
 		shapeState.transitioning = true;

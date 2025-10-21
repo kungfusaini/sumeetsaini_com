@@ -33,21 +33,15 @@ export function animate() {
 					? SHAPE_RETURN_TO_CENTER_SPEED
 					: TRANSITION_SPEED; // fallback
 
-		shapeState.pyramid.rotation.x = THREE.MathUtils.lerp(
-			shapeState.pyramid.rotation.x,
-			shapeState.targetRotation.x,
-			transitionSpeed,
-		);
-		shapeState.pyramid.rotation.y = THREE.MathUtils.lerp(
-			shapeState.pyramid.rotation.y,
-			shapeState.targetRotation.y,
-			transitionSpeed,
-		);
-		shapeState.pyramid.rotation.z = THREE.MathUtils.lerp(
-			shapeState.pyramid.rotation.z,
-			shapeState.targetRotation.z,
-			transitionSpeed,
-		);
+		// Use quaternion interpolation for smooth rotation
+		const currentQuaternion = new THREE.Quaternion();
+		currentQuaternion.copy(shapeState.pyramid.quaternion);
+
+		// Slerp between current and target quaternion
+		currentQuaternion.slerp(shapeState.targetQuaternion, transitionSpeed);
+
+		// Apply the interpolated quaternion back to the pyramid
+		shapeState.pyramid.quaternion.copy(currentQuaternion);
 		shapeState.pyramid.position.x = THREE.MathUtils.lerp(
 			shapeState.pyramid.position.x,
 			shapeState.targetPosition.x,
@@ -82,16 +76,11 @@ export function animate() {
 		// Check completion based on transition type
 		let transitionComplete = false;
 
-		// For all transitions, check rotation, position, and scale
-		const xClose =
-			Math.abs(shapeState.pyramid.rotation.x - shapeState.targetRotation.x) <
-			0.01;
-		const yClose =
-			Math.abs(shapeState.pyramid.rotation.y - shapeState.targetRotation.y) <
-			0.01;
-		const zClose =
-			Math.abs(shapeState.pyramid.rotation.z - shapeState.targetRotation.z) <
-			0.01;
+		// For all transitions, check rotation (using quaternion), position, and scale
+		const quaternionDistance = shapeState.pyramid.quaternion.angleTo(
+			shapeState.targetQuaternion,
+		);
+		const rotationClose = quaternionDistance < 0.01;
 		const posXClose =
 			Math.abs(shapeState.pyramid.position.x - shapeState.targetPosition.x) <
 			0.01;
@@ -109,9 +98,7 @@ export function animate() {
 			Math.abs(shapeState.pyramid.scale.z - shapeState.targetScale) < 0.01;
 
 		transitionComplete =
-			xClose &&
-			yClose &&
-			zClose &&
+			rotationClose &&
 			posXClose &&
 			posYClose &&
 			posZClose &&
