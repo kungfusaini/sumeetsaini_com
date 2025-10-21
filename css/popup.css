@@ -19,10 +19,11 @@ main {
 	border-radius: 8px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 	z-index: 10;
+	opacity: 0.85;
 }
 
 body.content-mode main {
-	opacity: 1;
+	opacity: 0;
 	visibility: visible;
 	transition:
 		opacity var(--popup-fade-in-duration) ease,
@@ -41,17 +42,20 @@ body.content-mode main {
 		visibility: hidden;
 		position: absolute;
 		right: 1rem;
-		top: 50vh;
+		top: 40vh;
 		left: auto;
 		bottom: auto;
 		max-height: calc(100vh - 55vh);
 		border-radius: 8px;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	}
+
+	main.popup-scrollable {
 		overflow-y: auto;
 	}
 
 	body.content-mode main {
-		opacity: 1;
+		opacity: 0;
 		background-color: var(--cream);
 		color: var(--dark-grey);
 		border: 2px solid var(--orange);
