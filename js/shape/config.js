@@ -30,6 +30,7 @@ export const MOBILE_BREAKPOINT = 600;
 export const POPUP_POSITION_DESKTOP = { x: -3.5, y: 0, z: 0 };
 export const POPUP_POSITION_MOBILE = { x: 0, y: 1, z: 0 };
 export const POPUP_SCALE = 0.7;
+export const POPUP_FADE_DURATION_MS = 500;
 export const FACES = [
 	{
 		text: "About",

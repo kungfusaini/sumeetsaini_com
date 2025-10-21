@@ -4,6 +4,7 @@ import {
 	DRAG_SENSITIVITY,
 	FACES,
 	MOBILE_BREAKPOINT,
+	POPUP_FADE_DURATION_MS,
 	POPUP_POSITION_DESKTOP,
 	POPUP_POSITION_MOBILE,
 	POPUP_SCALE,
@@ -93,9 +94,11 @@ export function closeContent() {
 	state.popupCloseTime = Date.now(); // Record when popup was closed
 	state.transitioning = true;
 	const main = document.querySelector("main");
-	main.style.display = "none";
-	main.style.opacity = "0";
-	main.innerHTML = "";
+	document.body.classList.remove("content-mode"); // Trigger fade out
+	setTimeout(() => {
+		main.style.display = "none";
+		main.innerHTML = "";
+	}, POPUP_FADE_DURATION_MS);
 }
 
 export function onClick(ev, container) {
@@ -119,6 +122,7 @@ export function onClick(ev, container) {
 			const faceConfig = FACES[faceIndex];
 			state.transitioning = true;
 			state.hasInteracted = true; // Stop autorotate immediately
+			state.skipPause = false; // Reset flag for normal transition completion
 			state.targetRotation = { ...faceConfig.rotation };
 			// Set target position based on screen size
 			const isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
@@ -132,11 +136,14 @@ export function onClick(ev, container) {
 			// Show and populate content
 			const main = document.querySelector("main");
 			main.style.display = "block";
-			main.style.opacity = "1";
 			main.innerHTML = `
- 				<button id="close-content" style="position: absolute; top: 1rem; right: 1rem; background: var(--dark-grey); color: var(--cream); border: none; padding: 0.5rem; cursor: pointer;">×</button>
- 				${faceConfig.content || "<p>No content available.</p>"}
- 			`;
+  				<button id="close-content" style="position: absolute; top: 1rem; right: 1rem; background: var(--dark-grey); color: var(--cream); border: none; padding: 0.5rem; cursor: pointer;">×</button>
+  				${faceConfig.content || "<p>No content available.</p>"}
+  			`;
+			// Trigger fade in after content is rendered
+			requestAnimationFrame(() => {
+				document.body.classList.add("content-mode");
+			});
 			startIdleTimer(); // Start timer to reset hasInteracted for autorotation
 		}
 	}
