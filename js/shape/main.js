@@ -119,6 +119,7 @@ export async function init() {
 		shapeState.targetPosition = { ...data.position };
 		shapeState.targetScale = data.scale;
 		shapeState.transitioning = true;
+		shapeState.transitionType = "toContent";
 		shapeState.hasInteracted = true;
 	});
 
@@ -131,6 +132,7 @@ export async function init() {
 		shapeState.targetPosition = { x: 0, y: 0, z: 0 };
 		shapeState.targetScale = 1;
 		shapeState.transitioning = true;
+		shapeState.transitionType = "toCenter";
 		shapeState.hasInteracted = true;
 	});
 

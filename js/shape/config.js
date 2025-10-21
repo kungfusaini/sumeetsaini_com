@@ -22,6 +22,8 @@ export const GRAIN_INTENSITY_FACE = 0.15;
 export const GRAIN_SIZE_FACE = 10;
 export const INITIAL_PYRAMID_ROTATION = { x: -4.2, y: -0.378, z: 0.0 };
 export const TRANSITION_SPEED = 0.05;
+export const SHAPE_MOVE_TO_CONTENT_SPEED = 0.08;
+export const SHAPE_RETURN_TO_CENTER_SPEED = 0.03;
 export const PAUSE_DURATION_MS = 3000;
 
 export const DEBUG_ROTATION_INCREMENT = 0.05;

@@ -3,6 +3,8 @@ import {
 	CONTENT_CLOSE_TRANSITION_MS,
 	PAUSE_DURATION_MS,
 	TRANSITION_SPEED,
+	SHAPE_MOVE_TO_CONTENT_SPEED,
+	SHAPE_RETURN_TO_CENTER_SPEED,
 	VELOCITY_DAMPING,
 } from "./config.js";
 import {
@@ -25,62 +27,106 @@ export function animate() {
 		shapeState.pyramid.rotation.y +=
 			shapeState.baseSpeed.y * shapeState.autoRotateMultiplier;
 	} else if (shapeState.transitioning) {
+		// Determine transition speed based on type
+		const transitionSpeed =
+			shapeState.transitionType === "toContent"
+				? SHAPE_MOVE_TO_CONTENT_SPEED
+				: shapeState.transitionType === "toCenter"
+					? SHAPE_RETURN_TO_CENTER_SPEED
+					: TRANSITION_SPEED; // fallback
+
 		shapeState.pyramid.rotation.x = THREE.MathUtils.lerp(
 			shapeState.pyramid.rotation.x,
 			shapeState.targetRotation.x,
-			TRANSITION_SPEED,
+			transitionSpeed,
 		);
 		shapeState.pyramid.rotation.y = THREE.MathUtils.lerp(
 			shapeState.pyramid.rotation.y,
 			shapeState.targetRotation.y,
-			TRANSITION_SPEED,
+			transitionSpeed,
 		);
 		shapeState.pyramid.rotation.z = THREE.MathUtils.lerp(
 			shapeState.pyramid.rotation.z,
 			shapeState.targetRotation.z,
-			TRANSITION_SPEED,
+			transitionSpeed,
 		);
 		shapeState.pyramid.position.x = THREE.MathUtils.lerp(
 			shapeState.pyramid.position.x,
 			shapeState.targetPosition.x,
-			TRANSITION_SPEED,
+			transitionSpeed,
 		);
 		shapeState.pyramid.position.y = THREE.MathUtils.lerp(
 			shapeState.pyramid.position.y,
 			shapeState.targetPosition.y,
-			TRANSITION_SPEED,
+			transitionSpeed,
 		);
 		shapeState.pyramid.position.z = THREE.MathUtils.lerp(
 			shapeState.pyramid.position.z,
 			shapeState.targetPosition.z,
-			TRANSITION_SPEED,
+			transitionSpeed,
 		);
 		shapeState.pyramid.scale.x = THREE.MathUtils.lerp(
 			shapeState.pyramid.scale.x,
 			shapeState.targetScale,
-			TRANSITION_SPEED,
+			transitionSpeed,
 		);
 		shapeState.pyramid.scale.y = THREE.MathUtils.lerp(
 			shapeState.pyramid.scale.y,
 			shapeState.targetScale,
-			TRANSITION_SPEED,
+			transitionSpeed,
 		);
 		shapeState.pyramid.scale.z = THREE.MathUtils.lerp(
 			shapeState.pyramid.scale.z,
 			shapeState.targetScale,
-			TRANSITION_SPEED,
+			transitionSpeed,
 		);
 
 		// Check completion based on transition type
 		let transitionComplete = false;
 
-		// For popup close transitions, use timer-based completion instead of position/scale checks
+		// For popup close transitions, use both timer AND position checks
 		if (shapeState.skipPause && shapeState.popupCloseTime > 0) {
 			const timeSinceClose = Date.now() - shapeState.popupCloseTime;
-			if (timeSinceClose >= CONTENT_CLOSE_TRANSITION_MS) {
-				// Configurable transition time
-				// Start autorotation with normal ramp-up after popup close
+			const xClose =
+				Math.abs(shapeState.pyramid.rotation.x - shapeState.targetRotation.x) <
+				0.01;
+			const yClose =
+				Math.abs(shapeState.pyramid.rotation.y - shapeState.targetRotation.y) <
+				0.01;
+			const zClose =
+				Math.abs(shapeState.pyramid.rotation.z - shapeState.targetRotation.z) <
+				0.01;
+			const posXClose =
+				Math.abs(shapeState.pyramid.position.x - shapeState.targetPosition.x) <
+				0.01;
+			const posYClose =
+				Math.abs(shapeState.pyramid.position.y - shapeState.targetPosition.y) <
+				0.01;
+			const posZClose =
+				Math.abs(shapeState.pyramid.position.z - shapeState.targetPosition.z) <
+				0.01;
+			const scaleXClose =
+				Math.abs(shapeState.pyramid.scale.x - shapeState.targetScale) < 0.01;
+			const scaleYClose =
+				Math.abs(shapeState.pyramid.scale.y - shapeState.targetScale) < 0.01;
+			const scaleZClose =
+				Math.abs(shapeState.pyramid.scale.z - shapeState.targetScale) < 0.01;
+
+			const positionReached =
+				xClose &&
+				yClose &&
+				zClose &&
+				posXClose &&
+				posYClose &&
+				posZClose &&
+				scaleXClose &&
+				scaleYClose &&
+				scaleZClose;
+
+			if (timeSinceClose >= CONTENT_CLOSE_TRANSITION_MS && positionReached) {
+				// Both timer elapsed AND position reached
 				shapeState.transitioning = false;
+				shapeState.transitionType = null; // Reset transition type
 				shapeState.hasInteracted = false;
 				shapeState.autoRotateMultiplier = 0; // Reset for proper ramp-up
 				shapeState.skipPause = false; // Reset flag
@@ -128,6 +174,7 @@ export function animate() {
 		if (transitionComplete && !shapeState.transitionTimer) {
 			shapeState.transitionTimer = setTimeout(() => {
 				shapeState.transitioning = false;
+				shapeState.transitionType = null; // Reset transition type
 				shapeState.hasInteracted = false;
 			}, PAUSE_DURATION_MS);
 		}

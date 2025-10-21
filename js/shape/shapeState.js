@@ -30,6 +30,7 @@ export const shapeState = {
 	targetPosition: { x: 0, y: 0, z: 0 },
 	targetScale: 1,
 	targetRotation: { x: 0, y: 0, z: 0 },
+	transitionType: null, // 'toContent' or 'toCenter'
 	skipPause: false, // Skip pause after popup close for immediate autorotation
 	popupCloseTime: 0, // Timestamp when popup was closed for timer-based completion
 
