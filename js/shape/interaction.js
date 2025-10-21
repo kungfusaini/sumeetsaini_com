@@ -2,6 +2,7 @@ import * as THREE from "three";
 import {
 	DEBUG_ROTATION_INCREMENT,
 	DRAG_SENSITIVITY,
+	DRAG_THRESHOLD_PX,
 	FACES,
 	MOBILE_BREAKPOINT,
 	POPUP_FADE_DURATION_MS,
@@ -27,11 +28,21 @@ export function onPointerDown(x, y) {
 
 export function onPointerMove(x, y) {
 	if (!state.dragging) return;
-	state.wasDragging = true;
-	state.userVel.y = -(x - state.lastPointer.x) * DRAG_SENSITIVITY;
-	state.userVel.x = (y - state.lastPointer.y) * DRAG_SENSITIVITY;
-	state.pyramid.rotation.y += state.userVel.y;
-	state.pyramid.rotation.x += state.userVel.x;
+
+	// Calculate distance from initial pointer down position
+	const deltaX = x - state.lastPointer.x;
+	const deltaY = y - state.lastPointer.y;
+	const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+	// Only consider it dragging if moved beyond threshold
+	if (distance >= DRAG_THRESHOLD_PX) {
+		state.wasDragging = true;
+		state.userVel.y = -(x - state.lastPointer.x) * DRAG_SENSITIVITY;
+		state.userVel.x = (y - state.lastPointer.y) * DRAG_SENSITIVITY;
+		state.pyramid.rotation.y += state.userVel.y;
+		state.pyramid.rotation.x += state.userVel.x;
+	}
+
 	state.lastPointer = { x, y };
 	state.hasInteracted = true;
 	state.autoRotateMultiplier = 0;
