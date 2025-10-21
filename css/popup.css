@@ -1,0 +1,61 @@
+/* ---------- Popup Styles ---------- */
+
+main {
+	padding: 4rem 2rem 2rem;
+	overflow-y: auto;
+	transition:
+		opacity var(--popup-fade-out-duration) ease,
+		visibility var(--popup-fade-out-duration) ease;
+	opacity: 0;
+	visibility: hidden;
+	position: absolute;
+	right: 1rem;
+	top: 6rem;
+	width: 45%;
+	height: calc(100vh - 8rem);
+	background-color: var(--cream);
+	color: var(--dark-grey);
+	border: 2px solid var(--orange);
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	z-index: 10;
+}
+
+body.content-mode main {
+	opacity: 1;
+	visibility: visible;
+	transition:
+		opacity var(--popup-fade-in-duration) ease,
+		visibility var(--popup-fade-in-duration) ease;
+}
+
+@media (max-width: 600px) {
+	main {
+		width: 100%;
+		padding-top: 1rem;
+		transition:
+			opacity var(--popup-fade-out-duration) ease,
+			visibility var(--popup-fade-out-duration) ease;
+		opacity: 0;
+		visibility: hidden;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		top: auto;
+		height: 50vh;
+		border-radius: 0;
+		box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+	}
+
+	body.content-mode main {
+		height: 50vh;
+		opacity: 1;
+		background-color: var(--cream);
+		color: var(--dark-grey);
+		border-top: 2px solid var(--orange);
+		transition:
+			opacity var(--popup-fade-in-duration) ease,
+			visibility var(--popup-fade-in-duration) ease;
+	}
+}

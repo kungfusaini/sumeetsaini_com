@@ -1,13 +1,18 @@
 import { emit, on } from "../controller/main.js";
-import { POPUP_FADE_DURATION_MS } from "./config.js";
+import {
+	POPUP_FADE_IN_DURATION_MS,
+	POPUP_FADE_OUT_DURATION_MS,
+} from "./config.js";
 
 export function closeContent() {
 	const main = document.querySelector("main");
 	document.body.classList.remove("content-mode");
+
+	// Wait for fade-out transition to complete
 	setTimeout(() => {
-		main.style.display = "none";
+		main.style.visibility = "hidden";
 		main.innerHTML = "";
-	}, POPUP_FADE_DURATION_MS);
+	}, POPUP_FADE_OUT_DURATION_MS);
 	emit("popup:closed");
 }
 
@@ -28,10 +33,13 @@ export async function showContent(contentPath, title) {
 		main.innerHTML = `${closeButton}<h2>${title}</h2><p>Content could not be loaded.</p>`;
 	}
 
-	main.style.display = "block";
-	setTimeout(() => {
+	// Ensure popup is ready for transition
+	main.style.visibility = "visible";
+
+	// Trigger fade-in in next frame
+	requestAnimationFrame(() => {
 		document.body.classList.add("content-mode");
-	}, 10);
+	});
 }
 
 /* ---------- event listeners ---------- */
