@@ -4,6 +4,8 @@ import {
 	CONTENT_SCALE,
 	MOBILE_BREAKPOINT,
 } from "../shape/config.js";
+import { updateTextSprite } from "../shape/helpers.js";
+import { shapeState } from "../shape/shapeState.js";
 import { FACES } from "../shared/faces.js";
 
 // Controller-specific state
@@ -38,6 +40,25 @@ export function handleFaceClick(faceIndex) {
 		return;
 	}
 
+	// Reset previously selected face if any (and it's different from current selection)
+	if (
+		controllerState.currentFace !== null &&
+		controllerState.currentFace !== faceIndex &&
+		shapeState.textSprites[controllerState.currentFace]
+	) {
+		const prevFace = FACES[controllerState.currentFace];
+		updateTextSprite(
+			shapeState.textSprites[controllerState.currentFace],
+			prevFace.text,
+			false,
+		);
+	}
+
+	// Update text sprite for selected face
+	if (shapeState.textSprites[faceIndex]) {
+		updateTextSprite(shapeState.textSprites[faceIndex], face.text, true);
+	}
+
 	emit("shape:moveToPosition", {
 		rotation: face.rotation,
 		position:
@@ -54,15 +75,30 @@ export function handleFaceClick(faceIndex) {
 
 	controllerState.contentVisible = true;
 	controllerState.currentFace = faceIndex;
+	shapeState.selectedFace = faceIndex;
 }
 
 export function handlePopupClose() {
+	// Reset text sprite for previously selected face
+	if (
+		controllerState.currentFace !== null &&
+		shapeState.textSprites[controllerState.currentFace]
+	) {
+		const prevFace = FACES[controllerState.currentFace];
+		updateTextSprite(
+			shapeState.textSprites[controllerState.currentFace],
+			prevFace.text,
+			false,
+		);
+	}
+
 	// Tell shape to reset to center
 	emit("shape:resetPosition");
 
 	// Update controller state
 	controllerState.contentVisible = false;
 	controllerState.currentFace = null;
+	shapeState.selectedFace = null;
 
 	// Tell shape to handle popup close timing
 	emit("shape:handlePopupClose");

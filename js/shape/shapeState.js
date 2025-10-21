@@ -34,4 +34,8 @@ export const shapeState = {
 
 	// Debug state
 	debugMode: false,
+
+	// Selection state
+	selectedFace: null,
+	textSprites: [],
 };

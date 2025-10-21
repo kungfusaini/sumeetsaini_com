@@ -1,0 +1,15 @@
+/* ---------- Label Styles ---------- */
+
+:root {
+	/* Label colors */
+	--label-color-normal: white;
+	--label-color-selected: var(--orange);
+
+	/* Label sizes (scale multipliers) */
+	--label-scale-normal: 1;
+	--label-scale-selected: 1.5;
+
+	/* Label outline settings */
+	--label-outline-color: black;
+	--label-outline-width: 100px;
+}

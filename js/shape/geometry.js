@@ -12,6 +12,7 @@ import {
 	getResponsivePyramidSize,
 	getResponsiveTextPosMultiplier,
 } from "./helpers.js";
+import { shapeState } from "./shapeState.js";
 
 export function buildPyramid(loadedTextures, grainCanvas) {
 	const group = new THREE.Group();
@@ -124,6 +125,9 @@ export function buildPyramid(loadedTextures, grainCanvas) {
 		center.normalize().multiplyScalar(size * textPosMultiplier);
 		textSprite.position.copy(center);
 		group.add(textSprite);
+
+		// Store text sprite in shapeState for later updates
+		shapeState.textSprites[colorIndex] = textSprite;
 	});
 
 	return group;

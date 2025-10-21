@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import {
-	TRANSITION_SPEED,
 	SHAPE_MOVE_TO_CONTENT_SPEED,
 	SHAPE_RETURN_TO_CENTER_SPEED,
+	TRANSITION_SPEED,
 	VELOCITY_DAMPING,
 } from "./config.js";
 import {

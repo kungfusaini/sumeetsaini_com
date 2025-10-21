@@ -1,8 +1,5 @@
 import { emit, on } from "../controller/main.js";
-import {
-	POPUP_FADE_IN_DURATION_MS,
-	POPUP_FADE_OUT_DURATION_MS,
-} from "./config.js";
+import { POPUP_FADE_OUT_DURATION_MS } from "./config.js";
 
 export function closeContent() {
 	const main = document.querySelector("main");

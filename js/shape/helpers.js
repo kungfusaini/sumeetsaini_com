@@ -113,27 +113,159 @@ export const getResponsiveTextPosMultiplier = (width) => {
 	return TEXT_POS_MULTIPLIER_BASE;
 };
 
-export function createTextSprite(text) {
+export function createTextSprite(text, isSelected = false) {
 	const canvas = document.createElement("canvas");
 	const context = canvas.getContext("2d");
 	canvas.width = TEXT_CANVAS_WIDTH;
 	canvas.height = TEXT_CANVAS_HEIGHT;
 
 	context.font = TEXT_FONT;
-	context.fillStyle = "white";
 	context.textAlign = "center";
 	context.textBaseline = "middle";
+
+	// Get colors from CSS variables
+	const normalColor =
+		getComputedStyle(document.documentElement)
+			.getPropertyValue("--label-color-normal")
+			.trim() || "white";
+	const selectedColor =
+		getComputedStyle(document.documentElement)
+			.getPropertyValue("--label-color-selected")
+			.trim() || "#d65d03";
 
 	// Draw text
 	const x = canvas.width / 2;
 	const y = canvas.height / 2;
-	context.fillText(text, x, y);
+
+	if (isSelected) {
+		// Get outline settings from CSS
+		const outlineColor =
+			getComputedStyle(document.documentElement)
+				.getPropertyValue("--label-outline-color")
+				.trim() || "black";
+		const outlineWidth =
+			getComputedStyle(document.documentElement)
+				.getPropertyValue("--label-outline-width")
+				.trim() || "3px";
+
+		// Draw outline first
+		context.strokeStyle = outlineColor;
+		context.lineWidth = parseInt(outlineWidth, 10);
+		context.strokeText(text, x, y);
+
+		// Then draw selected text on top
+		context.fillStyle = selectedColor;
+		context.fillText(text, x, y);
+	} else {
+		context.fillStyle = normalColor;
+		context.fillText(text, x, y);
+	}
 
 	const texture = new THREE.CanvasTexture(canvas);
+	texture.colorSpace = THREE.SRGBColorSpace;
+	texture.needsUpdate = true;
 	const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
 	const sprite = new THREE.Sprite(spriteMaterial);
 	const textScale = getResponsiveTextScale(window.innerWidth);
-	sprite.scale.set(textScale.x, textScale.y, textScale.z);
+
+	// Get scale multipliers from CSS variables
+	const normalScale =
+		parseFloat(
+			getComputedStyle(document.documentElement)
+				.getPropertyValue("--label-scale-normal")
+				.trim(),
+		) || 1;
+	const selectedScale =
+		parseFloat(
+			getComputedStyle(document.documentElement)
+				.getPropertyValue("--label-scale-selected")
+				.trim(),
+		) || 1.5;
+
+	const scaleMultiplier = isSelected ? selectedScale : normalScale;
+	sprite.scale.set(
+		textScale.x * scaleMultiplier,
+		textScale.y * scaleMultiplier,
+		textScale.z * scaleMultiplier,
+	);
 
 	return sprite;
+}
+
+export function updateTextSprite(sprite, text, isSelected = false) {
+	const canvas = document.createElement("canvas");
+	const context = canvas.getContext("2d");
+	canvas.width = TEXT_CANVAS_WIDTH;
+	canvas.height = TEXT_CANVAS_HEIGHT;
+
+	context.font = TEXT_FONT;
+	context.textAlign = "center";
+	context.textBaseline = "middle";
+
+	// Get colors from CSS variables
+	const normalColor =
+		getComputedStyle(document.documentElement)
+			.getPropertyValue("--label-color-normal")
+			.trim() || "white";
+	const selectedColor =
+		getComputedStyle(document.documentElement)
+			.getPropertyValue("--label-color-selected")
+			.trim() || "#d65d03";
+
+	// Draw text
+	const x = canvas.width / 2;
+	const y = canvas.height / 2;
+
+	if (isSelected) {
+		// Get outline settings from CSS
+		const outlineColor =
+			getComputedStyle(document.documentElement)
+				.getPropertyValue("--label-outline-color")
+				.trim() || "black";
+		const outlineWidth =
+			getComputedStyle(document.documentElement)
+				.getPropertyValue("--label-outline-width")
+				.trim() || "3px";
+
+		// Draw outline first
+		context.strokeStyle = outlineColor;
+		context.lineWidth = parseInt(outlineWidth, 10);
+		context.strokeText(text, x, y);
+
+		// Then draw selected text on top
+		context.fillStyle = selectedColor;
+		context.fillText(text, x, y);
+	} else {
+		context.fillStyle = normalColor;
+		context.fillText(text, x, y);
+	}
+
+	const texture = new THREE.CanvasTexture(canvas);
+	texture.colorSpace = THREE.SRGBColorSpace;
+	texture.needsUpdate = true;
+	sprite.material.map = texture;
+	sprite.material.needsUpdate = true;
+
+	const textScale = getResponsiveTextScale(window.innerWidth);
+
+	// Get scale multipliers from CSS variables
+	const normalScale =
+		parseFloat(
+			getComputedStyle(document.documentElement)
+				.getPropertyValue("--label-scale-normal")
+				.trim(),
+		) || 1;
+	const selectedScale =
+		parseFloat(
+			getComputedStyle(document.documentElement)
+				.getPropertyValue("--label-scale-selected")
+				.trim(),
+		) || 1.5;
+
+	const scaleMultiplier = isSelected ? selectedScale : normalScale;
+	sprite.scale.set(
+		textScale.x * scaleMultiplier,
+		textScale.y * scaleMultiplier,
+		textScale.z * scaleMultiplier,
+	);
 }
