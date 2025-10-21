@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import {
-	PAUSE_DURATION_MS,
 	TRANSITION_SPEED,
 	SHAPE_MOVE_TO_CONTENT_SPEED,
 	SHAPE_RETURN_TO_CENTER_SPEED,
@@ -121,11 +120,10 @@ export function animate() {
 			scaleZClose;
 
 		if (transitionComplete && !shapeState.transitionTimer) {
-			shapeState.transitionTimer = setTimeout(() => {
-				shapeState.transitioning = false;
-				shapeState.transitionType = null; // Reset transition type
-				shapeState.hasInteracted = false;
-			}, PAUSE_DURATION_MS);
+			shapeState.transitioning = false;
+			shapeState.transitionType = null; // Reset transition type
+			shapeState.hasInteracted = false;
+			shapeState.autoRotateMultiplier = 0; // Reset auto-rotation to start gradually
 		}
 	} else if (!shapeState.dragging) {
 		shapeState.pyramid.rotation.x += shapeState.userVel.x;

@@ -5,7 +5,7 @@ export const CAMERA_Y_BASE = 2;
 export const BASE_ROT_SPEED = { x: 0.002, y: 0.002 };
 export const DRAG_SENSITIVITY = 0.01;
 export const VELOCITY_DAMPING = 0.95;
-export const IDLE_TIMEOUT_MS = 6000;
+export const IDLE_TIMEOUT_MS = 3000;
 export const TEXT_CANVAS_WIDTH = 1536;
 export const TEXT_CANVAS_HEIGHT = 768;
 export const TEXT_FONT =
@@ -24,7 +24,6 @@ export const INITIAL_PYRAMID_ROTATION = { x: -4.2, y: -0.378, z: 0.0 };
 export const TRANSITION_SPEED = 0.05;
 export const SHAPE_MOVE_TO_CONTENT_SPEED = 0.08;
 export const SHAPE_RETURN_TO_CENTER_SPEED = 0.04;
-export const PAUSE_DURATION_MS = 3000;
 
 export const DEBUG_ROTATION_INCREMENT = 0.05;
 export const DRAG_THRESHOLD_PX = 3; // Minimum pixels to consider it a drag
