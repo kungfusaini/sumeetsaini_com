@@ -23,15 +23,16 @@ export const GRAIN_SIZE_FACE = 10;
 export const INITIAL_PYRAMID_ROTATION = { x: -4.2, y: -0.378, z: 0.0 };
 export const TRANSITION_SPEED = 0.05;
 export const PAUSE_DURATION_MS = 3000;
-export const POPUP_CLOSE_TRANSITION_MS = 1000;
 export const TRANSITION_CLOSENESS_THRESHOLD = 0.01;
 export const DEBUG_ROTATION_INCREMENT = 0.05;
-export const MOBILE_BREAKPOINT = 600;
-export const POPUP_POSITION_DESKTOP = { x: -3.5, y: 0, z: 0 };
-export const POPUP_POSITION_MOBILE = { x: 0, y: 1, z: 0 };
-export const POPUP_SCALE = 0.7;
-export const POPUP_FADE_DURATION_MS = 500;
 export const DRAG_THRESHOLD_PX = 3; // Minimum pixels to consider it a drag
+
+// Shape interaction and content display positioning (shape-related)
+export const CONTENT_CLOSE_TRANSITION_MS = 1000;
+export const CONTENT_POSITION_DESKTOP = { x: -3.5, y: 0, z: 0 };
+export const CONTENT_POSITION_MOBILE = { x: 0, y: 1, z: 0 };
+export const CONTENT_SCALE = 0.7;
+export const MOBILE_BREAKPOINT = 600;
 export const FACES = [
 	{
 		text: "About",

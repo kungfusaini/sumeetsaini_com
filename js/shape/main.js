@@ -1,4 +1,6 @@
 import * as THREE from "three";
+import { initPopup } from "../popup/main.js";
+import { loader, state } from "../shared/state.js";
 import { animate, onResize } from "./animation.js";
 import {
 	FACES,
@@ -15,14 +17,7 @@ import {
 	getResponsiveFOV,
 	getResponsiveLookAtY,
 } from "./helpers.js";
-import {
-	closeContent,
-	onClick,
-	onPointerDown,
-	onPointerMove,
-	onPointerUp,
-} from "./interaction.js";
-import { loader, state } from "./state.js";
+import { onPointerDown, onPointerMove, onPointerUp } from "./interaction.js";
 
 /* ---------- init ---------------------------------------------------- */
 export async function init() {
@@ -100,12 +95,8 @@ export async function init() {
 	);
 	window.addEventListener("touchend", onPointerUp);
 
-	container.addEventListener("click", (e) => onClick(e, container));
-	document.addEventListener("click", (e) => {
-		if (e.target.id === "close-content") {
-			closeContent();
-		}
-	});
+	// Initialize popup system
+	initPopup(container);
 	window.addEventListener("resize", () => onResize(container));
 
 	/* ---- first frame ---- */

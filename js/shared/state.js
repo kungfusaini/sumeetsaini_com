@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { BASE_ROT_SPEED } from "./config.js";
+import { BASE_ROT_SPEED } from "../shape/config.js";
 
 export const loader = new THREE.TextureLoader();
 
@@ -23,6 +23,7 @@ export const state = {
 	contentVisible: false,
 	targetPosition: { x: 0, y: 0, z: 0 },
 	targetScale: 1,
+	targetRotation: { x: 0, y: 0, z: 0 },
 	skipPause: false, // Skip pause after popup close for immediate autorotation
 	popupCloseTime: 0, // Timestamp when popup was closed for timer-based completion
 };

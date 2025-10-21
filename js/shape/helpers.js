@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { state } from "../shared/state.js";
 import {
 	CAMERA_FOV_BASE,
 	CAMERA_Y_BASE,
@@ -12,7 +13,6 @@ import {
 	TEXT_POS_MULTIPLIER_BASE,
 	TEXT_SCALE_BASE,
 } from "./config.js";
-import { state } from "./state.js";
 
 // Shaders for blending grain texture with face texture
 export const vertexShader = `

@@ -1,7 +1,8 @@
 import * as THREE from "three";
+import { state } from "../shared/state.js";
 import {
+	CONTENT_CLOSE_TRANSITION_MS,
 	PAUSE_DURATION_MS,
-	POPUP_CLOSE_TRANSITION_MS,
 	TRANSITION_CLOSENESS_THRESHOLD,
 	TRANSITION_SPEED,
 	VELOCITY_DAMPING,
@@ -12,7 +13,6 @@ import {
 	getResponsiveFOV,
 	getResponsiveLookAtY,
 } from "./helpers.js";
-import { state } from "./state.js";
 
 export function animate() {
 	requestAnimationFrame(animate);
@@ -80,7 +80,7 @@ export function animate() {
 		// For popup close transitions, use timer-based completion instead of position/scale checks
 		if (state.skipPause && state.popupCloseTime > 0) {
 			const timeSinceClose = Date.now() - state.popupCloseTime;
-			if (timeSinceClose >= POPUP_CLOSE_TRANSITION_MS) {
+			if (timeSinceClose >= CONTENT_CLOSE_TRANSITION_MS) {
 				// Configurable transition time
 				// Start autorotation with normal ramp-up after popup close
 				state.transitioning = false;
