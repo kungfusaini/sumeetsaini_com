@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import {
-	CONTENT_CLOSE_TRANSITION_MS,
 	PAUSE_DURATION_MS,
 	TRANSITION_SPEED,
 	SHAPE_MOVE_TO_CONTENT_SPEED,
@@ -84,92 +83,42 @@ export function animate() {
 		// Check completion based on transition type
 		let transitionComplete = false;
 
-		// For popup close transitions, use both timer AND position checks
-		if (shapeState.skipPause && shapeState.popupCloseTime > 0) {
-			const timeSinceClose = Date.now() - shapeState.popupCloseTime;
-			const xClose =
-				Math.abs(shapeState.pyramid.rotation.x - shapeState.targetRotation.x) <
-				0.01;
-			const yClose =
-				Math.abs(shapeState.pyramid.rotation.y - shapeState.targetRotation.y) <
-				0.01;
-			const zClose =
-				Math.abs(shapeState.pyramid.rotation.z - shapeState.targetRotation.z) <
-				0.01;
-			const posXClose =
-				Math.abs(shapeState.pyramid.position.x - shapeState.targetPosition.x) <
-				0.01;
-			const posYClose =
-				Math.abs(shapeState.pyramid.position.y - shapeState.targetPosition.y) <
-				0.01;
-			const posZClose =
-				Math.abs(shapeState.pyramid.position.z - shapeState.targetPosition.z) <
-				0.01;
-			const scaleXClose =
-				Math.abs(shapeState.pyramid.scale.x - shapeState.targetScale) < 0.01;
-			const scaleYClose =
-				Math.abs(shapeState.pyramid.scale.y - shapeState.targetScale) < 0.01;
-			const scaleZClose =
-				Math.abs(shapeState.pyramid.scale.z - shapeState.targetScale) < 0.01;
+		// For all transitions, check rotation, position, and scale
+		const xClose =
+			Math.abs(shapeState.pyramid.rotation.x - shapeState.targetRotation.x) <
+			0.01;
+		const yClose =
+			Math.abs(shapeState.pyramid.rotation.y - shapeState.targetRotation.y) <
+			0.01;
+		const zClose =
+			Math.abs(shapeState.pyramid.rotation.z - shapeState.targetRotation.z) <
+			0.01;
+		const posXClose =
+			Math.abs(shapeState.pyramid.position.x - shapeState.targetPosition.x) <
+			0.01;
+		const posYClose =
+			Math.abs(shapeState.pyramid.position.y - shapeState.targetPosition.y) <
+			0.01;
+		const posZClose =
+			Math.abs(shapeState.pyramid.position.z - shapeState.targetPosition.z) <
+			0.01;
+		const scaleXClose =
+			Math.abs(shapeState.pyramid.scale.x - shapeState.targetScale) < 0.01;
+		const scaleYClose =
+			Math.abs(shapeState.pyramid.scale.y - shapeState.targetScale) < 0.01;
+		const scaleZClose =
+			Math.abs(shapeState.pyramid.scale.z - shapeState.targetScale) < 0.01;
 
-			const positionReached =
-				xClose &&
-				yClose &&
-				zClose &&
-				posXClose &&
-				posYClose &&
-				posZClose &&
-				scaleXClose &&
-				scaleYClose &&
-				scaleZClose;
-
-			if (timeSinceClose >= CONTENT_CLOSE_TRANSITION_MS && positionReached) {
-				// Both timer elapsed AND position reached
-				shapeState.transitioning = false;
-				shapeState.transitionType = null; // Reset transition type
-				shapeState.hasInteracted = false;
-				shapeState.autoRotateMultiplier = 0; // Reset for proper ramp-up
-				shapeState.skipPause = false; // Reset flag
-				shapeState.popupCloseTime = 0; // Reset timer
-			}
-		} else {
-			// For open transitions, check rotation, position, and scale
-			const xClose =
-				Math.abs(shapeState.pyramid.rotation.x - shapeState.targetRotation.x) <
-				0.01;
-			const yClose =
-				Math.abs(shapeState.pyramid.rotation.y - shapeState.targetRotation.y) <
-				0.01;
-			const zClose =
-				Math.abs(shapeState.pyramid.rotation.z - shapeState.targetRotation.z) <
-				0.01;
-			const posXClose =
-				Math.abs(shapeState.pyramid.position.x - shapeState.targetPosition.x) <
-				0.01;
-			const posYClose =
-				Math.abs(shapeState.pyramid.position.y - shapeState.targetPosition.y) <
-				0.01;
-			const posZClose =
-				Math.abs(shapeState.pyramid.position.z - shapeState.targetPosition.z) <
-				0.01;
-			const scaleXClose =
-				Math.abs(shapeState.pyramid.scale.x - shapeState.targetScale) < 0.01;
-			const scaleYClose =
-				Math.abs(shapeState.pyramid.scale.y - shapeState.targetScale) < 0.01;
-			const scaleZClose =
-				Math.abs(shapeState.pyramid.scale.z - shapeState.targetScale) < 0.01;
-
-			transitionComplete =
-				xClose &&
-				yClose &&
-				zClose &&
-				posXClose &&
-				posYClose &&
-				posZClose &&
-				scaleXClose &&
-				scaleYClose &&
-				scaleZClose;
-		}
+		transitionComplete =
+			xClose &&
+			yClose &&
+			zClose &&
+			posXClose &&
+			posYClose &&
+			posZClose &&
+			scaleXClose &&
+			scaleYClose &&
+			scaleZClose;
 
 		if (transitionComplete && !shapeState.transitionTimer) {
 			shapeState.transitionTimer = setTimeout(() => {

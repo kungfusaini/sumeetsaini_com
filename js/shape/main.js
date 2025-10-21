@@ -113,8 +113,6 @@ export async function init() {
 
 	// Listen for controller events
 	on("shape:moveToPosition", (data) => {
-		shapeState.skipPause = false;
-		shapeState.popupCloseTime = 0;
 		shapeState.targetRotation = { ...data.rotation };
 		shapeState.targetPosition = { ...data.position };
 		shapeState.targetScale = data.scale;
@@ -137,8 +135,7 @@ export async function init() {
 	});
 
 	on("shape:handlePopupClose", () => {
-		shapeState.skipPause = true;
-		shapeState.popupCloseTime = Date.now();
+		// Timer logic removed - transition completes based on position only
 	});
 
 	window.addEventListener("resize", () => onResize(container));
