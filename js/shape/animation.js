@@ -1,9 +1,7 @@
 import * as THREE from "three";
-import { state } from "../shared/state.js";
 import {
 	CONTENT_CLOSE_TRANSITION_MS,
 	PAUSE_DURATION_MS,
-	TRANSITION_CLOSENESS_THRESHOLD,
 	TRANSITION_SPEED,
 	VELOCITY_DAMPING,
 } from "./config.js";
@@ -13,199 +11,108 @@ import {
 	getResponsiveFOV,
 	getResponsiveLookAtY,
 } from "./helpers.js";
+import { shapeState } from "./shapeState.js";
 
 export function animate() {
 	requestAnimationFrame(animate);
-	if (!state.hasInteracted && state.autoRotateEnabled) {
-		state.autoRotateMultiplier = Math.min(state.autoRotateMultiplier + 0.01, 1);
-		state.pyramid.rotation.x += state.baseSpeed.x * state.autoRotateMultiplier;
-		state.pyramid.rotation.y += state.baseSpeed.y * state.autoRotateMultiplier;
-	} else if (state.transitioning) {
-		state.pyramid.rotation.x = THREE.MathUtils.lerp(
-			state.pyramid.rotation.x,
-			state.targetRotation.x,
+	if (!shapeState.hasInteracted && shapeState.autoRotateEnabled) {
+		shapeState.autoRotateMultiplier = Math.min(
+			shapeState.autoRotateMultiplier + 0.01,
+			1,
+		);
+		shapeState.pyramid.rotation.x +=
+			shapeState.baseSpeed.x * shapeState.autoRotateMultiplier;
+		shapeState.pyramid.rotation.y +=
+			shapeState.baseSpeed.y * shapeState.autoRotateMultiplier;
+	} else if (shapeState.transitioning) {
+		shapeState.pyramid.rotation.x = THREE.MathUtils.lerp(
+			shapeState.pyramid.rotation.x,
+			shapeState.targetRotation.x,
 			TRANSITION_SPEED,
 		);
-		state.pyramid.rotation.y = THREE.MathUtils.lerp(
-			state.pyramid.rotation.y,
-			state.targetRotation.y,
+		shapeState.pyramid.rotation.y = THREE.MathUtils.lerp(
+			shapeState.pyramid.rotation.y,
+			shapeState.targetRotation.y,
 			TRANSITION_SPEED,
 		);
-		state.pyramid.rotation.z = THREE.MathUtils.lerp(
-			state.pyramid.rotation.z,
-			state.targetRotation.z,
+		shapeState.pyramid.rotation.z = THREE.MathUtils.lerp(
+			shapeState.pyramid.rotation.z,
+			shapeState.targetRotation.z,
 			TRANSITION_SPEED,
 		);
-		state.pyramid.position.x = THREE.MathUtils.lerp(
-			state.pyramid.position.x,
-			state.targetPosition.x,
+		shapeState.pyramid.position.x = THREE.MathUtils.lerp(
+			shapeState.pyramid.position.x,
+			shapeState.targetPosition.x,
 			TRANSITION_SPEED,
 		);
-		state.pyramid.position.y = THREE.MathUtils.lerp(
-			state.pyramid.position.y,
-			state.targetPosition.y,
+		shapeState.pyramid.position.y = THREE.MathUtils.lerp(
+			shapeState.pyramid.position.y,
+			shapeState.targetPosition.y,
 			TRANSITION_SPEED,
 		);
-		state.pyramid.position.z = THREE.MathUtils.lerp(
-			state.pyramid.position.z,
-			state.targetPosition.z,
+		shapeState.pyramid.position.z = THREE.MathUtils.lerp(
+			shapeState.pyramid.position.z,
+			shapeState.targetPosition.z,
 			TRANSITION_SPEED,
 		);
-		state.pyramid.scale.x = THREE.MathUtils.lerp(
-			state.pyramid.scale.x,
-			state.targetScale,
+		shapeState.pyramid.scale.x = THREE.MathUtils.lerp(
+			shapeState.pyramid.scale.x,
+			shapeState.targetScale,
 			TRANSITION_SPEED,
 		);
-		state.pyramid.scale.y = THREE.MathUtils.lerp(
-			state.pyramid.scale.y,
-			state.targetScale,
+		shapeState.pyramid.scale.y = THREE.MathUtils.lerp(
+			shapeState.pyramid.scale.y,
+			shapeState.targetScale,
 			TRANSITION_SPEED,
 		);
-		state.pyramid.scale.z = THREE.MathUtils.lerp(
-			state.pyramid.scale.z,
-			state.targetScale,
-			TRANSITION_SPEED,
-		);
-		// Check rotation closeness
-		const xClose =
-			Math.abs(state.pyramid.rotation.x - state.targetRotation.x) <
-			TRANSITION_CLOSENESS_THRESHOLD;
-		const yClose =
-			Math.abs(state.pyramid.rotation.y - state.targetRotation.y) <
-			TRANSITION_CLOSENESS_THRESHOLD;
-		const zClose =
-			Math.abs(state.pyramid.rotation.z - state.targetRotation.z) <
-			TRANSITION_CLOSENESS_THRESHOLD;
-
-		// For popup close transitions, use timer-based completion instead of position/scale checks
-		if (state.skipPause && state.popupCloseTime > 0) {
-			const timeSinceClose = Date.now() - state.popupCloseTime;
-			if (timeSinceClose >= CONTENT_CLOSE_TRANSITION_MS) {
-				// Configurable transition time
-				// Start autorotation with normal ramp-up after popup close
-				state.transitioning = false;
-				state.hasInteracted = false;
-				state.autoRotateMultiplier = 0; // Reset for proper ramp-up
-				state.skipPause = false; // Reset flag
-				state.popupCloseTime = 0; // Reset timer
-			}
-		} else {
-			// For normal transitions, use position/scale/rotation closeness checks
-			const posXClose =
-				Math.abs(state.pyramid.position.x - state.targetPosition.x) <
-				TRANSITION_CLOSENESS_THRESHOLD;
-			const posYClose =
-				Math.abs(state.pyramid.position.y - state.targetPosition.y) <
-				TRANSITION_CLOSENESS_THRESHOLD;
-			const posZClose =
-				Math.abs(state.pyramid.position.z - state.targetPosition.z) <
-				TRANSITION_CLOSENESS_THRESHOLD;
-			const scaleXClose =
-				Math.abs(state.pyramid.scale.x - state.targetScale) <
-				TRANSITION_CLOSENESS_THRESHOLD;
-			const scaleYClose =
-				Math.abs(state.pyramid.scale.y - state.targetScale) <
-				TRANSITION_CLOSENESS_THRESHOLD;
-			const scaleZClose =
-				Math.abs(state.pyramid.scale.z - state.targetScale) <
-				TRANSITION_CLOSENESS_THRESHOLD;
-
-			// Transition completes when all properties are close to targets
-			if (
-				xClose &&
-				yClose &&
-				zClose &&
-				posXClose &&
-				posYClose &&
-				posZClose &&
-				scaleXClose &&
-				scaleYClose &&
-				scaleZClose &&
-				!state.transitionTimer
-			) {
-				// Normal pause for other transitions
-				state.transitionTimer = setTimeout(() => {
-					state.transitioning = false;
-					state.hasInteracted = false;
-				}, PAUSE_DURATION_MS);
-			}
-		}
-
-		// Always lerp position and scale for both transition types
-		state.pyramid.position.x = THREE.MathUtils.lerp(
-			state.pyramid.position.x,
-			state.targetPosition.x,
-			TRANSITION_SPEED,
-		);
-		state.pyramid.position.y = THREE.MathUtils.lerp(
-			state.pyramid.position.y,
-			state.targetPosition.y,
-			TRANSITION_SPEED,
-		);
-		state.pyramid.position.z = THREE.MathUtils.lerp(
-			state.pyramid.position.z,
-			state.targetPosition.z,
-			TRANSITION_SPEED,
-		);
-		state.pyramid.scale.x = THREE.MathUtils.lerp(
-			state.pyramid.scale.x,
-			state.targetScale,
-			TRANSITION_SPEED,
-		);
-		state.pyramid.scale.y = THREE.MathUtils.lerp(
-			state.pyramid.scale.y,
-			state.targetScale,
-			TRANSITION_SPEED,
-		);
-		state.pyramid.scale.z = THREE.MathUtils.lerp(
-			state.pyramid.scale.z,
-			state.targetScale,
+		shapeState.pyramid.scale.z = THREE.MathUtils.lerp(
+			shapeState.pyramid.scale.z,
+			shapeState.targetScale,
 			TRANSITION_SPEED,
 		);
 
 		// Check completion based on transition type
 		let transitionComplete = false;
-		if (state.transitionType === "close") {
-			// For close transitions, only check position and scale
-			const posXClose =
-				Math.abs(state.pyramid.position.x - state.targetPosition.x) < 0.01;
-			const posYClose =
-				Math.abs(state.pyramid.position.y - state.targetPosition.y) < 0.01;
-			const posZClose =
-				Math.abs(state.pyramid.position.z - state.targetPosition.z) < 0.01;
-			const scaleXClose =
-				Math.abs(state.pyramid.scale.x - state.targetScale) < 0.01;
-			const scaleYClose =
-				Math.abs(state.pyramid.scale.y - state.targetScale) < 0.01;
-			const scaleZClose =
-				Math.abs(state.pyramid.scale.z - state.targetScale) < 0.01;
-			transitionComplete =
-				posXClose &&
-				posYClose &&
-				posZClose &&
-				scaleXClose &&
-				scaleYClose &&
-				scaleZClose;
+
+		// For popup close transitions, use timer-based completion instead of position/scale checks
+		if (shapeState.skipPause && shapeState.popupCloseTime > 0) {
+			const timeSinceClose = Date.now() - shapeState.popupCloseTime;
+			if (timeSinceClose >= CONTENT_CLOSE_TRANSITION_MS) {
+				// Configurable transition time
+				// Start autorotation with normal ramp-up after popup close
+				shapeState.transitioning = false;
+				shapeState.hasInteracted = false;
+				shapeState.autoRotateMultiplier = 0; // Reset for proper ramp-up
+				shapeState.skipPause = false; // Reset flag
+				shapeState.popupCloseTime = 0; // Reset timer
+			}
 		} else {
 			// For open transitions, check rotation, position, and scale
 			const xClose =
-				Math.abs(state.pyramid.rotation.x - state.targetRotation.x) < 0.01;
+				Math.abs(shapeState.pyramid.rotation.x - shapeState.targetRotation.x) <
+				0.01;
 			const yClose =
-				Math.abs(state.pyramid.rotation.y - state.targetRotation.y) < 0.01;
+				Math.abs(shapeState.pyramid.rotation.y - shapeState.targetRotation.y) <
+				0.01;
 			const zClose =
-				Math.abs(state.pyramid.rotation.z - state.targetRotation.z) < 0.01;
+				Math.abs(shapeState.pyramid.rotation.z - shapeState.targetRotation.z) <
+				0.01;
 			const posXClose =
-				Math.abs(state.pyramid.position.x - state.targetPosition.x) < 0.01;
+				Math.abs(shapeState.pyramid.position.x - shapeState.targetPosition.x) <
+				0.01;
 			const posYClose =
-				Math.abs(state.pyramid.position.y - state.targetPosition.y) < 0.01;
+				Math.abs(shapeState.pyramid.position.y - shapeState.targetPosition.y) <
+				0.01;
 			const posZClose =
-				Math.abs(state.pyramid.position.z - state.targetPosition.z) < 0.01;
+				Math.abs(shapeState.pyramid.position.z - shapeState.targetPosition.z) <
+				0.01;
 			const scaleXClose =
-				Math.abs(state.pyramid.scale.x - state.targetScale) < 0.01;
+				Math.abs(shapeState.pyramid.scale.x - shapeState.targetScale) < 0.01;
 			const scaleYClose =
-				Math.abs(state.pyramid.scale.y - state.targetScale) < 0.01;
+				Math.abs(shapeState.pyramid.scale.y - shapeState.targetScale) < 0.01;
 			const scaleZClose =
-				Math.abs(state.pyramid.scale.z - state.targetScale) < 0.01;
+				Math.abs(shapeState.pyramid.scale.z - shapeState.targetScale) < 0.01;
+
 			transitionComplete =
 				xClose &&
 				yClose &&
@@ -218,50 +125,31 @@ export function animate() {
 				scaleZClose;
 		}
 
-		if (transitionComplete && !state.transitionTimer) {
-			state.transitionTimer = setTimeout(() => {
-				state.transitioning = false;
-				state.hasInteracted = false;
+		if (transitionComplete && !shapeState.transitionTimer) {
+			shapeState.transitionTimer = setTimeout(() => {
+				shapeState.transitioning = false;
+				shapeState.hasInteracted = false;
 			}, PAUSE_DURATION_MS);
 		}
-	} else if (!state.dragging) {
-		state.pyramid.rotation.x += state.userVel.x;
-		state.pyramid.rotation.y += state.userVel.y;
-		state.userVel.x *= VELOCITY_DAMPING;
-		state.userVel.y *= VELOCITY_DAMPING;
+	} else if (!shapeState.dragging) {
+		shapeState.pyramid.rotation.x += shapeState.userVel.x;
+		shapeState.pyramid.rotation.y += shapeState.userVel.y;
+		shapeState.userVel.x *= VELOCITY_DAMPING;
+		shapeState.userVel.y *= VELOCITY_DAMPING;
 	}
-	if (state.debugMode) {
-		console.log(
-			"Pyramid Position:",
-			state.pyramid.position.x.toFixed(3),
-			state.pyramid.position.y.toFixed(3),
-			state.pyramid.position.z.toFixed(3),
-		);
-		console.log(
-			"Pyramid Rotation:",
-			state.pyramid.rotation.x.toFixed(3),
-			state.pyramid.rotation.y.toFixed(3),
-			state.pyramid.rotation.z.toFixed(3),
-		);
-		console.log(
-			"User Velocity:",
-			state.userVel.x.toFixed(3),
-			state.userVel.y.toFixed(3),
-		);
-	}
-	state.renderer.render(state.scene, state.camera);
+	shapeState.renderer.render(shapeState.scene, shapeState.camera);
 }
 
 /* ---------- resize -------------------------------------------------- */
 export function onResize(container) {
 	const w = container.clientWidth;
 	const h = container.clientHeight;
-	state.renderer.setSize(w, h);
-	state.camera.aspect = w / h;
-	state.camera.fov = getResponsiveFOV(w);
-	state.camera.position.z = getResponsiveCameraZ(w);
-	state.camera.position.y = getResponsiveCameraY(w);
+	shapeState.renderer.setSize(w, h);
+	shapeState.camera.aspect = w / h;
+	shapeState.camera.fov = getResponsiveFOV(w);
+	shapeState.camera.position.z = getResponsiveCameraZ(w);
+	shapeState.camera.position.y = getResponsiveCameraY(w);
 	const lookAtY = getResponsiveLookAtY(w);
-	state.camera.lookAt(0, lookAtY, 0);
-	state.camera.updateProjectionMatrix();
+	shapeState.camera.lookAt(0, lookAtY, 0);
+	shapeState.camera.updateProjectionMatrix();
 }

@@ -1,9 +1,9 @@
 import * as THREE from "three";
+import { initController, on } from "../controller/main.js";
 import { initPopup } from "../popup/main.js";
-import { loader, state } from "../shared/state.js";
+import { FACES } from "../shared/faces.js";
 import { animate, onResize } from "./animation.js";
 import {
-	FACES,
 	GRAIN_INTENSITY_FACE,
 	GRAIN_SIZE_FACE,
 	INITIAL_PYRAMID_ROTATION,
@@ -17,7 +17,13 @@ import {
 	getResponsiveFOV,
 	getResponsiveLookAtY,
 } from "./helpers.js";
-import { onPointerDown, onPointerMove, onPointerUp } from "./interaction.js";
+import {
+	onPointerDown,
+	onPointerMove,
+	onPointerUp,
+	onShapeClick,
+} from "./interaction.js";
+import { loader, shapeState } from "./shapeState.js";
 
 /* ---------- init ---------------------------------------------------- */
 export async function init() {
@@ -34,9 +40,12 @@ export async function init() {
 
 	document.body.insertBefore(container, $("main"));
 
-	state.scene = new THREE.Scene();
-	state.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-	container.appendChild(state.renderer.domElement);
+	shapeState.scene = new THREE.Scene();
+	shapeState.renderer = new THREE.WebGLRenderer({
+		antialias: true,
+		alpha: true,
+	});
+	container.appendChild(shapeState.renderer.domElement);
 
 	// Create static grain texture
 	const grainCanvas = document.createElement("canvas");
@@ -52,14 +61,14 @@ export async function init() {
 	const cameraY = getResponsiveCameraY(window.innerWidth);
 	const lookAtY = getResponsiveLookAtY(window.innerWidth);
 	const fov = getResponsiveFOV(window.innerWidth);
-	state.camera = new THREE.PerspectiveCamera(
+	shapeState.camera = new THREE.PerspectiveCamera(
 		fov,
 		container.clientWidth / container.clientHeight,
 		0.1,
 		100,
 	);
-	state.camera.position.set(0, cameraY, cameraZ);
-	state.camera.lookAt(0, lookAtY, 0);
+	shapeState.camera.position.set(0, cameraY, cameraZ);
+	shapeState.camera.lookAt(0, lookAtY, 0);
 
 	// Load textures asynchronously
 	const texturePromises = FACES.map(
@@ -70,13 +79,13 @@ export async function init() {
 	);
 	const loadedTextures = await Promise.all(texturePromises);
 
-	state.pyramid = buildPyramid(loadedTextures, grainCanvas);
-	state.pyramid.rotation.set(
+	shapeState.pyramid = buildPyramid(loadedTextures, grainCanvas);
+	shapeState.pyramid.rotation.set(
 		INITIAL_PYRAMID_ROTATION.x,
 		INITIAL_PYRAMID_ROTATION.y,
 		INITIAL_PYRAMID_ROTATION.z,
 	);
-	state.scene.add(state.pyramid);
+	shapeState.scene.add(shapeState.pyramid);
 
 	/* ---- events ---- */
 	container.addEventListener("mousedown", (e) =>
@@ -95,8 +104,41 @@ export async function init() {
 	);
 	window.addEventListener("touchend", onPointerUp);
 
-	// Initialize popup system
+	// Add click event listener for shape interactions
+	container.addEventListener("click", (e) => onShapeClick(e, container));
+
+	// Initialize controller and popup system
+	initController();
 	initPopup(container);
+
+	// Listen for controller events
+	on("shape:moveToPosition", (data) => {
+		shapeState.skipPause = false;
+		shapeState.popupCloseTime = 0;
+		shapeState.targetRotation = { ...data.rotation };
+		shapeState.targetPosition = { ...data.position };
+		shapeState.targetScale = data.scale;
+		shapeState.transitioning = true;
+		shapeState.hasInteracted = true;
+	});
+
+	on("shape:resetPosition", () => {
+		shapeState.targetRotation = {
+			x: shapeState.pyramid.rotation.x,
+			y: shapeState.pyramid.rotation.y,
+			z: shapeState.pyramid.rotation.z,
+		};
+		shapeState.targetPosition = { x: 0, y: 0, z: 0 };
+		shapeState.targetScale = 1;
+		shapeState.transitioning = true;
+		shapeState.hasInteracted = true;
+	});
+
+	on("shape:handlePopupClose", () => {
+		shapeState.skipPause = true;
+		shapeState.popupCloseTime = Date.now();
+	});
+
 	window.addEventListener("resize", () => onResize(container));
 
 	/* ---- first frame ---- */
@@ -104,7 +146,7 @@ export async function init() {
 	const waitForVisible = () => {
 		if (container.offsetWidth > 0 && container.offsetHeight > 0) {
 			onResize(container);
-			state.renderer.render(state.scene, state.camera);
+			shapeState.renderer.render(shapeState.scene, shapeState.camera);
 			// Check if intro text has finished moving
 			if ($("#name")?.classList.contains("top")) {
 				setTimeout(() => {

@@ -1,80 +1,85 @@
-import { state } from "../shared/state.js";
+import * as THREE from "three";
+import { emit } from "../controller/main.js";
 import {
 	DEBUG_ROTATION_INCREMENT,
 	DRAG_SENSITIVITY,
 	DRAG_THRESHOLD_PX,
 } from "./config.js";
 import { clearIdleTimer, startIdleTimer } from "./helpers.js";
+import { shapeState } from "./shapeState.js";
 
 export function onPointerDown(x, y) {
-	state.dragging = true;
-	state.pointerDown = true;
-	state.wasDragging = false;
-	state.lastPointer = { x, y };
+	shapeState.dragging = true;
+	shapeState.pointerDown = true;
+	shapeState.wasDragging = false;
+	shapeState.lastPointer = { x, y };
 	clearIdleTimer();
-	state.autoRotateMultiplier = 0;
-	if (state.transitioning) {
-		state.transitioning = false;
-		if (state.transitionTimer) clearTimeout(state.transitionTimer);
+	shapeState.autoRotateMultiplier = 0;
+	if (shapeState.transitioning) {
+		shapeState.transitioning = false;
+		if (shapeState.transitionTimer) clearTimeout(shapeState.transitionTimer);
 	}
 }
 
 export function onPointerMove(x, y) {
-	if (!state.dragging) return;
+	if (!shapeState.dragging) return;
 
 	// Calculate distance from initial pointer down position
-	const deltaX = x - state.lastPointer.x;
-	const deltaY = y - state.lastPointer.y;
+	const deltaX = x - shapeState.lastPointer.x;
+	const deltaY = y - shapeState.lastPointer.y;
 	const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
 	// Only consider it dragging if moved beyond threshold
 	if (distance >= DRAG_THRESHOLD_PX) {
-		state.wasDragging = true;
-		state.userVel.y = -(x - state.lastPointer.x) * DRAG_SENSITIVITY;
-		state.userVel.x = (y - state.lastPointer.y) * DRAG_SENSITIVITY;
-		state.pyramid.rotation.y += state.userVel.y;
-		state.pyramid.rotation.x += state.userVel.x;
+		shapeState.wasDragging = true;
+		shapeState.userVel.y = -(x - shapeState.lastPointer.x) * DRAG_SENSITIVITY;
+		shapeState.userVel.x = (y - shapeState.lastPointer.y) * DRAG_SENSITIVITY;
+		shapeState.pyramid.rotation.y += shapeState.userVel.y;
+		shapeState.pyramid.rotation.x += shapeState.userVel.x;
 	}
 
-	state.lastPointer = { x, y };
-	state.hasInteracted = true;
-	state.autoRotateMultiplier = 0;
+	shapeState.lastPointer = { x, y };
+	shapeState.hasInteracted = true;
+	shapeState.autoRotateMultiplier = 0;
 }
 
 export function onPointerUp() {
-	state.dragging = false;
-	state.pointerDown = false;
+	shapeState.dragging = false;
+	shapeState.pointerDown = false;
+	// Don't reset wasDragging immediately - let the click handler deal with it
+	setTimeout(() => {
+		shapeState.wasDragging = false;
+	}, 50);
 	startIdleTimer();
 }
 
 export function onKeyDown(event) {
-	if (!state.pyramid) return;
+	if (!shapeState.pyramid) return;
 	switch (event.key) {
 		case "d":
-			state.debugMode = !state.debugMode;
-			console.log("Debug mode:", state.debugMode ? "enabled" : "disabled");
+			shapeState.debugMode = !shapeState.debugMode;
 			break;
 		default:
-			if (state.debugMode) {
-				const increment = DEBUG_ROTATION_INCREMENT; // small increment for precision
+			if (shapeState.debugMode) {
+				const increment = DEBUG_ROTATION_INCREMENT;
 				switch (event.key) {
 					case "ArrowLeft":
-						state.pyramid.rotation.x -= increment;
+						shapeState.pyramid.rotation.x -= increment;
 						break;
 					case "ArrowRight":
-						state.pyramid.rotation.x += increment;
+						shapeState.pyramid.rotation.x += increment;
 						break;
 					case "ArrowUp":
-						state.pyramid.rotation.y -= increment;
+						shapeState.pyramid.rotation.y -= increment;
 						break;
 					case "ArrowDown":
-						state.pyramid.rotation.y += increment;
+						shapeState.pyramid.rotation.y += increment;
 						break;
 					case "z":
-						state.pyramid.rotation.z += increment;
+						shapeState.pyramid.rotation.z += increment;
 						break;
 					case "x":
-						state.pyramid.rotation.z -= increment;
+						shapeState.pyramid.rotation.z -= increment;
 						break;
 				}
 			}
@@ -83,8 +88,24 @@ export function onKeyDown(event) {
 }
 
 /* ---------- shape interaction ---------------------------------------- */
-export function onShapeClick(_ev, _container) {
-	// This function will be called by the popup module
-	// The actual click handling is now in popup/interaction.js
-	// This is kept for compatibility but can be removed if not needed
+export function onShapeClick(ev, container) {
+	if (shapeState.wasDragging) {
+		return;
+	}
+
+	const rect = container.getBoundingClientRect();
+	const mouse = new THREE.Vector2(
+		((ev.clientX - rect.left) / rect.width) * 2 - 1,
+		-((ev.clientY - rect.top) / rect.height) * 2 + 1,
+	);
+	const ray = new THREE.Raycaster();
+	ray.setFromCamera(mouse, shapeState.camera);
+	const hits = ray.intersectObjects(shapeState.pyramid.children);
+
+	if (hits.length) {
+		const userData = hits[0].object.userData;
+		if (userData?.faceIndex !== undefined) {
+			emit("shape:faceClicked", { faceIndex: userData.faceIndex });
+		}
+	}
 }

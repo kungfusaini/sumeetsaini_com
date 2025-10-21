@@ -1,10 +1,10 @@
 import * as THREE from "three";
+import { FACES } from "../shared/faces.js";
 import {
 	FACE_CANVAS_HEIGHT,
 	FACE_CANVAS_WIDTH,
 	FACE_IMG_OFFSET_Y,
 	FACE_IMG_SIZE,
-	FACES,
 	PYRAMID_EDGE,
 } from "./config.js";
 import {
@@ -106,9 +106,7 @@ export function buildPyramid(loadedTextures, grainCanvas) {
 		});
 
 		const face = new THREE.Mesh(geom, mat);
-		face.renderOrder = colorIndex;
 		face.userData = {
-			text: FACES[colorIndex].text,
 			faceIndex: colorIndex,
 		};
 		group.add(face);

@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { state } from "../shared/state.js";
 import {
 	CAMERA_FOV_BASE,
 	CAMERA_Y_BASE,
@@ -13,6 +12,7 @@ import {
 	TEXT_POS_MULTIPLIER_BASE,
 	TEXT_SCALE_BASE,
 } from "./config.js";
+import { shapeState } from "./shapeState.js";
 
 // Shaders for blending grain texture with face texture
 export const vertexShader = `
@@ -36,14 +36,14 @@ export const fragmentShader = `
 
 export const $ = (sel) => document.querySelector(sel);
 export const clearIdleTimer = () => {
-	clearTimeout(state.idleTimer);
-	state.idleTimer = null;
+	clearTimeout(shapeState.idleTimer);
+	shapeState.idleTimer = null;
 };
 export const startIdleTimer = () => {
 	clearIdleTimer();
-	state.idleTimer = setTimeout(() => {
-		state.hasInteracted = false;
-		state.userVel = { x: 0, y: 0 };
+	shapeState.idleTimer = setTimeout(() => {
+		shapeState.hasInteracted = false;
+		shapeState.userVel = { x: 0, y: 0 };
 	}, IDLE_TIMEOUT_MS);
 };
 
