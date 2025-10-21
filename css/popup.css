@@ -1,3 +1,13 @@
+/* ---------- Popup Animation Variables ---------- */
+:root {
+	--content-typewriter-speed: 120ms;
+	--content-fade-duration: 0.6s;
+	--content-fade-stagger: 100ms;
+	--content-animation-delay: 300ms;
+	--content-fade-start-delay: 300ms;
+	--content-switch-fade-duration: 0.2s;
+}
+
 /* ---------- Desktop Styles ---------- */
 
 main {
@@ -29,6 +39,20 @@ body.content-mode main {
 		visibility var(--popup-fade-in-duration) ease;
 }
 
+/* ---------- Content Animation Styles ---------- */
+main h2 {
+	opacity: 0;
+	transition: opacity calc(var(--content-fade-duration) / 2) ease;
+}
+
+main p,
+main ul,
+main ol,
+main div,
+main section {
+	opacity: 0;
+}
+
 /* ---------- Mobile Styles ---------- */
 @media (max-width: 600px) {
 	main {
@@ -42,10 +66,10 @@ body.content-mode main {
 		visibility: hidden;
 		position: absolute;
 		right: 1rem;
-		top: 45vh;
+		top: 42vh;
 		left: auto;
 		bottom: auto;
-		max-height: calc(100vh - 55vh);
+		max-height: calc(100vh - 56vh);
 		border-radius: 8px;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 	}
