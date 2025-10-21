@@ -31,6 +31,6 @@ export const DRAG_THRESHOLD_PX = 3; // Minimum pixels to consider it a drag
 // Shape interaction and content display positioning (shape-related)
 export const CONTENT_CLOSE_TRANSITION_MS = 1000;
 export const CONTENT_POSITION_DESKTOP = { x: -3.5, y: 0, z: 0 };
-export const CONTENT_POSITION_MOBILE = { x: 0, y: 3, z: 0 };
+export const CONTENT_POSITION_MOBILE = { x: 0, y: 3.5, z: 0 };
 export const CONTENT_SCALE = 0.7;
 export const MOBILE_BREAKPOINT = 600;

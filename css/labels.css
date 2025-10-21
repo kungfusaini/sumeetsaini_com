@@ -2,7 +2,7 @@
 
 :root {
 	/* Label colors */
-	--label-color-normal: white;
+	--label-color-normal: var(--cream);
 	--label-color-selected: var(--orange);
 
 	/* Label sizes (scale multipliers) */
@@ -10,6 +10,6 @@
 	--label-scale-selected: 1.5;
 
 	/* Label outline settings */
-	--label-outline-color: black;
-	--label-outline-width: 100px;
+	--label-outline-color: var(--cream);
+	--label-outline-width: 60px;
 }
