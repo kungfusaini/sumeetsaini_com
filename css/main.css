@@ -66,9 +66,13 @@ body {
 	}
 	.three-box {
 		width: 100%;
-		height: calc(100vh - 3rem);
+		height: 50vh;
 		margin-top: 3rem;
 		transition: height 0.5s ease;
+	}
+
+	body.content-mode .three-box {
+		width: 100%;
 	}
 }
 

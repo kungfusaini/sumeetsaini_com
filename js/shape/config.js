@@ -23,7 +23,7 @@ export const GRAIN_SIZE_FACE = 10;
 export const INITIAL_PYRAMID_ROTATION = { x: -4.2, y: -0.378, z: 0.0 };
 export const TRANSITION_SPEED = 0.05;
 export const SHAPE_MOVE_TO_CONTENT_SPEED = 0.08;
-export const SHAPE_RETURN_TO_CENTER_SPEED = 0.04;
+export const SHAPE_RETURN_TO_CENTER_SPEED = 0.035;
 
 export const DEBUG_ROTATION_INCREMENT = 0.05;
 export const DRAG_THRESHOLD_PX = 3; // Minimum pixels to consider it a drag
@@ -31,6 +31,6 @@ export const DRAG_THRESHOLD_PX = 3; // Minimum pixels to consider it a drag
 // Shape interaction and content display positioning (shape-related)
 export const CONTENT_CLOSE_TRANSITION_MS = 1000;
 export const CONTENT_POSITION_DESKTOP = { x: -3.5, y: 0, z: 0 };
-export const CONTENT_POSITION_MOBILE = { x: 0, y: 1, z: 0 };
+export const CONTENT_POSITION_MOBILE = { x: 0, y: 3, z: 0 };
 export const CONTENT_SCALE = 0.7;
 export const MOBILE_BREAKPOINT = 600;
