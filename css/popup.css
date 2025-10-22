@@ -2,10 +2,19 @@
 :root {
 	--content-typewriter-speed: 120ms;
 	--content-fade-duration: 0.6s;
-	--content-fade-stagger: 100ms;
+	--content-fade-stagger: 250ms;
 	--content-animation-delay: 300ms;
 	--content-fade-start-delay: 300ms;
 	--content-switch-fade-duration: 0.2s;
+
+	
+	/* same as var(--cream) */
+	--cream-filter: invert(88%) sepia(28%) saturate(308%) hue-rotate(347deg)
+
+	/* same as var(--orange) */
+		brightness(106%) contrast(97%);
+	--orange-filter: invert(33%) sepia(99%) saturate(901%) hue-rotate(358deg)
+		brightness(102%) contrast(101%);
 }
 
 /* ---------- Desktop Styles ---------- */
@@ -64,42 +73,28 @@ main p {
 .link-icon {
 	width: 1rem;
 	height: 1rem;
-	margin-right: 0.5rem;
-	vertical-align: middle;
-	color: var(--cream);
+	vertical-align: -0.2rem;
+	transition: filter 0.3s ease;
 }
 
-.link-with-icon {
+/* Link icon colors */
+.link-icon {
+	filter: var(--orange-filter);
+}
+
+/* Link hover states */
+a {
 	color: var(--orange);
 	text-decoration: none;
-	display: inline-flex;
-	align-items: center;
 	transition: color 0.3s ease;
 }
 
-.link-with-icon:hover {
+a:hover {
 	color: var(--cream);
 }
 
-.link-with-icon:hover .link-icon {
-	color: var(--orange);
-}
-
-.link-with-icon {
-	color: var(--orange);
-	text-decoration: none;
-	display: inline-flex;
-	align-items: center;
-	transition: all 0.3s ease;
-}
-
-.link-with-icon:hover {
-	color: var(--cream);
-}
-
-.link-with-icon:hover .link-icon {
-	filter: brightness(0) invert(93%) sepia(28%) saturate(425%) hue-rotate(5deg)
-		brightness(99%) contrast(92%);
+a:hover .link-icon {
+	filter: var(--cream-filter);
 }
 
 /* ---------- Mobile Styles ---------- */
