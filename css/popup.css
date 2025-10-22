@@ -91,18 +91,18 @@ a:hover .link-icon {
 	filter: var(--cream-filter);
 }
 
-
 /* Face image positioning */
 .face-image {
 	width: 120px;
 	height: 120px;
-	border-radius: 8px;
-	border: 2px solid var(--orange);
+	border-radius: 50%;
+	border: 1px solid var(--dark-grey);
 	object-fit: cover;
 	float: right;
 	margin-left: 1.5rem;
-	margin-top: 1.5rem;
-	margin-bottom: 0.5rem;
+	margin-top: 2rem;
+	margin-bottom: 1rem;
+	transform: scale(1.3);
 }
 
 /* ---------- Mobile Styles ---------- */
@@ -154,5 +154,6 @@ a:hover .link-icon {
 		margin: 0 auto 1rem auto;
 		width: 100px;
 		height: 100px;
+		transform: scale(1.2);
 	}
 }
