@@ -62,11 +62,25 @@ main section {
 	opacity: 0;
 }
 
-/* ---------- Content Typography ---------- */
-main p {
+/* ---------- Content Typography ---------- */main p {
 	margin-bottom: 1.2rem;
 	font-size: 0.9rem;
 	line-height: 1.6;
+}
+
+/* ---------- Intro Section with Face Image ---------- */
+.intro-section {
+	display: flex;
+	align-items: flex-start;
+	gap: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+}
+
+.intro-section p {
+	margin-bottom: 0;
+	flex: 1;
 }
 
 /* ---------- Link Icons ---------- */
@@ -130,5 +144,46 @@ a:hover .link-icon {
 		transition:
 			opacity var(--popup-fade-in-duration) ease,
 			visibility var(--popup-fade-in-duration) ease;
+	}
+
+	/* Mobile responsive for intro section */
+	.intro-section {
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 1rem;
+	}
+	
+}
+
+/* Face image positioning */
+	margin-left: 1.5rem;
+	margin-bottom: 0.5rem;
+}
+
+/* Mobile responsive for face image */
+@media (max-width: 600px) {
+}
+
+/* Face image positioning */
+.face-image {
+	width: 120px;
+	height: 120px;
+	border-radius: 8px;
+	border: 2px solid var(--orange);
+	object-fit: cover;
+	float: right;
+	margin-left: 1.5rem;
+	margin-bottom: 0.5rem;
+}
+
+/* Mobile responsive for face image */
+@media (max-width: 600px) {
+	.face-image {
+		float: none;
+		display: block;
+		margin: 0 auto 1rem auto;
+		width: 100px;
+		height: 100px;
 	}
 }
