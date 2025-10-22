@@ -50,6 +50,7 @@ body.content-mode main {
 main h2 {
 	opacity: 0;
 	transition: opacity calc(var(--content-fade-duration) / 2) ease;
+	font-size: 1.8rem;
 }
 
 main p,
@@ -63,7 +64,7 @@ main section {
 /* ---------- Content Typography ---------- */
 main p {
 	margin-bottom: 1.2rem;
-	font-size: 0.9rem;
+	font-size: 0.85rem;
 	line-height: 1.6;
 }
 
