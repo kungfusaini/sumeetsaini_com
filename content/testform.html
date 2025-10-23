@@ -1,14 +1,45 @@
-<form action="/scripts/send_email.php" method="POST">
-    
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
-    
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-    
-    <label for="message">Message:</label>
-    <textarea id="message" name="message" required></textarea>
-    
-    <button type="submit">Send Message</button>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>contact form</title>
+  <style>
+    #result { margin-top: 1em; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>POST to /web_contact (fetch, no redirect)</h2>
 
-</form>
+  <form id="contactForm">
+    <label> name    <input name="name"    required></label><br>
+    <label> email   <input name="email"   required></label><br>
+    <label> message <textarea name="message" required></textarea></label><br>
+    <button type="submit">Send</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', async (e) => {
+      e.preventDefault();                       // stop the browser redirect
+
+      const body = new URLSearchParams(new FormData(e.target)).toString();
+
+      try {
+        const res = await fetch('/web_contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body
+        });
+
+        const text = await res.text();
+        document.getElementById('result').textContent = res.ok
+          ? '✅ Sent – server answered: ' + text
+          : '❌ Error – server answered: ' + text;
+      } catch (err) {
+        document.getElementById('result').textContent = 'Network error: ' + err;
+      }
+    });
+  </script>
+</body>
+</html>
