@@ -29,14 +29,16 @@ export function onPointerMove(x, y) {
 	const deltaY = y - shapeState.lastPointer.y;
 	const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-	// Only consider it dragging if moved beyond threshold
+	// Check if we've moved beyond threshold to mark as dragging
 	if (distance >= DRAG_THRESHOLD_PX) {
 		shapeState.wasDragging = true;
-		shapeState.userVel.y = -(x - shapeState.lastPointer.x) * DRAG_SENSITIVITY;
-		shapeState.userVel.x = (y - shapeState.lastPointer.y) * DRAG_SENSITIVITY;
-		shapeState.pyramid.rotation.y += shapeState.userVel.y;
-		shapeState.pyramid.rotation.x += shapeState.userVel.x;
 	}
+
+	// Always update rotation when dragging for smooth movement
+	shapeState.userVel.y = -(x - shapeState.lastPointer.x) * DRAG_SENSITIVITY;
+	shapeState.userVel.x = (y - shapeState.lastPointer.y) * DRAG_SENSITIVITY;
+	shapeState.pyramid.rotation.y += shapeState.userVel.y;
+	shapeState.pyramid.rotation.x += shapeState.userVel.x;
 
 	shapeState.lastPointer = { x, y };
 	shapeState.hasInteracted = true;
