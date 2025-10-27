@@ -35,10 +35,30 @@ export function onPointerMove(x, y) {
 	}
 
 	// Always update rotation when dragging for smooth movement
-	shapeState.userVel.y = -(x - shapeState.lastPointer.x) * DRAG_SENSITIVITY;
-	shapeState.userVel.x = (y - shapeState.lastPointer.y) * DRAG_SENSITIVITY;
-	shapeState.pyramid.rotation.y += shapeState.userVel.y;
-	shapeState.pyramid.rotation.x += shapeState.userVel.x;
+	// Use quaternion rotation for more consistent behavior
+	const dragY = (x - shapeState.lastPointer.x) * DRAG_SENSITIVITY;
+	const dragX = (y - shapeState.lastPointer.y) * DRAG_SENSITIVITY;
+
+	// Create rotation quaternions for world-space rotation
+	const yawQuaternion = new THREE.Quaternion();
+	yawQuaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), dragY);
+
+	const pitchQuaternion = new THREE.Quaternion();
+	pitchQuaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), dragX);
+
+	// Apply rotations in world space for consistent behavior
+	shapeState.pyramid.quaternion.multiplyQuaternions(
+		yawQuaternion,
+		shapeState.pyramid.quaternion,
+	);
+	shapeState.pyramid.quaternion.multiplyQuaternions(
+		pitchQuaternion,
+		shapeState.pyramid.quaternion,
+	);
+
+	// Update velocity for smooth deceleration when released
+	shapeState.userVel.y = dragY;
+	shapeState.userVel.x = dragX;
 
 	shapeState.lastPointer = { x, y };
 	shapeState.hasInteracted = true;

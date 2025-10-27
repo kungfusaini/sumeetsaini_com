@@ -113,8 +113,28 @@ export function animate() {
 			shapeState.autoRotateMultiplier = 0; // Reset auto-rotation to start gradually
 		}
 	} else if (!shapeState.dragging) {
-		shapeState.pyramid.rotation.x += shapeState.userVel.x;
-		shapeState.pyramid.rotation.y += shapeState.userVel.y;
+		// Use quaternion rotation for consistency with dragging
+		const yawQuaternion = new THREE.Quaternion();
+		yawQuaternion.setFromAxisAngle(
+			new THREE.Vector3(0, 1, 0),
+			shapeState.userVel.y,
+		);
+
+		const pitchQuaternion = new THREE.Quaternion();
+		pitchQuaternion.setFromAxisAngle(
+			new THREE.Vector3(1, 0, 0),
+			shapeState.userVel.x,
+		);
+
+		shapeState.pyramid.quaternion.multiplyQuaternions(
+			yawQuaternion,
+			shapeState.pyramid.quaternion,
+		);
+		shapeState.pyramid.quaternion.multiplyQuaternions(
+			pitchQuaternion,
+			shapeState.pyramid.quaternion,
+		);
+
 		shapeState.userVel.x *= VELOCITY_DAMPING;
 		shapeState.userVel.y *= VELOCITY_DAMPING;
 	}
