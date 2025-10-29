@@ -1,3 +1,17 @@
+/* ---------- contact state management ---------- */
+const contactState = {
+	hasSubmitted: false,
+	submissionData: null,
+};
+
+export function getContactState() {
+	return contactState;
+}
+
+export function setContactState(state) {
+	Object.assign(contactState, state);
+}
+
 /* ---------- contact form handling ---------- */
 export function setupContactForm() {
 	const contactForm = document.getElementById("contactForm");
@@ -54,6 +68,13 @@ export function setupContactForm() {
 					resultDiv.style.justifyContent = "center";
 					resultDiv.style.alignItems = "center";
 					resultDiv.style.minHeight = "200px";
+					
+					// Save submission state to persist across face switches
+					contactState.hasSubmitted = true;
+					contactState.submissionData = {
+						message: "Thanks for reaching out! Talk soon.",
+						timestamp: Date.now()
+					};
 					
 					// Small delay then fade in the thank you message
 					setTimeout(() => {

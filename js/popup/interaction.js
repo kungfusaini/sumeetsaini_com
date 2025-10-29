@@ -1,6 +1,6 @@
 import { emit, on } from "../controller/main.js";
 import { POPUP_FADE_OUT_DURATION_MS } from "./config.js";
-import { setupContactForm } from "../contact.js";
+import { setupContactForm, getContactState } from "../contact.js";
 
 export function closeContent() {
 	const main = document.querySelector("main");
@@ -51,10 +51,42 @@ export async function showContent(contentPath, title) {
 	if (contentPath.includes('contact.html')) {
 		setupContactForm();
 		
-		// Ensure form starts with opacity 0 for animation system
-		const contactForm = document.getElementById('contactForm');
-		if (contactForm) {
-			contactForm.style.opacity = '0';
+		// Check if form was previously submitted and restore thank you message
+		const contactState = getContactState();
+		if (contactState.hasSubmitted && contactState.submissionData) {
+			const contactForm = document.getElementById('contactForm');
+			const resultDiv = document.getElementById('result');
+			const submitButton = contactForm ? contactForm.querySelector('button[type="submit"]') : null;
+			
+			if (contactForm && resultDiv && submitButton) {
+				// Hide the form and prepare thank you message for animation
+				contactForm.style.display = 'none';
+				resultDiv.textContent = contactState.submissionData.message;
+				resultDiv.style.display = 'flex';
+				resultDiv.style.justifyContent = 'center';
+				resultDiv.style.alignItems = 'center';
+				resultDiv.style.minHeight = '200px';
+				resultDiv.style.background = 'transparent';
+				resultDiv.style.color = 'var(--orange)';
+				resultDiv.style.border = 'none';
+				resultDiv.style.fontSize = '0.8rem';
+				resultDiv.style.opacity = '0'; // Start invisible for fade-in
+				
+				// Keep button in submitted state
+				submitButton.textContent = 'Message Sent';
+				submitButton.disabled = true;
+				submitButton.style.background = 'var(--dark-grey)';
+				submitButton.style.color = 'var(--grey)';
+				submitButton.style.cursor = 'not-allowed';
+				submitButton.onmouseover = null;
+				submitButton.onmouseout = null;
+			}
+		} else {
+			// Ensure form starts with opacity 0 for animation system if not submitted
+			const contactForm = document.getElementById('contactForm');
+			if (contactForm) {
+				contactForm.style.opacity = '0';
+			}
 		}
 	}
 
@@ -186,6 +218,8 @@ function fadeInElements(elements) {
 		}, index * staggerDelay); // Stagger the fade-ins
 	});
 }
+
+
 
 
 

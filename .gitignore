@@ -1,3 +1,5 @@
 # built site
 public/
 AGENTS.md
+node_modules/
+package-lock.json
