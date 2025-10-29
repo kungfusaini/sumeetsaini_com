@@ -1,63 +1,57 @@
 /* ---------- contact form handling ---------- */
 export function setupContactForm() {
-	const contactForm = document.getElementById('contactForm');
+	const contactForm = document.getElementById("contactForm");
 	if (!contactForm) return;
 
-	contactForm.addEventListener('submit', async function(e) {
+	const resultDiv = document.getElementById("result");
+	const submitButton = contactForm.querySelector('button[type="submit"]');
+
+	// Helper function to set consistent message styling
+	const setMessageStyle = () => {
+		resultDiv.style.display = "block";
+		resultDiv.style.background = "transparent";
+		resultDiv.style.color = "var(--orange)";
+		resultDiv.style.border = "none";
+		resultDiv.style.fontSize = "0.8rem";
+	};
+
+	contactForm.addEventListener("submit", async (e) => {
 		e.preventDefault();
 
-		const resultDiv = document.getElementById('result');
-		const submitButton = e.target.querySelector('button[type="submit"]');
-		
 		// Show loading state
-		submitButton.textContent = 'Sending...';
+		submitButton.textContent = "Sending...";
 		submitButton.disabled = true;
-		resultDiv.style.display = 'block';
-		resultDiv.style.background = 'var(--dark-grey)';
-		resultDiv.style.color = 'var(--cream)';
-		resultDiv.style.border = '1px solid var(--orange)';
-		resultDiv.textContent = 'Sending message...';
+		setMessageStyle();
+		resultDiv.textContent = "Sending message...";
 
 		const body = new URLSearchParams(new FormData(e.target)).toString();
 
 		try {
-			const res = await fetch('/vulkan/web_contact', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-				body
+			const res = await fetch("/vulkan/web_contact", {
+				method: "POST",
+				headers: { "Content-Type": "application/x-www-form-urlencoded" },
+				body,
 			});
 
 			const data = await res.json();
-			
+			setMessageStyle();
+
 			if (res.ok) {
-				resultDiv.style.background = 'rgba(214, 93, 3, 0.2)';
-				resultDiv.style.color = 'var(--cream)';
-				resultDiv.style.border = '1px solid var(--orange)';
-				resultDiv.textContent = '✅ Message sent successfully!';
+				resultDiv.textContent = "Message sent successfully!";
 				e.target.reset();
 			} else {
-				resultDiv.style.background = 'rgba(251, 241, 199, 0.1)';
-				resultDiv.style.color = 'var(--cream)';
-				resultDiv.style.border = '1px solid var(--cream)';
-				
 				// Display the actual error message from backend
-				let errorMessage = '❌ Error, please try again later';
+				let errorMessage = "Error, please try again later";
 				if (data.error) {
-					if (res.status === 429) {
-						errorMessage = `❌ ${data.error}`;
-					} else {
-						errorMessage = `❌ ${data.error}`;
-					}
+					errorMessage = `Error: ${data.error}`;
 				}
 				resultDiv.textContent = errorMessage;
 			}
 		} catch (err) {
-			resultDiv.style.background = 'rgba(251, 241, 199, 0.1)';
-			resultDiv.style.color = 'var(--cream)';
-			resultDiv.style.border = '1px solid var(--cream)';
-			resultDiv.textContent = '❌ Error, please try again later';
+			setMessageStyle();
+			resultDiv.textContent = "Error, please try again later";
 		} finally {
-			submitButton.textContent = 'Send Message';
+			submitButton.textContent = "Send Message";
 			submitButton.disabled = false;
 		}
 	});

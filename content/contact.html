@@ -97,4 +97,53 @@
   </button>
 </form>
 
-<div id="result" role="alert" aria-live="polite" style="margin-top: 1.5rem; font-weight: bold; padding: 0.75rem; border-radius: 4px; display: none;"></div>
+<div id="result" role="alert" aria-live="polite" style="margin-top: 0.5rem; font-weight: normal; padding: 0.5rem 0 0 0; font-size: 0.8rem; display: none;"></div>
+
+<script>
+// Handle UI updates for contact form
+document.addEventListener('contactStateChange', function(e) {
+	console.log('Contact state change event:', e.detail);
+	const { button, state, form } = e.detail;
+	const resultDiv = document.getElementById('result');
+	
+	switch(state.type) {
+		case 'loading':
+			button.textContent = 'Sending...';
+			button.disabled = true;
+			
+			resultDiv.style.display = 'block';
+			resultDiv.style.color = 'var(--orange)';
+			resultDiv.style.padding = '0.5rem 0 0 0';
+			resultDiv.style.fontSize = '0.8rem';
+			resultDiv.textContent = state.message;
+			break;
+			
+		case 'success':
+			resultDiv.style.color = 'var(--orange)';
+			resultDiv.textContent = state.message;
+			
+			if (state.resetForm) {
+				form.reset();
+			}
+			
+			// Keep button disabled and greyed out after success
+			button.textContent = 'Message Sent';
+			button.disabled = true;
+			button.style.background = 'var(--dark-grey)';
+			button.style.color = 'var(--grey)';
+			button.style.cursor = 'not-allowed';
+			button.onmouseover = null;
+			button.onmouseout = null;
+			break;
+			
+		case 'error':
+			resultDiv.style.color = 'var(--orange)';
+			resultDiv.textContent = state.message;
+			
+			// Reset button for retry
+			button.textContent = 'Send Message';
+			button.disabled = false;
+			break;
+	}
+});
+</script>
