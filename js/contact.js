@@ -27,7 +27,7 @@ export function setupContactForm() {
 				body
 			});
 
-			const text = await res.text();
+			const data = await res.json();
 			
 			if (res.ok) {
 				resultDiv.style.background = 'rgba(214, 93, 3, 0.2)';
@@ -39,7 +39,17 @@ export function setupContactForm() {
 				resultDiv.style.background = 'rgba(251, 241, 199, 0.1)';
 				resultDiv.style.color = 'var(--cream)';
 				resultDiv.style.border = '1px solid var(--cream)';
-				resultDiv.textContent = '❌ Error, please try again later';
+				
+				// Display the actual error message from backend
+				let errorMessage = '❌ Error, please try again later';
+				if (data.error) {
+					if (res.status === 429) {
+						errorMessage = `❌ ${data.error}`;
+					} else {
+						errorMessage = `❌ ${data.error}`;
+					}
+				}
+				resultDiv.textContent = errorMessage;
 			}
 		} catch (err) {
 			resultDiv.style.background = 'rgba(251, 241, 199, 0.1)';
