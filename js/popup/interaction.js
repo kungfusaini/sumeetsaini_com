@@ -1,5 +1,6 @@
 import { emit, on } from "../controller/main.js";
 import { POPUP_FADE_OUT_DURATION_MS } from "./config.js";
+import { setupContactForm } from "../contact.js";
 
 export function closeContent() {
 	const main = document.querySelector("main");
@@ -45,6 +46,11 @@ export async function showContent(contentPath, title) {
 
 	// Check if content overflows and apply scrollable class if needed
 	checkContentOverflow();
+
+	// Set up contact form handler if contact content is loaded
+	if (contentPath.includes('contact.html')) {
+		setupContactForm();
+	}
 
 	// Trigger fade-in in next frame
 	requestAnimationFrame(() => {
@@ -174,6 +180,8 @@ function fadeInElements(elements) {
 		}, index * staggerDelay); // Stagger the fade-ins
 	});
 }
+
+
 
 /* ---------- event listeners ---------- */
 export function initPopupEventListeners() {
