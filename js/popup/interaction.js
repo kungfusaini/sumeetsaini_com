@@ -50,6 +50,12 @@ export async function showContent(contentPath, title) {
 	// Set up contact form handler if contact content is loaded
 	if (contentPath.includes('contact.html')) {
 		setupContactForm();
+		
+		// Ensure form starts with opacity 0 for animation system
+		const contactForm = document.getElementById('contactForm');
+		if (contactForm) {
+			contactForm.style.opacity = '0';
+		}
 	}
 
 	// Trigger fade-in in next frame
