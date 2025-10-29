@@ -34,7 +34,7 @@ main h2 {
 }
 
 main h3 {
-	margin-bottom: 0.5rem;
+	margin-bottom: 0.2rem;
 	font-size: clamp(1.2rem, 0.8vw + 0.3rem, 1.4rem);
 }
 
@@ -50,8 +50,9 @@ body.content-mode main {
 		opacity var(--popup-fade-in-duration) ease,
 		visibility var(--popup-fade-in-duration) ease;
 }
+
 main p {
-	margin-bottom: 0.75rem;
+	margin-bottom: 0.2rem;
 	font-size: clamp(0.85rem, 0.5vw + 0.3rem, 1rem);
 	line-height: 1.5;
 }

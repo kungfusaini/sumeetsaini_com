@@ -2,13 +2,14 @@
 <p>Get in touch via the form below or email/social media.</p>
 
 <form id="contactForm" style="margin-top: 1.5rem;">
-  <label for="contact-name" style="display: block; margin-bottom: 0.5rem; color: var(--cream);">Name</label>
+  
   <input 
     type="text" 
     id="contact-name" 
     name="name" 
     required
     autocomplete="name"
+    placeholder="Name"
     style="
       width: 100%;
       padding: 0.75rem;
@@ -25,13 +26,14 @@
     onblur="this.style.borderColor='var(--orange)'"
   />
   
-  <label for="contact-email" style="display: block; margin-bottom: 0.5rem; color: var(--cream);">Email</label>
+  
   <input 
     type="email" 
     id="contact-email" 
     name="email" 
     required
     autocomplete="email"
+    placeholder="Email"
     style="
       width: 100%;
       padding: 0.75rem;
@@ -48,13 +50,14 @@
     onblur="this.style.borderColor='var(--orange)'"
   />
   
-  <label for="contact-message" style="display: block; margin-bottom: 0.5rem; color: var(--cream);">Message</label>
+  
   <textarea 
     id="contact-message" 
     name="message" 
     required
     autocomplete="off"
     rows="5"
+    placeholder="Your message..."
     style="
       width: 100%;
       padding: 0.75rem;
@@ -76,9 +79,9 @@
   <button 
     type="submit"
     style="
-      background: var(--orange);
-      color: var(--dark-grey);
-      border: none;
+      background: var(--dark-grey);
+      color: var(--cream);
+	  border: 1px solid var(--orange);
       padding: 0.75rem 2rem;
       font-family: var(--font-mono);
       font-size: 0.9rem;
@@ -87,8 +90,8 @@
       cursor: pointer;
       transition: all 0.3s ease;
     "
-    onmouseover="this.style.background='var(--cream)'; this.style.transform='translateY(-2px)'"
-    onmouseout="this.style.background='var(--orange)'; this.style.transform='translateY(0)'"
+    onmouseover="this.style.background='var(--orange)'; this.style.transform='translateY(-2px)'"
+    onmouseout="this.style.background='var(--dark-grey)'; this.style.transform='translateY(0)'"
   >
     Send Message
   </button>
