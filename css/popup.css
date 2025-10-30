@@ -151,25 +151,22 @@ main {
 /* ---------- Mobile Styles ---------- */
 @media (max-width: 600px) {
 	main {
-		padding: clamp(1rem, 2vw, 2rem) clamp(1.5rem, 3vw, 3rem)
-			clamp(1rem, 2vw, 2rem);
-		overflow-y: auto;
+		width: 90%;
+		max-width: 400px;
+		padding: 1rem;
 		transition:
 			opacity var(--popup-fade-out-duration) ease,
 			visibility var(--popup-fade-out-duration) ease;
+		opacity: 0;
 		visibility: hidden;
 		position: absolute;
-		right: 5rem;
-		top: 6rem;
-		width: 45%;
-		height: calc(100vh - 8rem);
-		background-color: transparent;
-		color: var(--cream);
-		border: 2px solid var(--orange);
+		right: 1rem;
+		top: 42vh;
+		left: auto;
+		bottom: auto;
+		max-height: calc(100vh - 56vh);
 		border-radius: 8px;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-		z-index: 10;
-		opacity: 0;
 	}
 
 	main.popup-scrollable {
