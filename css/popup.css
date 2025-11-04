@@ -52,7 +52,7 @@ body.content-mode main {
 }
 
 main p {
-	margin-bottom: 0.2rem;
+	margin-bottom: 0.4rem;
 	font-size: clamp(0.85rem, 0.5vw + 0.3rem, 1rem);
 	line-height: 1.5;
 }
