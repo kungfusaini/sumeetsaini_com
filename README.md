@@ -6,7 +6,6 @@ Interactive 3D pyramid built with Three.js. Drag to rotate, click faces to explo
 - **Custom Tetrahedron**: Programmatic geometry with BufferGeometry
 - **Quaternion Rotation**: Gimbal-lock-free smooth rotations
 - **Composite Textures**: Canvas-based faces with grain overlays
-- **High-Res Rendering**: 4096x4096 textures for crisp visuals
 
 ## ⚡ Performance
 - **60fps Loop**: RequestAnimationFrame with GPU acceleration
@@ -14,19 +13,33 @@ Interactive 3D pyramid built with Three.js. Drag to rotate, click faces to explo
 - **Responsive Camera**: Dynamic positioning for all viewports
 - **Touch Support**: Full mobile interaction handling
 
-## 🔧 3D Architecture
-```
-js/shape/
-├── geometry.js    # Pyramid construction
-├── animation.js  # Quaternion interpolation
-├── interaction.js # Drag/touch handling
-└── helpers.js    # Responsive calculations
-```
-
 ## 🎯 Features
 - Smooth drag-to-rotate with realistic physics
-- Click faces for content transitions
+- Click faces for content (About, Blog, Contact, Now)
+- Contact form with email integration
 - Auto-rotation with idle detection
 - Mobile-optimized touch controls
 
 Press 'D' for debug controls.
+
+## Development
+
+This project is part of [Aether](https://github.com/kungfusaini/aether) unified Docker setup.
+
+### Running with Aether (Recommended)
+```bash
+# Clone Aether project
+git clone https://github.com/kungfusaini/aether.git
+cd aether
+
+# Start development environment
+docker compose -f docker-compose.yml -f docker-compose-dev.yml up -d
+```
+
+### Local Development
+```bash
+npm run dev
+```
+
+
+
