@@ -25,6 +25,7 @@ import {
 } from "./interaction.js";
 import { loader, shapeState } from "./shapeState.js";
 
+
 /* ---------- init ---------------------------------------------------- */
 export async function init() {
 	const container = document.createElement("div");
@@ -87,6 +88,9 @@ export async function init() {
 	);
 	shapeState.scene.add(shapeState.pyramid);
 
+	// Signal that shape is loaded and trigger intro completion
+	window.completeIntro(container);
+
 	/* ---- events ---- */
 	container.addEventListener("mousedown", (e) =>
 		onPointerDown(e.clientX, e.clientY),
@@ -138,24 +142,16 @@ export async function init() {
 	window.addEventListener("resize", () => onResize(container));
 
 	/* ---- first frame ---- */
-	// Wait for content to be visible and intro text to finish moving before fading in
-	const waitForVisible = () => {
+	// Initial render setup
+	const setupFirstFrame = () => {
 		if (container.offsetWidth > 0 && container.offsetHeight > 0) {
 			onResize(container);
 			shapeState.renderer.render(shapeState.scene, shapeState.camera);
-			// Check if intro text has finished moving
-			if ($("#name")?.classList.contains("top")) {
-				setTimeout(() => {
-					container.style.opacity = "1";
-				}, 100);
-			} else {
-				setTimeout(waitForVisible, 50);
-			}
 		} else {
-			setTimeout(waitForVisible, 50);
+			setTimeout(setupFirstFrame, 50);
 		}
 	};
-	waitForVisible();
+	setupFirstFrame();
 	animate();
 }
 
