@@ -15,7 +15,7 @@ Interactive 3D pyramid built with Three.js. Drag to rotate, click faces to explo
 
 ## 🎯 Features
 - Smooth drag-to-rotate with realistic physics
-- Click faces for content (About, Blog, Contact, Now)
+- Click faces for content (About, Blog, Contact, Now - auto-loads latest month)
 - Contact form with email integration
 - Auto-rotation with idle detection
 - Mobile-optimized touch controls

@@ -30,11 +30,22 @@ export async function showContent(contentPath, title) {
 	}
 
 	try {
-		const response = await fetch(contentPath);
-		if (!response.ok) {
-			throw new Error(`Failed to load content: ${contentPath}`);
+		let content;
+
+		// Check if this is the now loader
+		if (contentPath.includes("nowLoader.js")) {
+			// Import and use the now loader
+			const { loadNowContent } = await import("../now/nowLoader.js");
+			content = await loadNowContent();
+		} else {
+			// Regular HTML file
+			const response = await fetch(contentPath);
+			if (!response.ok) {
+				throw new Error(`Failed to load content: ${contentPath}`);
+			}
+			content = await response.text();
 		}
-		const content = await response.text();
+
 		main.innerHTML = closeButton + content;
 	} catch (error) {
 		console.error("Error loading content:", error);
@@ -48,44 +59,46 @@ export async function showContent(contentPath, title) {
 	checkContentOverflow();
 
 	// Set up contact form handler if contact content is loaded
-	if (contentPath.includes('contact.html')) {
+	if (contentPath.includes("contact.html")) {
 		setupContactForm();
-		
+
 		// Check if form was previously submitted and restore thank you message
 		const contactState = getContactState();
 		if (contactState.hasSubmitted && contactState.submissionData) {
-			const contactForm = document.getElementById('contactForm');
-			const resultDiv = document.getElementById('result');
-			const submitButton = contactForm ? contactForm.querySelector('button[type="submit"]') : null;
-			
+			const contactForm = document.getElementById("contactForm");
+			const resultDiv = document.getElementById("result");
+			const submitButton = contactForm
+				? contactForm.querySelector('button[type="submit"]')
+				: null;
+
 			if (contactForm && resultDiv && submitButton) {
 				// Hide the form and prepare thank you message for animation
-				contactForm.style.display = 'none';
+				contactForm.style.display = "none";
 				resultDiv.textContent = contactState.submissionData.message;
-				resultDiv.style.display = 'flex';
-				resultDiv.style.justifyContent = 'center';
-				resultDiv.style.alignItems = 'center';
-				resultDiv.style.minHeight = '200px';
-				resultDiv.style.background = 'transparent';
-				resultDiv.style.color = 'var(--orange)';
-				resultDiv.style.border = 'none';
-				resultDiv.style.fontSize = '0.8rem';
-				resultDiv.style.opacity = '0'; // Start invisible for fade-in
-				
+				resultDiv.style.display = "flex";
+				resultDiv.style.justifyContent = "center";
+				resultDiv.style.alignItems = "center";
+				resultDiv.style.minHeight = "200px";
+				resultDiv.style.background = "transparent";
+				resultDiv.style.color = "var(--orange)";
+				resultDiv.style.border = "none";
+				resultDiv.style.fontSize = "0.8rem";
+				resultDiv.style.opacity = "0"; // Start invisible for fade-in
+
 				// Keep button in submitted state
-				submitButton.textContent = 'Message Sent';
+				submitButton.textContent = "Message Sent";
 				submitButton.disabled = true;
-				submitButton.style.background = 'var(--dark-grey)';
-				submitButton.style.color = 'var(--grey)';
-				submitButton.style.cursor = 'not-allowed';
+				submitButton.style.background = "var(--dark-grey)";
+				submitButton.style.color = "var(--grey)";
+				submitButton.style.cursor = "not-allowed";
 				submitButton.onmouseover = null;
 				submitButton.onmouseout = null;
 			}
 		} else {
 			// Ensure form starts with opacity 0 for animation system if not submitted
-			const contactForm = document.getElementById('contactForm');
+			const contactForm = document.getElementById("contactForm");
 			if (contactForm) {
-				contactForm.style.opacity = '0';
+				contactForm.style.opacity = "0";
 			}
 		}
 	}
@@ -218,10 +231,6 @@ function fadeInElements(elements) {
 		}, index * staggerDelay); // Stagger the fade-ins
 	});
 }
-
-
-
-
 
 /* ---------- event listeners ---------- */
 export function initPopupEventListeners() {

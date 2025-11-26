@@ -29,6 +29,6 @@ export const FACES = [
 		color: "--light-grey",
 		image: "assets/dice_images/sun.svg",
 		rotation: { x: 0.89, y: 9.415, z: -2.4 },
-		contentPath: "content/now.html",
+		contentPath: "js/now/nowLoader.js",
 	},
 ];
