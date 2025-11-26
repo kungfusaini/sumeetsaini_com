@@ -65,7 +65,7 @@ export function generateSelectorHTML(selectedMonth, selectedYear) {
 		const yearOptions = availableYears
 			.map(
 				(year) =>
-					`<option value="${year}" ${year == selectedYear ? "selected" : ""}>${year}</option>`,
+					`<option value="${year}" ${year == selectedYear ? "selected" : ""}>${year} ▼</option>`,
 			)
 			.join("");
 
@@ -89,7 +89,7 @@ export function generateSelectorHTML(selectedMonth, selectedYear) {
 				const monthValue = (index + 1).toString().padStart(2, "0");
 				const isAvailable = availableMonths.includes(monthValue);
 				const isSelected = index + 1 === selectedMonth;
-				return `<option value="${monthValue}" ${isSelected ? "selected" : ""} ${!isAvailable ? "disabled" : ""}>${name}</option>`;
+				return `<option value="${monthValue}" ${isSelected ? "selected" : ""} ${!isAvailable ? "disabled" : ""}>${name} ▼</option>`;
 			})
 			.join("");
 

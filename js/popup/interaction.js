@@ -282,7 +282,7 @@ async function setupNowSelector() {
 			.map((name, index) => {
 				const monthValue = (index + 1).toString().padStart(2, "0");
 				const isAvailable = availableMonths.includes(monthValue);
-				return `<option value="${monthValue}" ${!isAvailable ? "disabled" : ""}>${name}</option>`;
+				return `<option value="${monthValue}" ${!isAvailable ? "disabled" : ""}>${name} ▼</option>`;
 			})
 			.join("");
 
