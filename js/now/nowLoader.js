@@ -95,11 +95,11 @@ export function generateSelectorHTML(selectedMonth, selectedYear) {
 
 		return `
 			<div class="now-selector">
-				<select id="year-selector">
-					${yearOptions}
-				</select>
 				<select id="month-selector">
 					${monthOptions}
+				</select>
+				<select id="year-selector">
+					${yearOptions}
 				</select>
 			</div>
 		`;
