@@ -143,13 +143,20 @@ a:hover .link-icon {
 /* ---------- Mobile Selector Styles ---------- */
 @media (max-width: 600px) {
 	.now-selector {
-		flex-direction: column;
-		gap: 0.3rem;
-		margin: 0.3rem 0 0.8rem 0;
+		flex-direction: row;
+		gap: 0.5rem;
+		margin: 0rem 0 0.3rem 0;
 	}
 	
 	.now-selector select {
 		font-size: clamp(1.2rem, 0.8vw + 0.3rem, 1.4rem);
+		width: auto;
+		min-width: fit-content;
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		vertical-align: baseline;
+		line-height: 1;
 	}
 }
 
