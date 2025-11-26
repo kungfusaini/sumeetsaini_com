@@ -121,6 +121,11 @@ export async function showContent(contentPath, title) {
 			},
 			isSwitching ? 0 : animationDelay,
 		);
+
+		// Set up now page selector if present
+		if (contentPath.includes("nowLoader.js")) {
+			setupNowSelector();
+		}
 	});
 }
 
@@ -230,6 +235,133 @@ function fadeInElements(elements) {
 			element.style.opacity = "1";
 		}, index * staggerDelay); // Stagger the fade-ins
 	});
+}
+
+/* ---------- now page selector ---------- */
+async function setupNowSelector() {
+	const yearSelector = document.getElementById("year-selector");
+	const monthSelector = document.getElementById("month-selector");
+	const selectorContainer = document.querySelector(".now-selector");
+
+	if (!yearSelector || !monthSelector || !selectorContainer) return;
+
+	// Make selector visible after a short delay
+	setTimeout(() => {
+		selectorContainer.classList.add("loaded");
+	}, 100);
+
+	// Import now loader functions
+	const { getAvailableMonths } = await import("../now/nowLoader.js");
+
+	// Year selector change handler
+	yearSelector.addEventListener("change", async () => {
+		const selectedYear = parseInt(yearSelector.value);
+		const availableMonths = getAvailableMonths(selectedYear);
+
+		// Update month selector options
+		const monthNames = [
+			"January",
+			"February",
+			"March",
+			"April",
+			"May",
+			"June",
+			"July",
+			"August",
+			"September",
+			"October",
+			"November",
+			"December",
+		];
+
+		const newMonthOptions = monthNames
+			.map((name, index) => {
+				const monthValue = (index + 1).toString().padStart(2, "0");
+				const isAvailable = availableMonths.includes(monthValue);
+				return `<option value="${monthValue}" ${!isAvailable ? "disabled" : ""}>${name}</option>`;
+			})
+			.join("");
+
+		monthSelector.innerHTML = newMonthOptions;
+
+		// Select first available month
+		if (availableMonths.length > 0) {
+			monthSelector.value = availableMonths[0];
+			await switchNowContent();
+		}
+	});
+
+	// Month selector change handler
+	monthSelector.addEventListener("change", switchNowContent);
+}
+
+async function switchNowContent() {
+	const yearSelector = document.getElementById("year-selector");
+	const monthSelector = document.getElementById("month-selector");
+
+	if (!yearSelector || !monthSelector) return;
+
+	const year = parseInt(yearSelector.value);
+	const month = parseInt(monthSelector.value);
+
+	// Import now loader function (only when needed)
+	const { loadNowContentByMonth } = await import("../now/nowLoader.js");
+
+	// Fade out current content (except selector and heading)
+	const main = document.querySelector("main");
+	const selectorContainer = document.querySelector(".now-selector");
+	const heading = main.querySelector("h2");
+	const contentElements = Array.from(main.children).filter(
+		(child) =>
+			child !== selectorContainer &&
+			child !== heading &&
+			child.id !== "close-content",
+	);
+
+	// Fade out content
+	contentElements.forEach((element) => {
+		element.style.transition = "opacity 0.2s ease-out";
+		element.style.opacity = "0";
+	});
+
+	// Wait for fade out, then load new content ONLY when selected
+	setTimeout(async () => {
+		try {
+			// Load content ONLY when user selects it
+			const newContent = await loadNowContentByMonth(month, year);
+
+			// Create temporary container for new content
+			const tempDiv = document.createElement("div");
+			tempDiv.innerHTML = newContent;
+
+			// Remove old content elements
+			contentElements.forEach((element) => element.remove());
+
+			// Add new content after selector
+			selectorContainer.insertAdjacentHTML("afterend", newContent);
+
+			// Fade in new content
+			const newElements = Array.from(main.children).filter(
+				(child) =>
+					child !== selectorContainer &&
+					child !== heading &&
+					child.id !== "close-content",
+			);
+
+			newElements.forEach((element, index) => {
+				element.style.opacity = "0";
+				element.style.transition = "opacity 0.3s ease-in";
+				setTimeout(() => {
+					element.style.opacity = "1";
+				}, index * 50);
+			});
+
+			// Recheck content overflow
+			checkContentOverflow();
+		} catch (error) {
+			console.error("Error switching now content:", error);
+		}
+	}, 200);
 }
 
 /* ---------- event listeners ---------- */

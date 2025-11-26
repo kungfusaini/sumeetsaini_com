@@ -1,92 +1,151 @@
 // Now page loader - automatically loads the most recent month from content/now/
 
+// Static list of available months - update this when adding new files
+const AVAILABLE_MONTHS = [
+	{ month: 10, year: 2025, filename: "10-2025.html" },
+	{ month: 11, year: 2025, filename: "11-2025.html" },
+	// Add new months here as they're created
+];
+
 export async function loadNowContent() {
 	try {
-		// Get list of HTML files in content/now/
-		const files = await getNowFiles();
-
-		if (files.length === 0) {
+		if (AVAILABLE_MONTHS.length === 0) {
 			return "<h2>Now</h2><p>No now page content found.</p>";
 		}
 
-		// Find the most recent file
-		const latestFile = getLatestFile(files);
+		// Find the most recent entry from static list
+		const latestEntry = AVAILABLE_MONTHS.reduce((latest, current) => {
+			const latestDate = new Date(latest.year, latest.month - 1);
+			const currentDate = new Date(current.year, current.month - 1);
+			return currentDate > latestDate ? current : latest;
+		});
 
-		// Load the content
-		const response = await fetch(`content/now/${latestFile}`);
-		if (!response.ok) {
-			throw new Error(`Failed to load ${latestFile}`);
-		}
+		// Load ONLY the most recent content immediately
+		const content = await loadNowContentByMonth(
+			latestEntry.month,
+			latestEntry.year,
+		);
 
-		const content = await response.text();
+		// Generate selector HTML using static list (no HTTP requests)
+		const selectorHTML = generateSelectorHTML(
+			latestEntry.month,
+			latestEntry.year,
+		);
 
-		// Wrap with h2 for consistency with other pages
-		return `<h2>Now</h2>${content}`;
+		// Wrap with h2 and selector for consistency with other pages
+		return `<h2>Now</h2>${selectorHTML}${content}`;
 	} catch (error) {
 		console.error("Error loading now content:", error);
 		return "<h2>Now</h2><p>Could not load now page content.</p>";
 	}
 }
 
-async function getNowFiles() {
+export async function loadNowContentByMonth(month, year) {
 	try {
-		// Since we can't directly list directory contents in browser,
-		// we'll check for common month files
-		const currentYear = new Date().getFullYear();
-		const files = [];
+		const monthStr = month.toString().padStart(2, "0");
+		const filename = `${monthStr}-${year}.html`;
 
-		// Check for files from current year and previous year
-		for (let year = currentYear; year >= currentYear - 1; year--) {
-			for (let month = 12; month >= 1; month--) {
-				const monthStr = month.toString().padStart(2, "0");
-				const filename = `${monthStr}-${year}.html`;
-
-				try {
-					const response = await fetch(`content/now/${filename}`, {
-						method: "HEAD",
-					});
-					if (response.ok) {
-						files.push(filename);
-					}
-				} catch {
-					// File doesn't exist, continue
-				}
-			}
+		const response = await fetch(`content/now/${filename}`);
+		if (!response.ok) {
+			throw new Error(`Failed to load ${filename}`);
 		}
 
-		return files;
+		return await response.text();
 	} catch (error) {
-		console.error("Error getting now files:", error);
-		return [];
+		console.error("Error loading month content:", error);
+		return `<p>Content for ${getMonthName(month)} ${year} not found.</p>`;
 	}
 }
 
-function getLatestFile(files) {
-	if (files.length === 0) return null;
+export function generateSelectorHTML(selectedMonth, selectedYear) {
+	try {
+		const availableYears = getAvailableYears();
+		const availableMonths = getAvailableMonths(selectedYear);
 
-	// Parse filenames and find the most recent
-	let latestFile = files[0];
-	let latestDate = parseDateFromFilename(latestFile);
+		const yearOptions = availableYears
+			.map(
+				(year) =>
+					`<option value="${year}" ${year == selectedYear ? "selected" : ""}>${year}</option>`,
+			)
+			.join("");
 
-	for (let i = 1; i < files.length; i++) {
-		const currentDate = parseDateFromFilename(files[i]);
-		if (currentDate > latestDate) {
-			latestDate = currentDate;
-			latestFile = files[i];
+		const monthNames = [
+			"January",
+			"February",
+			"March",
+			"April",
+			"May",
+			"June",
+			"July",
+			"August",
+			"September",
+			"October",
+			"November",
+			"December",
+		];
+
+		const monthOptions = monthNames
+			.map((name, index) => {
+				const monthValue = (index + 1).toString().padStart(2, "0");
+				const isAvailable = availableMonths.includes(monthValue);
+				const isSelected = index + 1 === selectedMonth;
+				return `<option value="${monthValue}" ${isSelected ? "selected" : ""} ${!isAvailable ? "disabled" : ""}>${name}</option>`;
+			})
+			.join("");
+
+		return `
+			<div class="now-selector">
+				<select id="year-selector">
+					${yearOptions}
+				</select>
+				<select id="month-selector">
+					${monthOptions}
+				</select>
+			</div>
+		`;
+	} catch (error) {
+		console.error("Error generating selector:", error);
+		return "";
+	}
+}
+
+export function getAvailableYears() {
+	const years = new Set();
+
+	AVAILABLE_MONTHS.forEach((entry) => {
+		years.add(entry.year);
+	});
+
+	return Array.from(years).sort((a, b) => b - a); // Sort descending
+}
+
+export function getAvailableMonths(year) {
+	const months = new Set();
+
+	AVAILABLE_MONTHS.forEach((entry) => {
+		if (entry.year === year) {
+			months.add(entry.month.toString().padStart(2, "0"));
 		}
-	}
+	});
 
-	return latestFile;
+	return Array.from(months).sort();
 }
 
-function parseDateFromFilename(filename) {
-	// Extract month and year from "mm-yyyy.html" format
-	const match = filename.match(/^(\d{2})-(\d{4})\.html$/);
-	if (!match) return new Date(0); // Return epoch date for invalid format
-
-	const [, monthStr, yearStr] = match;
-	const month = parseInt(monthStr, 10) - 1; // JS months are 0-indexed
-	const year = parseInt(yearStr, 10);
-
-	return new Date(year, month, 1);
+// Helper function to get month name
+export function getMonthName(month) {
+	const monthNames = [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
+	];
+	return monthNames[month - 1] || "Unknown";
 }
