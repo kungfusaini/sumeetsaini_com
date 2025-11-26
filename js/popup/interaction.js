@@ -198,6 +198,13 @@ function animateContent() {
 			heading.textContent += text[idx++];
 			if (idx === text.length) {
 				clearInterval(typeInterval);
+
+				// Fade in now selector immediately after typewriter completes
+				const selectorContainer = document.querySelector(".now-selector");
+				if (selectorContainer) {
+					selectorContainer.classList.add("loaded");
+				}
+
 				// Add delay before fade-in starts
 				const fadeStartDelay = parseInt(
 					getComputedStyle(document.documentElement).getPropertyValue(
@@ -245,10 +252,7 @@ async function setupNowSelector() {
 
 	if (!yearSelector || !monthSelector || !selectorContainer) return;
 
-	// Make selector visible after a short delay
-	setTimeout(() => {
-		selectorContainer.classList.add("loaded");
-	}, 100);
+	// Don't auto-fade in selector here - let animateContent handle timing
 
 	// Import now loader functions
 	const { getAvailableMonths } = await import("../now/nowLoader.js");
