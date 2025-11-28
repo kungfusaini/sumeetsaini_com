@@ -192,9 +192,10 @@ main {
 	visibility: hidden;
 	position: absolute;
 	right: 5rem;
-	top: 6rem;
+	top: 50%;
+	transform: translateY(-50%);
 	width: 45%;
-	height: calc(100vh - 8rem);
+	max-height: calc(100vh - 8rem);
 	background-color: transparent;
 	color: var(--cream);
 	border: 2px solid var(--orange);
