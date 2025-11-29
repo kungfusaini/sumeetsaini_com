@@ -25,8 +25,8 @@ export async function showContent(contentPath, title) {
 		main.style.visibility === "visible" && main.innerHTML !== "";
 
 	if (isSwitching) {
-		// Fade out current content first
-		await fadeOutCurrentContent();
+		// Fade out popup window first
+		await fadeOutPopup();
 	}
 
 	try {
@@ -126,6 +126,10 @@ export async function showContent(contentPath, title) {
 	requestAnimationFrame(() => {
 		if (!isSwitching) {
 			document.body.classList.add("content-mode");
+		} else {
+			// Remove switching class to fade back in
+			const main = document.querySelector("main");
+			main.classList.remove("switching");
 		}
 		// Start animations after content mode is active
 		const animationDelay = parseInt(
@@ -166,6 +170,22 @@ function checkContentOverflow() {
 }
 
 /* ---------- content animations ---------- */
+function fadeOutPopup() {
+	return new Promise((resolve) => {
+		const main = document.querySelector("main");
+		const fadeDuration = getComputedStyle(
+			document.documentElement,
+		).getPropertyValue("--content-switch-fade-duration");
+
+		// Add switching class to fade out
+		main.classList.add("switching");
+
+		setTimeout(() => {
+			resolve();
+		}, parseFloat(fadeDuration) * 1000);
+	});
+}
+
 function fadeOutCurrentContent() {
 	return new Promise((resolve) => {
 		const main = document.querySelector("main");

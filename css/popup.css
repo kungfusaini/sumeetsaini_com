@@ -51,6 +51,12 @@ body.content-mode main {
 		visibility var(--popup-fade-in-duration) ease;
 }
 
+/* Content switching state */
+body.content-mode main.switching {
+	opacity: 0;
+	transition: opacity var(--content-switch-fade-duration) ease-out;
+}
+
 main p {
 	margin-bottom: 0.4rem;
 	font-size: clamp(0.85rem, 0.5vw + 0.3rem, 1rem);
