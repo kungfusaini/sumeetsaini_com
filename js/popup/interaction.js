@@ -46,25 +46,7 @@ export async function showContent(contentPath, title) {
 			content = await response.text();
 		}
 
-		// Create temporary container to measure final size
-		const tempDiv = document.createElement("div");
-		tempDiv.style.cssText = `
-			position: absolute;
-			visibility: hidden;
-			padding: ${getComputedStyle(main).padding};
-			width: ${getComputedStyle(main).width};
-			max-height: calc(100vh - 8rem);
-		`;
-		tempDiv.innerHTML = closeButton + content;
-		document.body.appendChild(tempDiv);
-
-		// Set the final height immediately
-		const finalHeight = tempDiv.scrollHeight;
-		main.style.height = finalHeight + "px";
-		main.style.minHeight = finalHeight + "px";
-
-		// Remove temp container and set actual content
-		document.body.removeChild(tempDiv);
+		// Set content directly - let CSS handle sizing
 		main.innerHTML = closeButton + content;
 	} catch (error) {
 		console.error("Error loading content:", error);

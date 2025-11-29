@@ -252,9 +252,11 @@ main {
 		top: 42vh;
 		left: auto;
 		bottom: auto;
-		max-height: calc(100vh - 56vh);
+		max-height: calc(100vh - 55vh);
 		border-radius: 8px;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		/* Override desktop centering */
+		transform: none;
 	}
 
 	main.popup-scrollable {
@@ -269,6 +271,20 @@ main {
 		transition:
 			opacity var(--popup-fade-in-duration) ease,
 			visibility var(--popup-fade-in-duration) ease;
+		/* Override desktop centering */
+		transform: none;
+	}
+
+	/* Mobile content switching state */
+	body.content-mode main.switching {
+		opacity: 0;
+		transition: opacity var(--content-switch-fade-duration) ease-out;
+		/* Preserve mobile positioning */
+		width: 90%;
+		max-width: 400px;
+		right: 1rem;
+		top: 42vh;
+		transform: none;
 	}
 
 	/* Mobile responsive for intro section and face image */
