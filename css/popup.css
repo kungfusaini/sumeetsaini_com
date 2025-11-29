@@ -298,7 +298,7 @@ main {
 	.face-image {
 		float: none;
 		display: block;
-		margin: 0 auto 1rem auto;
+		margin: 1rem auto 1rem auto;
 		width: 100px;
 		height: 100px;
 		transform: scale(1.2);
