@@ -39,13 +39,26 @@ export function categorizePosts(posts) {
 function normalizePermalink(permalink) {
 	if (!permalink) return "";
 
-	if (permalink.includes("localhost:1313")) {
+	const isLocalDev = window.location.hostname === "localhost";
+
+	// If we're on localhost, keep localhost URLs
+	if (isLocalDev && permalink.includes("localhost:1313")) {
+		// Just add protocol if missing
+		if (permalink.startsWith("//")) {
+			return "http:" + permalink;
+		}
+		return permalink;
+	}
+
+	// If we're on production, convert localhost URLs to production
+	if (!isLocalDev && permalink.includes("localhost:1313")) {
 		return permalink.replace(
 			/^(https?:)?\/\/localhost:1313/,
 			"https://arcanecodex.dev",
 		);
 	}
 
+	// Handle protocol-relative URLs
 	if (permalink.startsWith("//")) {
 		return "https:" + permalink;
 	}
@@ -116,11 +129,15 @@ export async function loadBlogContent() {
 		return `
       <h2>Blog Highlights</h2>
 
-      <h3>Something Technical</h3>
-      ${techHTML}
+      <section class="blog-section">
+        <h3>Something Technical</h3>
+        ${techHTML}
+      </section>
 
-      <h3>Something Else</h3>
-      ${nonTechHTML}
+      <section class="blog-section">
+        <h3>Something Else</h3>
+        ${nonTechHTML}
+      </section>
 
       <p>
         <a href="https://arcanecodex.dev" target="_blank" rel="noopener">

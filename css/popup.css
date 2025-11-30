@@ -28,6 +28,13 @@ main section {
 	opacity: 0;
 }
 
+/* Blog sections animate as groups, children should be visible */
+.blog-section h3,
+.blog-section h4,
+.blog-section p {
+	opacity: 1;
+}
+
 main h2 {
 	transition: opacity calc(var(--content-fade-duration) / 2) ease;
 	font-size: clamp(1.8rem, 1.2vw + 0.2rem, 2.2rem);
