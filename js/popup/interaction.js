@@ -37,6 +37,10 @@ export async function showContent(contentPath, title) {
 			// Import and use the now loader
 			const { loadNowContent } = await import("../now/nowLoader.js");
 			content = await loadNowContent();
+		} else if (contentPath.includes("blog.html")) {
+			// Import and load blog content (like now page)
+			const { loadBlogContent } = await import("../blog/fetcher.js");
+			content = await loadBlogContent();
 		} else {
 			// Regular HTML file
 			const response = await fetch(contentPath);
@@ -256,6 +260,11 @@ function fadeInElements(elements) {
 	);
 
 	elements.forEach((element, index) => {
+		// Clear any existing inline opacity styles that might conflict
+		element.style.removeProperty('opacity');
+		element.style.removeProperty('transition');
+		
+		// Set initial state for animation
 		element.style.opacity = "0";
 		element.style.transition = `opacity ${fadeDuration} ease-in-out`;
 
