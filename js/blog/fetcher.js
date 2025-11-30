@@ -99,18 +99,15 @@ export function createBlogCardHTML(post) {
 		: "";
 
 	return `
-    <h4>
-      <a href="${permalink}" target="_blank" rel="noopener">
-        ${post.title}
-      </a>
-    </h4>
-    <p><em>${date} • ${category}${readingTime}</em></p>
-    <p>${excerpt}</p>
-    <p>
-      <a href="${permalink}" target="_blank" rel="noopener">
-        Read full post →
-      </a>
-    </p>
+    <div class="blog-card" onclick="window.open('${permalink}', '_blank', 'noopener')">
+      <h4>
+        <a href="${permalink}" target="_blank" rel="noopener">
+          ${post.title}
+        </a>
+      </h4>
+      <p><em>${date} • ${category}${readingTime}</em></p>
+      <p>${excerpt} <a href="${permalink}" target="_blank" rel="noopener">read more →</a></p>
+    </div>
   `;
 }
 
