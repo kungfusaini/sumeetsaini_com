@@ -154,13 +154,13 @@ body.content-mode .three-box {
 @media (max-width: 600px) {
 	.guidance-drag {
 		left: 50%;
-		top: 4rem;
+		top: 5rem;
 		transform: translateX(-50%);
 	}
 
 	.guidance-click {
 		left: 50%;
-		bottom: 8rem;
+		bottom: 10rem;
 		right: auto;
 		top: auto;
 		transform: translateX(-50%);
