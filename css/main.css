@@ -127,13 +127,13 @@ body.content-mode .three-box {
 }
 
 .guidance-drag {
-	left: 2rem;
+	left: 12rem;
 	top: 50%;
 	transform: translateY(-50%);
 }
 
 .guidance-click {
-	right: 2rem;
+	right: 12rem;
 	top: 50%;
 	transform: translateY(-50%);
 }
@@ -141,13 +141,13 @@ body.content-mode .three-box {
 @media (max-width: 600px) {
 	.guidance-drag {
 		left: 50%;
-		top: 2rem;
+		top: 4rem;
 		transform: translateX(-50%);
 	}
 
 	.guidance-click {
 		left: 50%;
-		bottom: 2rem;
+		bottom: 8rem;
 		right: auto;
 		top: auto;
 		transform: translateX(-50%);
