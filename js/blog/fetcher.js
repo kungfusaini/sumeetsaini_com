@@ -94,9 +94,7 @@ export function createBlogCardHTML(post) {
 		: "Read more about this topic.";
 
 	const permalink = normalizePermalink(post.permalink);
-	const readingTime = post.readingTime
-		? ` • ${post.readingTime} min read`
-		: "";
+	const readingTime = post.readingTime ? ` • ${post.readingTime} min read` : "";
 
 	return `
     <div class="blog-card" onclick="window.open('${permalink}', '_blank', 'noopener')">
@@ -127,8 +125,9 @@ export async function loadBlogContent() {
       <h2>Blog</h2>
       <p> My blog
         <a href="https://arcanecodex.dev" target="_blank" rel="noopener">
+<img src="/assets/link_icons/arcanecodex.svg" alt="Arcane Codex" class="link-icon">
           Arcane Codex
-        </a> is where I write about my projects, thoughts and experiences.
+        </a> is where I write about my projects, thoughts and experiences. Check out some of my latest posts.
       </p>
 
       <section class="blog-section">
