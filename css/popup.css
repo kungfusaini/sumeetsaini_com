@@ -72,6 +72,12 @@ body.content-mode main {
 		visibility var(--popup-fade-in-duration) ease;
 }
 
+/* Keep popup hidden during three-box transition */
+body.content-mode.main-hidden main {
+	opacity: 0;
+	visibility: hidden;
+}
+
 /* Content switching state */
 body.content-mode main.switching {
 	opacity: 0;
@@ -216,13 +222,13 @@ main {
 	overflow-y: auto;
 	transition:
 		opacity var(--popup-fade-out-duration) ease,
-		visibility var(--popup-fade-out-duration) ease,
-		min-height 0.3s ease;
+		visibility var(--popup-fade-out-duration) ease;
 	visibility: hidden;
 	position: absolute;
 	right: 5rem;
 	top: 50%;
 	transform: translateY(-50%);
+	will-change: opacity;
 	width: 45%;
 	max-height: calc(100vh - 8rem);
 	background-color: transparent;
@@ -232,8 +238,6 @@ main {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 	z-index: 10;
 	opacity: 0;
-	/* Prevent size jumping during content load */
-	min-height: 200px;
 }
 
 /* ---------- Large Screen Styles ---------- */

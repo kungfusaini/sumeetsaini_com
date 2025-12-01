@@ -57,8 +57,23 @@ export async function showContent(contentPath, title) {
 		main.innerHTML = `${closeButton}<h2>${title}</h2><p>Content could not be loaded.</p>`;
 	}
 
-	// Ensure popup is ready for transition
+	// Ensure popup is visible (but still opacity 0) for layout calculation
 	main.style.visibility = "visible";
+
+	// Add content-mode class if not switching
+	if (!isSwitching) {
+		document.body.classList.add("content-mode", "main-hidden");
+
+		// Wait for three-box width transition to complete, then start popup fade-in
+		setTimeout(() => {
+			document.body.classList.remove("main-hidden");
+		}, 500);
+	}
+
+	// Force multiple synchronous layout calculations
+	void main.offsetHeight;
+	void main.offsetWidth;
+	void main.scrollHeight;
 
 	// Check if content overflows and apply scrollable class if needed
 	checkContentOverflow();
@@ -108,33 +123,36 @@ export async function showContent(contentPath, title) {
 		}
 	}
 
-	// Trigger fade-in in next frame
+	// Wait for two frames to ensure layout is complete before triggering fade-in
 	requestAnimationFrame(() => {
-		if (!isSwitching) {
-			document.body.classList.add("content-mode");
-		} else {
-			// Remove switching class to fade back in
-			const main = document.querySelector("main");
-			main.classList.remove("switching");
-		}
-		// Start animations after content mode is active
-		const animationDelay = parseInt(
-			getComputedStyle(document.documentElement).getPropertyValue(
-				"--content-animation-delay",
-			),
-			10,
-		);
-		setTimeout(
-			() => {
-				animateContent();
-			},
-			isSwitching ? 0 : animationDelay,
-		);
+		requestAnimationFrame(() => {
+			if (isSwitching) {
+				// Remove switching class to fade back in
+				const main = document.querySelector("main");
+				main.classList.remove("switching");
+			} else {
+				// Remove inline opacity style to let CSS transition take over
+				main.style.removeProperty("opacity");
+			}
+			// Start animations after content mode is active
+			const animationDelay = parseInt(
+				getComputedStyle(document.documentElement).getPropertyValue(
+					"--content-animation-delay",
+				),
+				10,
+			);
+			setTimeout(
+				() => {
+					animateContent();
+				},
+				isSwitching ? 0 : animationDelay,
+			);
 
-		// Set up now page selector if present
-		if (contentPath.includes("nowLoader.js")) {
-			setupNowSelector();
-		}
+			// Set up now page selector if present
+			if (contentPath.includes("nowLoader.js")) {
+				setupNowSelector();
+			}
+		});
 	});
 }
 
@@ -261,9 +279,9 @@ function fadeInElements(elements) {
 
 	elements.forEach((element, index) => {
 		// Clear any existing inline opacity styles that might conflict
-		element.style.removeProperty('opacity');
-		element.style.removeProperty('transition');
-		
+		element.style.removeProperty("opacity");
+		element.style.removeProperty("transition");
+
 		// Set initial state for animation
 		element.style.opacity = "0";
 		element.style.transition = `opacity ${fadeDuration} ease-in-out`;
