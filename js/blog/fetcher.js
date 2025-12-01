@@ -100,13 +100,13 @@ export function createBlogCardHTML(post) {
 
 	return `
     <div class="blog-card" onclick="window.open('${permalink}', '_blank', 'noopener')">
-      <h4>
+      <h5>
         <a href="${permalink}" target="_blank" rel="noopener">
           ${post.title}
         </a>
-      </h4>
+      </h5>
       <p><em>${date} • ${category}${readingTime}</em></p>
-      <p>${excerpt} <a href="${permalink}" target="_blank" rel="noopener">read more →</a></p>
+      <p>${excerpt} <a href="${permalink}" target="_blank" rel="noopener">Read more →</a></p>
     </div>
   `;
 }
@@ -117,30 +117,30 @@ export async function loadBlogContent() {
 		const { latestTech, latestNonTech } = categorizePosts(posts);
 
 		if (posts.length === 0) {
-			return "<h2>Blog Highlights</h2><p>No blog posts found.</p>";
+			return "<h2>Blog</h2><p>No blog posts found.</p>";
 		}
 
 		const techHTML = createBlogCardHTML(latestTech);
 		const nonTechHTML = createBlogCardHTML(latestNonTech);
 
 		return `
-      <h2>Blog Highlights</h2>
+      <h2>Blog</h2>
+      <p> My blog
+        <a href="https://arcanecodex.dev" target="_blank" rel="noopener">
+          Arcane Codex
+        </a> is where I write about my projects, thoughts and experiences.
+      </p>
 
       <section class="blog-section">
-        <h3>Something Technical</h3>
+        <h4>Something Technical:</h4>
         ${techHTML}
       </section>
 
       <section class="blog-section">
-        <h3>Something Else</h3>
+        <h4>Something Not:</h4>
         ${nonTechHTML}
       </section>
 
-      <p>
-        <a href="https://arcanecodex.dev" target="_blank" rel="noopener">
-          Read more posts on Arcane Codex →
-        </a>
-      </p>
     `;
 	} catch (error) {
 		console.error("Error loading blog content:", error);
