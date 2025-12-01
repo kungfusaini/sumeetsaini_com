@@ -7,6 +7,7 @@ import {
 	GRAIN_INTENSITY_FACE,
 	GRAIN_SIZE_FACE,
 	INITIAL_PYRAMID_ROTATION,
+	GUIDANCE_DELAY_MS,
 } from "./config.js";
 import { buildPyramid } from "./geometry.js";
 import {
@@ -101,12 +102,12 @@ export async function init() {
 	// Signal that shape is loaded and trigger intro completion
 	window.completeIntro(container);
 
-	// Start guidance timer - show after 5 seconds if no popup opened
+	// Start guidance timer - show after configured delay if no popup opened
 	shapeState.guidanceTimer = setTimeout(() => {
 		if (!shapeState.hasOpenedPopup) {
 			showGuidance();
 		}
-	}, 5000);
+	}, GUIDANCE_DELAY_MS);
 
 	/* ---- events ---- */
 	container.addEventListener("mousedown", (e) =>

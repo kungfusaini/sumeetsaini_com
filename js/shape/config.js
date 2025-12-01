@@ -34,3 +34,4 @@ export const CONTENT_POSITION_DESKTOP = { x: -3.5, y: 0, z: 0 };
 export const CONTENT_POSITION_MOBILE = { x: 0, y: 3.5, z: 0 };
 export const CONTENT_SCALE = 0.7;
 export const MOBILE_BREAKPOINT = 600;
+export const GUIDANCE_DELAY_MS = 5000;
