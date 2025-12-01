@@ -63,6 +63,8 @@ export function onPointerMove(x, y) {
 	shapeState.lastPointer = { x, y };
 	shapeState.hasInteracted = true;
 	shapeState.autoRotateMultiplier = 0;
+
+	// Don't hide guidance on drag - only on click or popup open
 }
 
 export function onPointerUp() {
@@ -127,6 +129,16 @@ export function onShapeClick(ev, container) {
 	if (hits.length) {
 		const userData = hits[0].object.userData;
 		if (userData?.faceIndex !== undefined) {
+			// Hide guidance immediately when face is clicked
+			if (shapeState.guidanceShown) {
+				shapeState.guidanceElement.style.opacity = "0";
+				shapeState.guidanceShown = false;
+			}
+			// Clear guidance timer if it exists
+			if (shapeState.guidanceTimer) {
+				clearTimeout(shapeState.guidanceTimer);
+				shapeState.guidanceTimer = null;
+			}
 			emit("shape:faceClicked", { faceIndex: userData.faceIndex });
 		}
 	}

@@ -25,7 +25,6 @@ import {
 } from "./interaction.js";
 import { loader, shapeState } from "./shapeState.js";
 
-
 /* ---------- init ---------------------------------------------------- */
 export async function init() {
 	const container = document.createElement("div");
@@ -40,6 +39,17 @@ export async function init() {
 	});
 
 	document.body.insertBefore(container, $("main"));
+
+	// Create guidance element
+	const guidanceElement = document.createElement("div");
+	guidanceElement.className = "shape-guidance";
+	guidanceElement.innerHTML = `
+		<span class="guidance-drag">drag</span>
+		<span class="guidance-click">click</span>
+	`;
+	guidanceElement.style.opacity = "0";
+	container.appendChild(guidanceElement);
+	shapeState.guidanceElement = guidanceElement;
 
 	shapeState.scene = new THREE.Scene();
 	shapeState.renderer = new THREE.WebGLRenderer({
@@ -91,6 +101,13 @@ export async function init() {
 	// Signal that shape is loaded and trigger intro completion
 	window.completeIntro(container);
 
+	// Start guidance timer - show after 5 seconds if no popup opened
+	shapeState.guidanceTimer = setTimeout(() => {
+		if (!shapeState.hasOpenedPopup) {
+			showGuidance();
+		}
+	}, 5000);
+
 	/* ---- events ---- */
 	container.addEventListener("mousedown", (e) =>
 		onPointerDown(e.clientX, e.clientY),
@@ -139,6 +156,15 @@ export async function init() {
 		// Timer logic removed - transition completes based on position only
 	});
 
+	on("popup:showContent", () => {
+		shapeState.hasOpenedPopup = true;
+		hideGuidance();
+		if (shapeState.guidanceTimer) {
+			clearTimeout(shapeState.guidanceTimer);
+			shapeState.guidanceTimer = null;
+		}
+	});
+
 	window.addEventListener("resize", () => onResize(container));
 
 	/* ---- first frame ---- */
@@ -153,6 +179,21 @@ export async function init() {
 	};
 	setupFirstFrame();
 	animate();
+}
+
+/* ---------- guidance functions ------------------------------------ */
+function showGuidance() {
+	if (shapeState.guidanceElement) {
+		shapeState.guidanceElement.style.opacity = "1";
+		shapeState.guidanceShown = true;
+	}
+}
+
+function hideGuidance() {
+	if (shapeState.guidanceElement && shapeState.guidanceShown) {
+		shapeState.guidanceElement.style.opacity = "0";
+		shapeState.guidanceShown = false;
+	}
 }
 
 /* ---------- boot ---------------------------------------------------- */

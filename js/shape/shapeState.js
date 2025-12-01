@@ -39,4 +39,10 @@ export const shapeState = {
 	// Selection state
 	selectedFace: null,
 	textSprites: [],
+
+	// Guidance state
+	guidanceShown: false,
+	guidanceTimer: null,
+	guidanceElement: null,
+	hasOpenedPopup: false,
 };
