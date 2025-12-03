@@ -19,11 +19,16 @@ export async function fetchBlogPosts() {
 }
 
 export function categorizePosts(posts) {
-	const techPosts = posts.filter(
+	// Filter to only include actual blog posts (not pages like About)
+	const blogPosts = posts.filter(
+		(post) => post.permalink && post.permalink.includes("/posts/"),
+	);
+
+	const techPosts = blogPosts.filter(
 		(post) => post.categories && post.categories.includes("Tech"),
 	);
 
-	const nonTechPosts = posts.filter(
+	const nonTechPosts = blogPosts.filter(
 		(post) => !post.categories || !post.categories.includes("Tech"),
 	);
 
