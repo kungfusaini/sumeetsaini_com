@@ -29,8 +29,16 @@
   }
   </script>
 
-  <!-- Plausible Analytics -->
-  <script defer data-domain="sumeetsaini.com" src="/stats/js/script.outbound-links.pageview-props.tagged-events.js"></script>
+  <!-- Plausible Analytics (Production only) -->
+  <script>
+    if (window.location.hostname !== 'localhost') {
+      const script = document.createElement('script');
+      script.defer = true;
+      script.setAttribute('data-domain', 'sumeetsaini.com');
+      script.src = '/stats/js/script.outbound-links.pageview-props.tagged-events.js';
+      document.head.appendChild(script);
+    }
+  </script>
   <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
 
  </head>
