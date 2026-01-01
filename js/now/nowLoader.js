@@ -5,6 +5,7 @@ const AVAILABLE_MONTHS = [
 	{ month: 10, year: 2025, filename: "10-2025.html" },
 	{ month: 11, year: 2025, filename: "11-2025.html" },
 	{ month: 12, year: 2025, filename: "12-2025.html" },
+	{ month: 1, year: 2026, filename: "01-2026.html" },
 	// Add new months here as they're created
 ];
 
@@ -96,7 +97,7 @@ export function generateSelectorHTML(selectedMonth, selectedYear) {
 
 		return `
 			<div class="now-selector">
-				<select id="month-selector">
+				<select id="month-selector" style="line-height: 1.4;">
 					${monthOptions}
 				</select>
 				<select id="year-selector">
