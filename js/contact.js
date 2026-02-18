@@ -38,7 +38,10 @@ export function setupContactForm() {
 		setMessageStyle();
 		resultDiv.textContent = "Sending message...";
 
-		const body = new URLSearchParams(new FormData(e.target)).toString();
+		const formData = new FormData(e.target);
+		// Add origin field to identify which site the submission is from
+		formData.append('origin', 'sumeetsaini');
+		const body = new URLSearchParams(formData).toString();
 
 		try {
 			const res = await fetch("/vulkan/web_contact", {
