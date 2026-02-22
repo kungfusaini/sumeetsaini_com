@@ -23,6 +23,7 @@ import {
 	onPointerMove,
 	onPointerUp,
 	onShapeClick,
+	onKeyDown,
 } from "./interaction.js";
 import { loader, shapeState } from "./shapeState.js";
 
@@ -117,6 +118,7 @@ export async function init() {
 		onPointerMove(e.clientX, e.clientY),
 	);
 	window.addEventListener("mouseup", onPointerUp);
+	window.addEventListener("keydown", onKeyDown);
 
 	container.addEventListener("touchstart", (e) =>
 		onPointerDown(e.touches[0].clientX, e.touches[0].clientY),

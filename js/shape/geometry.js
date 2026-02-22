@@ -35,17 +35,18 @@ export function buildPyramid(loadedTextures, grainCanvas) {
 
 	// Face definitions
 	// 4 triangular side faces + 1 square base
-	// Rotation is in degrees - e.g., 180 = 180 degrees
+	// Rotation is the initial rotation in degrees - e.g., 180 = 180 degrees
 	// Size is the image size in pixels (uses FACE_IMG_SIZE from config if not specified)
+	// OffsetY adjusts vertical position of image (uses FACE_IMG_OFFSET_Y from config if not specified)
 	const faceDefs = [
 		{ indices: [4, 3, 0], colorIndex: 0, isTriangle: true, rotation: -80 },   // Front face (About)
 		{ indices: [4, 0, 1], colorIndex: 1, isTriangle: true, rotation: -67 },   // Right face (Contact)
 		{ indices: [4, 1, 2], colorIndex: 2, isTriangle: true, rotation: -67 },   // Back face (Blog)
 		{ indices: [4, 2, 3], colorIndex: 3, isTriangle: true, rotation: -67, size: 1900 },   // Left face (Now) - larger image
-		{ indices: [0, 3, 2, 1], colorIndex: 4, isTriangle: false, rotation: 180 }, // Base (Projects)
+		{ indices: [0, 3, 2, 1], colorIndex: 4, isTriangle: false, rotation: -90, size: 2200, offsetY: 0 }, // Base (Projects) - larger image
 	];
 
-	faceDefs.forEach(({ indices, colorIndex, isTriangle, rotation: faceRotation, size: faceSize }) => {
+	faceDefs.forEach(({ indices, colorIndex, isTriangle, rotation: faceRotation, size: faceSize, offsetY: faceOffsetY }) => {
 		const geom = new THREE.BufferGeometry();
 		let positions;
 		let uvs;
@@ -166,6 +167,7 @@ export function buildPyramid(loadedTextures, grainCanvas) {
 		// Draw image on top with multiply blend for better color integration
 		const img = loadedTextures[colorIndex].image;
 		const imgSize = faceSize || FACE_IMG_SIZE;
+		const imgOffsetY = faceOffsetY !== undefined ? faceOffsetY : FACE_IMG_OFFSET_Y;
 		
 		let imgX, imgY;
 		
@@ -188,12 +190,12 @@ export function buildPyramid(loadedTextures, grainCanvas) {
 			imgX = centroidU * canvas.width - imgSize / 2;
 			imgY = centroidV * canvas.height - imgSize / 2;
 			
-			// Adjust for FACE_IMG_OFFSET_Y
-			imgY += FACE_IMG_OFFSET_Y;
+			// Adjust for offset
+			imgY += imgOffsetY;
 		} else {
 			// Square face: center on canvas
 			imgX = (canvas.width - imgSize) / 2;
-			imgY = (canvas.height - imgSize) / 2 + FACE_IMG_OFFSET_Y;
+			imgY = (canvas.height - imgSize) / 2 + imgOffsetY;
 		}
 		
 		ctx.globalCompositeOperation = "multiply";

@@ -4,7 +4,7 @@ export const FACES = [
 		text: "About",
 		color: "--black-grey",
 		image: "assets/dice_images/book.svg",
-		rotation: { x: -4, y: 0.8, z: 0 },
+		rotation: { x: -0.044, y: 0.016, z: 0.000 },
 		contentPath: "content/about.html",
 	},
 	{
@@ -12,7 +12,7 @@ export const FACES = [
 		text: "Contact",
 		color: "--dark-grey",
 		image: "assets/dice_images/ball.svg",
-		rotation: { x: 2.48, y: 8.65, z: -4.7 },
+		rotation: { x: -0.057, y: -1.538, z: 0.000 },
 		contentPath: "content/contact.html",
 	},
 	{
@@ -20,7 +20,7 @@ export const FACES = [
 		text: "Blog",
 		color: "--mid-grey",
 		image: "assets/dice_images/quill.svg",
-		rotation: { x: -2.34, y: -3.14, z: 2.35 },
+		rotation: { x: 3.084, y: -0.004, z: 3.140 },
 		contentPath: "content/blog.html",
 	},
 	{
@@ -28,15 +28,15 @@ export const FACES = [
 		text: "Now",
 		color: "--light-grey",
 		image: "assets/dice_images/sun.svg",
-		rotation: { x: 0.89, y: 9.415, z: -2.4 },
+		rotation: { x: -2.559, y: 1.560, z: 2.499 },
 		contentPath: "js/now/nowLoader.js",
 	},
 	{
 		id: "projects",
 		text: "Projects",
 		color: "--lighter-grey",
-		image: "assets/dice_images/sun.svg",
-		rotation: { x: 3.14, y: 0, z: 0 },
+		image: "assets/dice_images/cauldron.svg",
+		rotation: { x: -1.904, y: 1.588, z: 0.005 },
 		contentPath: "content/projects.html",
 	},
 ];
