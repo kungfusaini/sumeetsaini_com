@@ -31,4 +31,12 @@ export const FACES = [
 		rotation: { x: 0.89, y: 9.415, z: -2.4 },
 		contentPath: "js/now/nowLoader.js",
 	},
+	{
+		id: "projects",
+		text: "Projects",
+		color: "--lighter-grey",
+		image: "assets/dice_images/sun.svg",
+		rotation: { x: 3.14, y: 0, z: 0 },
+		contentPath: "content/projects.html",
+	},
 ];
