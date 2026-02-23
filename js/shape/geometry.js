@@ -152,9 +152,9 @@ export function buildPyramid(loadedTextures, grainCanvas) {
 		canvas.height = canvasHeight;
 		const ctx = canvas.getContext("2d");
 
-		// Fill with face color from CSS variable
+		// Fill with unified face color (all faces same color for dynamic lighting)
 		const colorValue = getComputedStyle(document.documentElement)
-			.getPropertyValue(FACES[colorIndex].color)
+			.getPropertyValue("--mid-grey")
 			.trim();
 		ctx.fillStyle = colorValue;
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -214,7 +214,7 @@ export function buildPyramid(loadedTextures, grainCanvas) {
 		texture.minFilter = THREE.LinearMipmapLinearFilter;
 		texture.magFilter = THREE.LinearFilter;
 
-		const mat = new THREE.MeshBasicMaterial({
+		const mat = new THREE.MeshLambertMaterial({
 			map: texture,
 			side: THREE.DoubleSide,
 		});
