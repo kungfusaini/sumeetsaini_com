@@ -1,4 +1,4 @@
-export const PYRAMID_EDGE = 3;
+export const PYRAMID_EDGE = 3.25;
 export const CAMERA_FOV_BASE = 50;
 export const CAMERA_Z_BASE = 8;
 export const CAMERA_Y_BASE = 2;
