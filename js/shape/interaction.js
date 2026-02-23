@@ -136,7 +136,12 @@ export function onShapeClick(ev, container) {
 	);
 	const ray = new THREE.Raycaster();
 	ray.setFromCamera(mouse, shapeState.camera);
-	const hits = ray.intersectObjects(shapeState.pyramid.children);
+	
+	// Filter to only mesh objects (faces), exclude sprites for accurate click detection
+	const faceMeshes = shapeState.pyramid.children.filter(
+		child => child.isMesh
+	);
+	const hits = ray.intersectObjects(faceMeshes);
 
 	if (hits.length) {
 		const userData = hits[0].object.userData;
