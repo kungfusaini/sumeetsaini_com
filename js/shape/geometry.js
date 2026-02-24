@@ -251,7 +251,9 @@ export function buildPyramid(loadedTextures, grainCanvas) {
 		}
 
 		const textPosMultiplier = getResponsiveTextPosMultiplier(window.innerWidth);
-		center.normalize().multiplyScalar(size * textPosMultiplier);
+		// Use smaller multiplier for base face (Projects) since it's already lower
+		const finalMultiplier = colorIndex === 4 ? textPosMultiplier * 0.85 : textPosMultiplier;
+		center.normalize().multiplyScalar(size * finalMultiplier);
 		textSprite.position.copy(center);
 		group.add(textSprite);
 
