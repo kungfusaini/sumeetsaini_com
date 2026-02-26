@@ -8,11 +8,12 @@ const API_URL = "https://vulkan.sumeetsaini.com/projects/";
 let currentSlideIndex = 0;
 let currentImages = [];
 let currentProject = null;
+let allProjects = []; // Store all projects for filtering
 
 // Export function to load projects
 export async function loadProjectsContent() {
 	// Always show the heading and intro (like other popups)
-	const headerHtml = `<h2>Projects</h2><p class="projects-intro">Check out my projects, click to learn more!</p>`;
+	const headerHtml = `<h2>Projects</h2>`;
 
 	try {
 		const response = await fetch(API_URL);
@@ -23,16 +24,16 @@ export async function loadProjectsContent() {
 		}
 
 		// Filter out draft projects
-		const projects = data.projects.filter((p) => !p.draft);
+		allProjects = data.projects.filter((p) => !p.draft);
 
 		// Render project grid
-		const gridHtml = renderProjectGrid(projects);
+		const gridHtml = renderProjectGrid(allProjects);
 		
-		// Build complete HTML and attach handlers
-		const contentHtml = headerHtml + gridHtml;
+		// Build complete HTML
+		const contentHtml = headerHtml + `<p class="projects-intro">Check out my projects, click to learn more!</p>` + gridHtml;
 		
-		// Return content - handlers will be attached after it's inserted into DOM
-		return { html: contentHtml, projects: projects };
+		// Return content
+		return { html: contentHtml, projects: allProjects };
 	} catch (error) {
 		console.error("Error loading projects:", error);
 		return headerHtml + '<div class="projects-error">Unable to load projects</div>';

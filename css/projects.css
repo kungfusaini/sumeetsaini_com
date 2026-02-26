@@ -54,6 +54,8 @@ main .projects-grid .project-tag {
 	cursor: pointer;
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
 	border: 1px solid var(--mid-grey);
+	display: flex;
+	flex-direction: column;
 }
 
 .project-card:hover {
@@ -68,6 +70,7 @@ main .projects-grid .project-tag {
 	height: 180px;
 	overflow: hidden;
 	background: var(--black-grey);
+	flex-shrink: 0;
 }
 
 .project-video,
@@ -80,6 +83,9 @@ main .projects-grid .project-tag {
 /* Card Content */
 .project-content {
 	padding: 0.8rem;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
 }
 
 .project-title {
@@ -104,10 +110,6 @@ main .projects-grid .project-tag {
 	line-height: 1.4;
 	margin-bottom: 0.5rem;
 	opacity: 0.85;
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
 }
 
 /* Tech Tags */
@@ -115,11 +117,13 @@ main .projects-grid .project-tag {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.4rem;
+	margin-top: auto;
 }
 
 .project-tag {
-	background: var(--orange);
-	color: var(--cream);
+	background: transparent;
+	color: var(--orange);
+	border: 1px solid var(--orange);
 	font-size: 0.65rem;
 	padding: 0.2rem 0.5rem;
 	border-radius: 2px;

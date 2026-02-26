@@ -83,7 +83,7 @@ export async function showContent(contentPath, title) {
 					intro.style.transition = 'opacity 0.6s ease-in-out';
 					intro.style.opacity = '1';
 				}
-				
+
 				// Fade in the grid after a small stagger
 				setTimeout(() => {
 					const grid = main.querySelector('.projects-grid');
