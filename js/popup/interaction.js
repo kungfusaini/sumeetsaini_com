@@ -41,6 +41,23 @@ export async function showContent(contentPath, title) {
 			// Import and load blog content (like now page)
 			const { loadBlogContent } = await import("../blog/fetcher.js");
 			content = await loadBlogContent();
+		} else if (contentPath.includes("projects.html")) {
+			// Import and load projects dynamically from API
+			try {
+				const { loadProjectsContent } = await import("../projects/projectsLoader.js");
+				const result = await loadProjectsContent();
+				// Handle both string and object return types
+				if (typeof result === 'object' && result.html && result.projects) {
+					content = result.html;
+					// Store projects data for later use
+					window._currentProjects = result.projects;
+				} else {
+					content = result;
+					window._currentProjects = null;
+				}
+			} catch (e) {
+				content = '<h2>Projects</h2><p class="projects-error">Unable to load projects</p>';
+			}
 		} else {
 			// Regular HTML file
 			const response = await fetch(contentPath);
@@ -52,6 +69,45 @@ export async function showContent(contentPath, title) {
 
 		// Set content directly - let CSS handle sizing
 		main.innerHTML = closeButton + content;
+
+		// For projects, manually handle the animation after typewriter
+		if (contentPath.includes("projects.html")) {
+			// Wait for typewriter to complete, then fade in content
+			const typewriterTime = 8 * 120; // "Projects" = 8 chars
+			const fadeDelay = 300;
+			
+			setTimeout(() => {
+				// Fade in the intro text
+				const intro = main.querySelector('.projects-intro');
+				if (intro) {
+					intro.style.transition = 'opacity 0.6s ease-in-out';
+					intro.style.opacity = '1';
+				}
+				
+				// Fade in the grid after a small stagger
+				setTimeout(() => {
+					const grid = main.querySelector('.projects-grid');
+					if (grid) {
+						grid.style.transition = 'opacity 0.6s ease-in-out';
+						grid.style.opacity = '1';
+					}
+					
+					// Attach click handlers after grid is visible
+					if (window._currentProjects) {
+						setTimeout(async () => {
+							try {
+								const { attachProjectClickHandlers } = await import("../projects/projectsLoader.js");
+								attachProjectClickHandlers(main, window._currentProjects);
+							} catch (e) {
+								// Silently fail
+							}
+							window._currentProjects = null;
+						}, 800);
+					}
+				}, 300);
+				
+			}, typewriterTime + fadeDelay);
+		}
 	} catch (error) {
 		console.error("Error loading content:", error);
 		main.innerHTML = `${closeButton}<h2>${title}</h2><p>Content could not be loaded.</p>`;
