@@ -69,6 +69,16 @@ main .project-detail span {
 	animation-delay: 0.3s;
 }
 
+/* Carousel images - let them be controlled by .active class */
+main .project-detail .carousel-image {
+	animation: none;
+}
+
+/* Make sure active carousel images are visible */
+main .project-detail .carousel-image.active {
+	opacity: 1 !important;
+}
+
 /* Blog sections animate as groups, children should be visible */
 .blog-section h3,
 .blog-section h4,

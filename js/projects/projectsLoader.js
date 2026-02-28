@@ -166,6 +166,7 @@ function renderProjectDetail(project) {
 			<button class="project-back-btn">← Back to Projects</button>
 			
 			<div class="project-carousel">
+				<button class="carousel-fullscreen-btn" title="Fullscreen">⛶</button>
 				<div class="carousel-wrapper">
 					<button class="carousel-btn carousel-prev">❮</button>
 					<div class="carousel-images">
@@ -233,10 +234,18 @@ function initializeCarousel(container, project) {
 	const nextBtn = container.querySelector(".carousel-next");
 	const currentEl = container.querySelector(".carousel-current");
 	const totalEl = container.querySelector(".carousel-total");
+	const carouselImages = container.querySelector(".carousel-images");
 
 	if (!images.length) return;
 
 	totalEl.textContent = images.length;
+
+	// Set first image as active immediately
+	images.forEach((img, idx) => {
+		img.classList.toggle("active", idx === 0);
+	});
+	currentSlideIndex = 0;
+	currentEl.textContent = 1;
 
 	function showImage(index) {
 		images.forEach((img, idx) => {
@@ -258,6 +267,14 @@ function initializeCarousel(container, project) {
 		showImage(newIndex);
 	});
 
+	// Fullscreen button
+	const fullscreenBtn = container.querySelector(".carousel-fullscreen-btn");
+	if (fullscreenBtn) {
+		fullscreenBtn.addEventListener("click", () => {
+			openFullscreenCarousel(images);
+		});
+	}
+
 	// Keyboard navigation
 	document.addEventListener("keydown", handleCarouselKeydown);
 }
@@ -276,8 +293,116 @@ function handleCarouselKeydown(e) {
 		const nextBtn = detailView.querySelector(".carousel-next");
 		nextBtn?.click();
 	} else if (e.key === "Escape") {
-		const backBtn = detailView.querySelector(".project-back-btn");
-		backBtn?.click();
+		// Close fullscreen if open, otherwise go back
+		const fullscreen = document.querySelector(".carousel-fullscreen");
+		if (fullscreen) {
+			closeFullscreenCarousel();
+		} else {
+			const backBtn = detailView.querySelector(".project-back-btn");
+			backBtn?.click();
+		}
+	}
+}
+
+/* ---------- Fullscreen Carousel ---------- */
+
+function openFullscreenCarousel(images) {
+	// Create fullscreen overlay
+	const fullscreen = document.createElement("div");
+	fullscreen.className = "carousel-fullscreen";
+	fullscreen.innerHTML = `
+		<button class="carousel-fullscreen-close">✕</button>
+		<button class="carousel-fullscreen-nav carousel-fullscreen-prev">❮</button>
+		<div class="carousel-fullscreen-images">
+			${Array.from(images)
+				.map(
+					(img, idx) => `
+				<img 
+					class="carousel-fullscreen-image ${idx === currentSlideIndex ? "active" : ""}" 
+					src="${img.src}" 
+					alt="${img.alt}"
+					data-index="${idx}"
+				>
+			`,
+				)
+				.join("")}
+		</div>
+		<button class="carousel-fullscreen-nav carousel-fullscreen-next">❯</button>
+		<div class="carousel-fullscreen-counter">
+			<span class="carousel-fullscreen-current">${currentSlideIndex + 1}</span> / <span class="carousel-fullscreen-total">${images.length}</span>
+		</div>
+	`;
+
+	document.body.appendChild(fullscreen);
+
+	// Get elements
+	const fullscreenImages = fullscreen.querySelectorAll(
+		".carousel-fullscreen-image",
+	);
+	const prevBtn = fullscreen.querySelector(".carousel-fullscreen-prev");
+	const nextBtn = fullscreen.querySelector(".carousel-fullscreen-next");
+	const closeBtn = fullscreen.querySelector(".carousel-fullscreen-close");
+	const currentEl = fullscreen.querySelector(".carousel-fullscreen-current");
+	let fullscreenIndex = currentSlideIndex;
+
+	function showFullscreenImage(index) {
+		fullscreenImages.forEach((img, idx) => {
+			img.classList.toggle("active", idx === index);
+		});
+		currentEl.textContent = index + 1;
+		fullscreenIndex = index;
+	}
+
+	prevBtn.addEventListener("click", () => {
+		const newIndex =
+			fullscreenIndex > 0 ? fullscreenIndex - 1 : images.length - 1;
+		showFullscreenImage(newIndex);
+	});
+
+	nextBtn.addEventListener("click", () => {
+		const newIndex =
+			fullscreenIndex < images.length - 1 ? fullscreenIndex + 1 : 0;
+		showFullscreenImage(newIndex);
+	});
+
+	closeBtn.addEventListener("click", closeFullscreenCarousel);
+
+	// Click outside to close
+	fullscreen.addEventListener("click", (e) => {
+		if (e.target === fullscreen) {
+			closeFullscreenCarousel();
+		}
+	});
+
+	// Keyboard navigation
+	const handleFullscreenKeydown = (e) => {
+		if (!document.querySelector(".carousel-fullscreen")) {
+			document.removeEventListener("keydown", handleFullscreenKeydown);
+			return;
+		}
+		if (e.key === "ArrowLeft") {
+			prevBtn.click();
+		} else if (e.key === "ArrowRight") {
+			nextBtn.click();
+		} else if (e.key === "Escape") {
+			closeFullscreenCarousel();
+		}
+	};
+	document.addEventListener("keydown", handleFullscreenKeydown);
+
+	// Fade in
+	requestAnimationFrame(() => {
+		fullscreen.classList.add("visible");
+	});
+}
+
+function closeFullscreenCarousel() {
+	const fullscreen = document.querySelector(".carousel-fullscreen");
+	if (fullscreen) {
+		fullscreen.classList.remove("visible");
+		setTimeout(() => {
+			fullscreen.remove();
+		}, 300);
 	}
 }
 
