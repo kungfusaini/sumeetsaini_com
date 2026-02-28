@@ -96,10 +96,12 @@ export async function showContent(contentPath, title) {
 					if (window._currentProjects) {
 						setTimeout(async () => {
 							try {
+								console.log("Importing project handlers...");
 								const { attachProjectClickHandlers } = await import("../projects/projectsLoader.js");
+								console.log("Calling attachProjectClickHandlers with projects:", window._currentProjects.length);
 								attachProjectClickHandlers(main, window._currentProjects);
 							} catch (e) {
-								// Silently fail
+								console.error("Error attaching handlers:", e);
 							}
 							window._currentProjects = null;
 						}, 800);

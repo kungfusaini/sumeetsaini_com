@@ -20,7 +20,9 @@ export async function loadProjectsContent() {
 		const data = await response.json();
 
 		if (!data.success || !data.projects) {
-			return headerHtml + '<div class="projects-error">Unable to load projects</div>';
+			return (
+				headerHtml + '<div class="projects-error">Unable to load projects</div>'
+			);
 		}
 
 		// Filter out draft projects
@@ -28,15 +30,20 @@ export async function loadProjectsContent() {
 
 		// Render project grid
 		const gridHtml = renderProjectGrid(allProjects);
-		
+
 		// Build complete HTML
-		const contentHtml = headerHtml + `<p class="projects-intro">Check out my projects, click to learn more!</p>` + gridHtml;
-		
+		const contentHtml =
+			headerHtml +
+			`<p class="projects-intro">Check out my projects, click to learn more!</p>` +
+			gridHtml;
+
 		// Return content
 		return { html: contentHtml, projects: allProjects };
 	} catch (error) {
 		console.error("Error loading projects:", error);
-		return headerHtml + '<div class="projects-error">Unable to load projects</div>';
+		return (
+			headerHtml + '<div class="projects-error">Unable to load projects</div>'
+		);
 	}
 }
 
@@ -45,7 +52,9 @@ function renderProjectGrid(projects) {
 		return '<div class="projects-empty">No projects found</div>';
 	}
 
-	const cardsHtml = projects.map((project) => renderProjectCard(project)).join("");
+	const cardsHtml = projects
+		.map((project) => renderProjectCard(project))
+		.join("");
 
 	return `
 		<div class="projects-grid">
@@ -89,9 +98,11 @@ function formatDate(dateStr) {
 
 export function attachProjectClickHandlers(container, projects) {
 	const cards = container.querySelectorAll(".project-card");
+	console.log("Attaching handlers to cards:", cards.length);
 
 	cards.forEach((card) => {
 		card.addEventListener("click", () => {
+			console.log("Card clicked:", card.dataset.slug);
 			const slug = card.dataset.slug;
 			const project = projects.find((p) => p.slug === slug);
 			if (project) {
@@ -106,22 +117,49 @@ function showProjectDetail(container, project) {
 	currentImages = project.images || [project.image].filter(Boolean);
 	currentSlideIndex = 0;
 
-	// Get the close button to preserve it
-	const closeButton = container.querySelector('#close-content');
+	// Capture current container height BEFORE replacing content
+	const currentHeight = container.offsetHeight + "px";
+	console.log("Captured height:", currentHeight);
 
-	// Update container with detail view
-	container.innerHTML = (closeButton ? closeButton.outerHTML : '') + renderProjectDetail(project);
+	// Get elements to preserve
+	const closeButton = container.querySelector("#close-content");
+	const heading = container.querySelector("h2");
 
-	// Initialize carousel
+	// Get the grid and subtitle to fade out
+	const grid = container.querySelector(".projects-grid");
+	const intro = container.querySelector(".projects-intro");
+
+	// Fade out grid and intro first
+	const fadeOutDuration = 300;
+	if (grid) {
+		grid.style.transition = `opacity ${fadeOutDuration}ms ease-out`;
+		grid.style.opacity = "0";
+	}
+	if (intro) {
+		intro.style.transition = `opacity ${fadeOutDuration}ms ease-out`;
+		intro.style.opacity = "0";
+	}
+
+	// After fade out, replace content
 	setTimeout(() => {
+		container.innerHTML =
+			(closeButton ? closeButton.outerHTML : "") +
+			(heading ? heading.outerHTML : "") +
+			renderProjectDetail(project);
+
+		// Apply the captured height to maintain popup size
+		container.style.height = currentHeight;
+
+		// Initialize carousel
 		initializeCarousel(container, project);
 		attachBackButtonHandler(container);
-	}, 0);
+	}, fadeOutDuration);
 }
 
 function renderProjectDetail(project) {
 	// Get sumeetsaini text only
-	const sumeetsainiText = project.text?.sumeetsaini || "No description available.";
+	const sumeetsainiText =
+		project.text?.sumeetsaini || "No description available.";
 
 	return `
 		<div class="project-detail">
@@ -186,9 +224,7 @@ function formatText(text) {
 	if (!text) return "";
 	// Convert newlines to paragraphs
 	const paragraphs = text.split("\n\n").filter((p) => p.trim());
-	return paragraphs
-		.map((p) => `<p>${p.replace(/\n/g, "<br>")}</p>`)
-		.join("");
+	return paragraphs.map((p) => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
 }
 
 function initializeCarousel(container, project) {
@@ -211,12 +247,14 @@ function initializeCarousel(container, project) {
 	}
 
 	prevBtn.addEventListener("click", () => {
-		const newIndex = currentSlideIndex > 0 ? currentSlideIndex - 1 : images.length - 1;
+		const newIndex =
+			currentSlideIndex > 0 ? currentSlideIndex - 1 : images.length - 1;
 		showImage(newIndex);
 	});
 
 	nextBtn.addEventListener("click", () => {
-		const newIndex = currentSlideIndex < images.length - 1 ? currentSlideIndex + 1 : 0;
+		const newIndex =
+			currentSlideIndex < images.length - 1 ? currentSlideIndex + 1 : 0;
 		showImage(newIndex);
 	});
 
@@ -248,32 +286,68 @@ function attachBackButtonHandler(container) {
 	if (backBtn) {
 		backBtn.addEventListener("click", async () => {
 			document.removeEventListener("keydown", handleCarouselKeydown);
-			
-			// Get the close button to preserve it
-			const closeButton = container.querySelector('#close-content');
-			
+
+			// Fade out detail view
+			const detail = container.querySelector(".project-detail");
+			if (detail) {
+				// Override animation and delay to trigger fade-out immediately
+				detail.style.animation = "projectDetailFadeOut 0.5s ease forwards";
+				detail.style.animationDelay = "0s";
+
+				const children = detail.querySelectorAll("*");
+				children.forEach((child) => {
+					child.style.animation = "projectDetailFadeOut 0.5s ease forwards";
+					child.style.animationDelay = "0s";
+				});
+			}
+
+			// Wait for animation to complete
+			await new Promise((resolve) => setTimeout(resolve, 500));
+
+			// Get elements to preserve
+			const closeButton = container.querySelector("#close-content");
+			const heading = container.querySelector("h2");
+
 			const result = await loadProjectsContent();
 			// Handle both string and object return types
-			const contentHtml = (typeof result === 'object' && result.html) ? result.html : result;
-			const projects = (typeof result === 'object' && result.projects) ? result.projects : null;
-			
-			container.innerHTML = (closeButton ? closeButton.outerHTML : '') + contentHtml;
-			
+			const contentHtml =
+				typeof result === "object" && result.html ? result.html : result;
+			const projects =
+				typeof result === "object" && result.projects ? result.projects : null;
+
+			// Get the new heading from content to remove it (we'll use the old one)
+			const tempDiv = document.createElement("div");
+			tempDiv.innerHTML = contentHtml;
+			const newHeading = tempDiv.querySelector("h2");
+			if (newHeading) {
+				newHeading.remove();
+			}
+
+			// Rebuild HTML with preserved heading
+			const newContent = tempDiv.innerHTML;
+			container.innerHTML =
+				(closeButton ? closeButton.outerHTML : "") +
+				(heading ? heading.outerHTML : "") +
+				newContent;
+
+			// Remove fixed height so popup can resize naturally
+			container.style.height = "";
+
 			// Animate the content back in
 			setTimeout(() => {
-				const intro = container.querySelector('.projects-intro');
+				const intro = container.querySelector(".projects-intro");
 				if (intro) {
-					intro.style.transition = 'opacity 0.6s ease-in-out';
-					intro.style.opacity = '1';
+					intro.style.transition = "opacity 0.6s ease-in-out";
+					intro.style.opacity = "1";
 				}
-				
+
 				setTimeout(() => {
-					const grid = container.querySelector('.projects-grid');
+					const grid = container.querySelector(".projects-grid");
 					if (grid) {
-						grid.style.transition = 'opacity 0.6s ease-in-out';
-						grid.style.opacity = '1';
+						grid.style.transition = "opacity 0.6s ease-in-out";
+						grid.style.opacity = "1";
 					}
-					
+
 					// Attach click handlers after visible
 					if (projects) {
 						setTimeout(() => {
@@ -281,7 +355,7 @@ function attachBackButtonHandler(container) {
 						}, 800);
 					}
 				}, 300);
-			}, 960); // Wait for typewriter
+			}, 0); // No typewriter delay when coming back from detail
 		});
 	}
 }

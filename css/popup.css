@@ -28,6 +28,47 @@ main section {
 	opacity: 0;
 }
 
+/* Project detail - fade in animation */
+@keyframes projectDetailFadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+/* Project detail - fade out animation */
+@keyframes projectDetailFadeOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+main .project-detail,
+main .project-detail > *,
+main .project-detail h2,
+main .project-detail h3,
+main .project-detail h4,
+main .project-detail p,
+main .project-detail ul,
+main .project-detail ol,
+main .project-detail div,
+main .project-detail section,
+main .project-detail iframe,
+main .project-detail button,
+main .project-detail img,
+main .project-detail a,
+main .project-detail time,
+main .project-detail span {
+	opacity: 0;
+	animation: projectDetailFadeIn 0.5s ease forwards;
+	animation-delay: 0.3s;
+}
+
 /* Blog sections animate as groups, children should be visible */
 .blog-section h3,
 .blog-section h4,
@@ -179,8 +220,6 @@ a:hover .link-icon {
 	color: var(--light-grey);
 }
 
-
-
 /* ---------- Mobile Selector Styles ---------- */
 @media (max-width: 600px) {
 	.now-selector {
@@ -188,7 +227,7 @@ a:hover .link-icon {
 		gap: 0.5rem;
 		margin: 0rem 0 0.3rem 0;
 	}
-	
+
 	.now-selector select {
 		font-size: clamp(1.2rem, 0.8vw + 0.3rem, 1.4rem);
 		width: auto;
@@ -243,7 +282,8 @@ main {
 /* ---------- Large Screen Styles ---------- */
 @media (min-width: 1400px) {
 	main {
-		padding: clamp(1.5rem, 2.5vw, 2.5rem) clamp(2rem, 3.5vw, 4rem) clamp(1.5rem, 2.5vw, 2.5rem);
+		padding: clamp(1.5rem, 2.5vw, 2.5rem) clamp(2rem, 3.5vw, 4rem)
+			clamp(1.5rem, 2.5vw, 2.5rem);
 		right: clamp(3rem, 5vw, 8rem);
 	}
 }
@@ -252,7 +292,6 @@ main {
 	main {
 		right: clamp(4rem, 6vw, 10rem);
 	}
-}
 }
 
 @media (min-width: 1800px) {
