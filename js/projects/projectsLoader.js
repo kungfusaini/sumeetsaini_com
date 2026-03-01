@@ -9,6 +9,9 @@ let currentSlideIndex = 0;
 let currentImages = [];
 let currentProject = null;
 let allProjects = []; // Store all projects for filtering
+let autoScrollInterval = null; // Auto-scroll interval for detail carousel
+let fullscreenAutoScrollInterval = null; // Auto-scroll interval for fullscreen carousel
+const AUTO_SCROLL_DELAY = 3000; // 3 seconds
 
 // Export function to load projects
 export async function loadProjectsContent() {
@@ -164,7 +167,9 @@ function renderProjectDetail(project) {
 	return `
 		<div class="project-detail">
 			<button class="project-back-btn">← Back to Projects</button>
-			
+
+			<h3 class="project-info-title">${project.title}</h3>
+
 			<div class="project-carousel">
 				<button class="carousel-fullscreen-btn" title="Fullscreen">⛶</button>
 				<div class="carousel-wrapper">
@@ -191,19 +196,6 @@ function renderProjectDetail(project) {
 			</div>
 
 			<div class="project-info">
-				<h3 class="project-info-title">${project.title}</h3>
-				<div class="project-meta">
-					<time class="project-info-date">${formatDate(project.date)}</time>
-					${
-						project.link
-							? `
-						<a href="${project.link}" target="_blank" rel="noopener" class="project-link">
-							View Live Site →
-						</a>
-					`
-							: ""
-					}
-				</div>
 				<div class="project-tags project-info-tags">
 					${
 						project.tech
@@ -216,6 +208,17 @@ function renderProjectDetail(project) {
 				<div class="project-text">
 					${formatText(sumeetsainiText)}
 				</div>
+				${
+					project.link
+						? `
+					<div class="project-meta">
+						<a href="${project.link}" target="_blank" rel="noopener" class="project-link">
+							View Project →
+						</a>
+					</div>
+				`
+						: ""
+				}
 			</div>
 		</div>
 	`;
@@ -255,28 +258,60 @@ function initializeCarousel(container, project) {
 		currentSlideIndex = index;
 	}
 
+	// Auto-scroll functions
+	function startAutoScroll() {
+		if (autoScrollInterval) clearInterval(autoScrollInterval);
+		autoScrollInterval = setInterval(() => {
+			const newIndex =
+				currentSlideIndex < images.length - 1 ? currentSlideIndex + 1 : 0;
+			showImage(newIndex);
+		}, AUTO_SCROLL_DELAY);
+	}
+
+	function stopAutoScroll() {
+		if (autoScrollInterval) {
+			clearInterval(autoScrollInterval);
+			autoScrollInterval = null;
+		}
+	}
+
+	// Start auto-scroll immediately
+	startAutoScroll();
+
+	// Pause on hover
+	carouselImages.addEventListener("mouseenter", stopAutoScroll);
+	carouselImages.addEventListener("mouseleave", startAutoScroll);
+
 	prevBtn.addEventListener("click", () => {
 		const newIndex =
 			currentSlideIndex > 0 ? currentSlideIndex - 1 : images.length - 1;
 		showImage(newIndex);
+		// Reset auto-scroll timer after manual navigation
+		startAutoScroll();
 	});
 
 	nextBtn.addEventListener("click", () => {
 		const newIndex =
 			currentSlideIndex < images.length - 1 ? currentSlideIndex + 1 : 0;
 		showImage(newIndex);
+		// Reset auto-scroll timer after manual navigation
+		startAutoScroll();
 	});
 
 	// Fullscreen button
 	const fullscreenBtn = container.querySelector(".carousel-fullscreen-btn");
 	if (fullscreenBtn) {
 		fullscreenBtn.addEventListener("click", () => {
+			stopAutoScroll(); // Stop detail carousel when opening fullscreen
 			openFullscreenCarousel(images);
 		});
 	}
 
 	// Keyboard navigation
 	document.addEventListener("keydown", handleCarouselKeydown);
+
+	// Listen for restart auto-scroll event (from closing fullscreen)
+	carouselImages.addEventListener("restartAutoscroll", startAutoScroll);
 }
 
 function handleCarouselKeydown(e) {
@@ -353,16 +388,54 @@ function openFullscreenCarousel(images) {
 		fullscreenIndex = index;
 	}
 
+	// Auto-scroll functions for fullscreen
+	function startFullscreenAutoScroll() {
+		if (fullscreenAutoScrollInterval)
+			clearInterval(fullscreenAutoScrollInterval);
+		fullscreenAutoScrollInterval = setInterval(() => {
+			const newIndex =
+				fullscreenIndex < images.length - 1 ? fullscreenIndex + 1 : 0;
+			showFullscreenImage(newIndex);
+		}, AUTO_SCROLL_DELAY);
+	}
+
+	function stopFullscreenAutoScroll() {
+		if (fullscreenAutoScrollInterval) {
+			clearInterval(fullscreenAutoScrollInterval);
+			fullscreenAutoScrollInterval = null;
+		}
+	}
+
+	// Start auto-scroll
+	startFullscreenAutoScroll();
+
+	// Pause on hover
+	const fullscreenImagesContainer = fullscreen.querySelector(
+		".carousel-fullscreen-images",
+	);
+	fullscreenImagesContainer.addEventListener(
+		"mouseenter",
+		stopFullscreenAutoScroll,
+	);
+	fullscreenImagesContainer.addEventListener(
+		"mouseleave",
+		startFullscreenAutoScroll,
+	);
+
 	prevBtn.addEventListener("click", () => {
 		const newIndex =
 			fullscreenIndex > 0 ? fullscreenIndex - 1 : images.length - 1;
 		showFullscreenImage(newIndex);
+		// Reset auto-scroll timer after manual navigation
+		startFullscreenAutoScroll();
 	});
 
 	nextBtn.addEventListener("click", () => {
 		const newIndex =
 			fullscreenIndex < images.length - 1 ? fullscreenIndex + 1 : 0;
 		showFullscreenImage(newIndex);
+		// Reset auto-scroll timer after manual navigation
+		startFullscreenAutoScroll();
 	});
 
 	closeBtn.addEventListener("click", closeFullscreenCarousel);
@@ -397,12 +470,26 @@ function openFullscreenCarousel(images) {
 }
 
 function closeFullscreenCarousel() {
+	// Stop fullscreen auto-scroll
+	if (fullscreenAutoScrollInterval) {
+		clearInterval(fullscreenAutoScrollInterval);
+		fullscreenAutoScrollInterval = null;
+	}
+
 	const fullscreen = document.querySelector(".carousel-fullscreen");
 	if (fullscreen) {
 		fullscreen.classList.remove("visible");
 		setTimeout(() => {
 			fullscreen.remove();
 		}, 300);
+	}
+
+	// Restart detail carousel auto-scroll if it exists
+	const detailCarousel = document.querySelector(".carousel-images");
+	if (detailCarousel && autoScrollInterval === null) {
+		// Re-initialize auto-scroll by triggering a custom event or calling startAutoScroll
+		// Since we're in a different scope, we'll dispatch a custom event
+		detailCarousel.dispatchEvent(new CustomEvent("restartAutoscroll"));
 	}
 }
 
@@ -412,6 +499,12 @@ function attachBackButtonHandler(container) {
 		backBtn.addEventListener("click", async () => {
 			document.removeEventListener("keydown", handleCarouselKeydown);
 
+			// Stop auto-scroll
+			if (autoScrollInterval) {
+				clearInterval(autoScrollInterval);
+				autoScrollInterval = null;
+			}
+
 			// Fade out detail view
 			const detail = container.querySelector(".project-detail");
 			if (detail) {
@@ -419,10 +512,13 @@ function attachBackButtonHandler(container) {
 				detail.style.animation = "projectDetailFadeOut 0.5s ease forwards";
 				detail.style.animationDelay = "0s";
 
-				const children = detail.querySelectorAll("*");
-				children.forEach((child) => {
-					child.style.animation = "projectDetailFadeOut 0.5s ease forwards";
-					child.style.animationDelay = "0s";
+				// Only animate text elements, not the carousel (to prevent flash of first image)
+				const textElements = detail.querySelectorAll(
+					".project-info, .project-back-btn",
+				);
+				textElements.forEach((el) => {
+					el.style.animation = "projectDetailFadeOut 0.5s ease forwards";
+					el.style.animationDelay = "0s";
 				});
 			}
 
