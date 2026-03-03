@@ -15,7 +15,7 @@ import { shapeState } from "./shapeState.js";
 
 export function animate() {
 	requestAnimationFrame(animate);
-	if (!shapeState.hasInteracted && shapeState.autoRotateEnabled) {
+	if (!shapeState.hasInteracted && shapeState.autoRotateEnabled && !shapeState.debugMode) {
 		shapeState.autoRotateMultiplier = Math.min(
 			shapeState.autoRotateMultiplier + 0.01,
 			1,

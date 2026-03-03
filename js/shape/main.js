@@ -23,6 +23,7 @@ import {
 	onPointerMove,
 	onPointerUp,
 	onShapeClick,
+	onKeyDown,
 } from "./interaction.js";
 import { loader, shapeState } from "./shapeState.js";
 
@@ -82,6 +83,16 @@ export async function init() {
 	shapeState.camera.position.set(0, cameraY, cameraZ);
 	shapeState.camera.lookAt(0, lookAtY, 0);
 
+	// Add lighting for dynamic brightening effect
+	// Ambient light provides base illumination so faces aren't completely dark
+	const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+	shapeState.scene.add(ambientLight);
+
+	// Directional light creates dynamic brightening based on face angle
+	const directionalLight = new THREE.DirectionalLight(0xffffff, 2.5);
+	directionalLight.position.set(6, 4, 5);
+	shapeState.scene.add(directionalLight);
+
 	// Load textures asynchronously
 	const texturePromises = FACES.map(
 		(face) =>
@@ -117,6 +128,7 @@ export async function init() {
 		onPointerMove(e.clientX, e.clientY),
 	);
 	window.addEventListener("mouseup", onPointerUp);
+	window.addEventListener("keydown", onKeyDown);
 
 	container.addEventListener("touchstart", (e) =>
 		onPointerDown(e.touches[0].clientX, e.touches[0].clientY),

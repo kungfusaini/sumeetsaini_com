@@ -82,6 +82,15 @@ export function onKeyDown(event) {
 	switch (event.key) {
 		case "d":
 			shapeState.debugMode = !shapeState.debugMode;
+			if (shapeState.debugMode) {
+				// Disable autorotate when debug mode is on
+				shapeState.autoRotateEnabled = false;
+				console.log("Debug mode ON");
+			} else {
+				// Re-enable autorotate when debug mode is off
+				shapeState.autoRotateEnabled = true;
+				console.log("Debug mode OFF");
+			}
 			break;
 		default:
 			if (shapeState.debugMode) {
@@ -106,6 +115,9 @@ export function onKeyDown(event) {
 						shapeState.pyramid.rotation.z -= increment;
 						break;
 				}
+				// Print current rotation after each input
+				const r = shapeState.pyramid.rotation;
+				console.log(`x: ${r.x.toFixed(3)}, y: ${r.y.toFixed(3)}, z: ${r.z.toFixed(3)}`);
 			}
 			break;
 	}
@@ -124,7 +136,12 @@ export function onShapeClick(ev, container) {
 	);
 	const ray = new THREE.Raycaster();
 	ray.setFromCamera(mouse, shapeState.camera);
-	const hits = ray.intersectObjects(shapeState.pyramid.children);
+	
+	// Filter to only mesh objects (faces), exclude sprites for accurate click detection
+	const faceMeshes = shapeState.pyramid.children.filter(
+		child => child.isMesh
+	);
+	const hits = ray.intersectObjects(faceMeshes);
 
 	if (hits.length) {
 		const userData = hits[0].object.userData;
