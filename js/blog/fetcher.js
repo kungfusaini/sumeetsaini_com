@@ -28,16 +28,24 @@ export function categorizePosts(posts) {
 		(post) => post.categories && post.categories.includes("Tech"),
 	);
 
-	const nonTechPosts = blogPosts.filter(
-		(post) => !post.categories || !post.categories.includes("Tech"),
+	const travelPosts = blogPosts.filter(
+		(post) => post.categories && post.categories.includes("Travel"),
+	);
+
+	const somethingElsePosts = blogPosts.filter(
+		(post) =>
+			(!post.categories || !post.categories.includes("Tech")) &&
+			(!post.categories || !post.categories.includes("Travel")),
 	);
 
 	techPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-	nonTechPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+	travelPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+	somethingElsePosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
 	return {
 		latestTech: techPosts[0] || null,
-		latestNonTech: nonTechPosts[0] || null,
+		latestTravel: travelPosts[0] || null,
+		latestSomethingElse: somethingElsePosts[0] || null,
 	};
 }
 
@@ -117,14 +125,18 @@ export function createBlogCardHTML(post) {
 export async function loadBlogContent() {
 	try {
 		const posts = await fetchBlogPosts();
-		const { latestTech, latestNonTech } = categorizePosts(posts);
+		const categorized = categorizePosts(posts);
+		const latestTech = categorized.latestTech;
+		const latestTravel = categorized.latestTravel;
+		const latestSomethingElse = categorized.latestSomethingElse;
 
 		if (posts.length === 0) {
 			return "<h2>Blog</h2><p>No blog posts found.</p>";
 		}
 
 		const techHTML = createBlogCardHTML(latestTech);
-		const nonTechHTML = createBlogCardHTML(latestNonTech);
+		const travelHTML = createBlogCardHTML(latestTravel);
+		const somethingElseHTML = createBlogCardHTML(latestSomethingElse);
 
 		return `
       <h2>Blog</h2>
@@ -136,13 +148,18 @@ export async function loadBlogContent() {
       </p>
 
       <section class="blog-section">
-        <h4>Something Technical:</h4>
+        <h4>Some Tech</h4>
         ${techHTML}
       </section>
 
       <section class="blog-section">
-        <h4>Something Not:</h4>
-        ${nonTechHTML}
+        <h4>Some Travel</h4>
+        ${travelHTML}
+      </section>
+
+      <section class="blog-section">
+        <h4>Something Else</h4>
+        ${somethingElseHTML}
       </section>
 
     `;
