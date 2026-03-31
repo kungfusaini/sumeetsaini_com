@@ -173,7 +173,7 @@ function renderProjectDetail(project) {
 			<div class="project-carousel">
 				<button class="carousel-fullscreen-btn" title="Fullscreen">⛶</button>
 				<div class="carousel-wrapper">
-					<button class="carousel-btn carousel-prev">❮</button>
+					${currentImages.length > 1 ? '<button class="carousel-btn carousel-prev">❮</button>' : ""}
 					<div class="carousel-images">
 						${currentImages
 							.map(
@@ -188,11 +188,15 @@ function renderProjectDetail(project) {
 							)
 							.join("")}
 					</div>
-					<button class="carousel-btn carousel-next">❯</button>
+					${currentImages.length > 1 ? '<button class="carousel-btn carousel-next">❯</button>' : ""}
 				</div>
-				<div class="carousel-counter">
+				${
+					currentImages.length > 1
+						? `<div class="carousel-counter">
 					<span class="carousel-current">1</span> / <span class="carousel-total">${currentImages.length}</span>
-				</div>
+				</div>`
+						: ""
+				}
 			</div>
 
 			<div class="project-info">
@@ -241,20 +245,24 @@ function initializeCarousel(container, project) {
 
 	if (!images.length) return;
 
-	totalEl.textContent = images.length;
+	// Only set total and start auto-scroll if there's more than one image
+	if (totalEl) totalEl.textContent = images.length;
 
 	// Set first image as active immediately
 	images.forEach((img, idx) => {
 		img.classList.toggle("active", idx === 0);
 	});
 	currentSlideIndex = 0;
-	currentEl.textContent = 1;
+	if (currentEl) currentEl.textContent = 1;
+
+	// Only enable auto-scroll and navigation if there's more than one image
+	if (images.length <= 1) return;
 
 	function showImage(index) {
 		images.forEach((img, idx) => {
 			img.classList.toggle("active", idx === index);
 		});
-		currentEl.textContent = index + 1;
+		if (currentEl) currentEl.textContent = index + 1;
 		currentSlideIndex = index;
 	}
 
@@ -282,7 +290,7 @@ function initializeCarousel(container, project) {
 	carouselImages.addEventListener("mouseenter", stopAutoScroll);
 	carouselImages.addEventListener("mouseleave", startAutoScroll);
 
-	prevBtn.addEventListener("click", () => {
+	prevBtn?.addEventListener("click", () => {
 		const newIndex =
 			currentSlideIndex > 0 ? currentSlideIndex - 1 : images.length - 1;
 		showImage(newIndex);
@@ -290,7 +298,7 @@ function initializeCarousel(container, project) {
 		startAutoScroll();
 	});
 
-	nextBtn.addEventListener("click", () => {
+	nextBtn?.addEventListener("click", () => {
 		const newIndex =
 			currentSlideIndex < images.length - 1 ? currentSlideIndex + 1 : 0;
 		showImage(newIndex);
@@ -347,7 +355,7 @@ function openFullscreenCarousel(images) {
 	fullscreen.className = "carousel-fullscreen";
 	fullscreen.innerHTML = `
 		<button class="carousel-fullscreen-close">✕</button>
-		<button class="carousel-fullscreen-nav carousel-fullscreen-prev">❮</button>
+		${images.length > 1 ? '<button class="carousel-fullscreen-nav carousel-fullscreen-prev">❮</button>' : ""}
 		<div class="carousel-fullscreen-images">
 			${Array.from(images)
 				.map(
@@ -362,10 +370,14 @@ function openFullscreenCarousel(images) {
 				)
 				.join("")}
 		</div>
-		<button class="carousel-fullscreen-nav carousel-fullscreen-next">❯</button>
-		<div class="carousel-fullscreen-counter">
+		${images.length > 1 ? '<button class="carousel-fullscreen-nav carousel-fullscreen-next">❯</button>' : ""}
+		${
+			images.length > 1
+				? `<div class="carousel-fullscreen-counter">
 			<span class="carousel-fullscreen-current">${currentSlideIndex + 1}</span> / <span class="carousel-fullscreen-total">${images.length}</span>
-		</div>
+		</div>`
+				: ""
+		}
 	`;
 
 	document.body.appendChild(fullscreen);
@@ -422,7 +434,7 @@ function openFullscreenCarousel(images) {
 		startFullscreenAutoScroll,
 	);
 
-	prevBtn.addEventListener("click", () => {
+	prevBtn?.addEventListener("click", () => {
 		const newIndex =
 			fullscreenIndex > 0 ? fullscreenIndex - 1 : images.length - 1;
 		showFullscreenImage(newIndex);
@@ -430,7 +442,7 @@ function openFullscreenCarousel(images) {
 		startFullscreenAutoScroll();
 	});
 
-	nextBtn.addEventListener("click", () => {
+	nextBtn?.addEventListener("click", () => {
 		const newIndex =
 			fullscreenIndex < images.length - 1 ? fullscreenIndex + 1 : 0;
 		showFullscreenImage(newIndex);
