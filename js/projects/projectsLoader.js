@@ -236,6 +236,11 @@ function renderProjectDetail(project) {
 
 function formatText(text) {
 	if (!text) return "";
+	// Convert markdown links [text](url) to HTML <a href="url">text</a>
+	text = text.replace(
+		/\[([^\]]+)\]\(([^)]+)\)/g,
+		'<a href="$2" target="_blank" rel="noopener">$1</a>',
+	);
 	// Convert newlines to paragraphs
 	const paragraphs = text.split("\n\n").filter((p) => p.trim());
 	return paragraphs.map((p) => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
