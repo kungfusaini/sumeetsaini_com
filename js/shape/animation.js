@@ -1,4 +1,4 @@
-import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
+import * as THREE from "../three.module.js";
 import {
 	SHAPE_MOVE_TO_CONTENT_SPEED,
 	SHAPE_RETURN_TO_CENTER_SPEED,

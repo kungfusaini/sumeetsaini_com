@@ -1,5 +1,5 @@
-import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 import { FACES } from "../shared/faces.js";
+import * as THREE from "../three.module.js";
 import {
 	FACE_CANVAS_HEIGHT,
 	FACE_CANVAS_WIDTH,

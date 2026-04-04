@@ -1,7 +1,7 @@
-import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 import { initController, on } from "../controller/main.js";
 import { initPopup } from "../popup/main.js";
 import { FACES } from "../shared/faces.js";
+import * as THREE from "../three.module.js";
 import { animate, onResize } from "./animation.js";
 import {
 	FACE_CANVAS_HEIGHT,

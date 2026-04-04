@@ -1,5 +1,5 @@
-import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 import { emit } from "../controller/main.js";
+import * as THREE from "../three.module.js";
 import {
 	DEBUG_ROTATION_INCREMENT,
 	DRAG_SENSITIVITY,

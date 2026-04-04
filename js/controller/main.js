@@ -1,4 +1,3 @@
-import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 import {
 	CONTENT_POSITION_DESKTOP,
 	CONTENT_POSITION_MOBILE,
@@ -9,6 +8,7 @@ import {
 import { updateTextSprite } from "../shape/helpers.js";
 import { shapeState } from "../shape/shapeState.js";
 import { FACES } from "../shared/faces.js";
+import * as THREE from "../three.module.js";
 
 // Controller-specific state
 const controllerState = {

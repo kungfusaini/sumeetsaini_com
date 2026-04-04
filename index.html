@@ -14,10 +14,19 @@
 	<link rel="canonical" href="https://sumeetsaini.com/"/>
 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  
+  <!-- Critical CSS (loaded synchronously) -->
   <link rel="stylesheet" href="css/main.css"/>
-  <link rel="stylesheet" href="css/popup.css"/>
-  <link rel="stylesheet" href="css/projects.css"/>
-  <link rel="stylesheet" href="css/labels.css"/>
+  
+  <!-- Non-critical CSS (deferred) -->
+  <link rel="stylesheet" href="css/popup.css" media="print" onload="this.media='all'"/>
+  <link rel="stylesheet" href="css/projects.css" media="print" onload="this.media='all'"/>
+  <link rel="stylesheet" href="css/labels.css" media="print" onload="this.media='all'"/>
+  <noscript>
+    <link rel="stylesheet" href="css/popup.css"/>
+    <link rel="stylesheet" href="css/projects.css"/>
+    <link rel="stylesheet" href="css/labels.css"/>
+  </noscript>
    <link rel="icon" href="assets/favicon.png">
 
 
