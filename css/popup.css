@@ -279,7 +279,7 @@ main {
 	transform: translateY(-50%);
 	will-change: opacity;
 	width: 45%;
-	max-height: calc(100vh - 8rem);
+	max-height: calc(100dvh - 8rem);
 	background-color: transparent;
 	color: var(--cream);
 	border: 2px solid var(--orange);
@@ -327,7 +327,7 @@ main {
 		top: 42vh;
 		left: auto;
 		bottom: auto;
-		max-height: calc(100vh - 55vh);
+		max-height: calc(100dvh - 50%);
 		border-radius: 8px;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 		/* Override desktop centering */
