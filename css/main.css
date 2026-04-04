@@ -33,7 +33,13 @@ body {
 	flex-direction: row;
 	height: 100vh;
 	overflow: hidden;
+	overscroll-behavior: none;
 	transition: all 0.5s ease;
+}
+
+/* Prevent scroll/bounce on iOS Safari */
+.three-box {
+	touch-action: none;
 }
 
 #name {

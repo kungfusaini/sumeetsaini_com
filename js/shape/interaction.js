@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 import { emit } from "../controller/main.js";
 import {
 	DEBUG_ROTATION_INCREMENT,
@@ -117,7 +117,9 @@ export function onKeyDown(event) {
 				}
 				// Print current rotation after each input
 				const r = shapeState.pyramid.rotation;
-				console.log(`x: ${r.x.toFixed(3)}, y: ${r.y.toFixed(3)}, z: ${r.z.toFixed(3)}`);
+				console.log(
+					`x: ${r.x.toFixed(3)}, y: ${r.y.toFixed(3)}, z: ${r.z.toFixed(3)}`,
+				);
 			}
 			break;
 	}
@@ -136,10 +138,10 @@ export function onShapeClick(ev, container) {
 	);
 	const ray = new THREE.Raycaster();
 	ray.setFromCamera(mouse, shapeState.camera);
-	
+
 	// Filter to only mesh objects (faces), exclude sprites for accurate click detection
 	const faceMeshes = shapeState.pyramid.children.filter(
-		child => child.isMesh
+		(child) => child.isMesh,
 	);
 	const hits = ray.intersectObjects(faceMeshes);
 

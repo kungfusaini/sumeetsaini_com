@@ -1,13 +1,15 @@
-import * as THREE from "three";
+import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 import { initController, on } from "../controller/main.js";
 import { initPopup } from "../popup/main.js";
 import { FACES } from "../shared/faces.js";
 import { animate, onResize } from "./animation.js";
 import {
+	FACE_CANVAS_HEIGHT,
+	FACE_CANVAS_WIDTH,
 	GRAIN_INTENSITY_FACE,
 	GRAIN_SIZE_FACE,
-	INITIAL_PYRAMID_ROTATION,
 	GUIDANCE_DELAY_MS,
+	INITIAL_PYRAMID_ROTATION,
 } from "./config.js";
 import { buildPyramid } from "./geometry.js";
 import {
@@ -19,11 +21,11 @@ import {
 	getResponsiveLookAtY,
 } from "./helpers.js";
 import {
+	onKeyDown,
 	onPointerDown,
 	onPointerMove,
 	onPointerUp,
 	onShapeClick,
-	onKeyDown,
 } from "./interaction.js";
 import { loader, shapeState } from "./shapeState.js";
 
@@ -93,13 +95,28 @@ export async function init() {
 	directionalLight.position.set(6, 4, 5);
 	shapeState.scene.add(directionalLight);
 
-	// Load textures asynchronously
-	const texturePromises = FACES.map(
-		(face) =>
-			new Promise((resolve, reject) => {
-				loader.load(face.image, resolve, undefined, reject);
-			}),
-	);
+	// Load textures with error handling and fallback
+	const texturePromises = FACES.map((face) => {
+		return new Promise((resolve) => {
+			const onLoad = (texture) => {
+				texture.colorSpace = THREE.SRGBColorSpace;
+				resolve(texture);
+			};
+			const onError = () => {
+				// Create fallback solid color texture
+				const canvas = document.createElement("canvas");
+				canvas.width = 256;
+				canvas.height = 256;
+				const ctx = canvas.getContext("2d");
+				ctx.fillStyle = "#504945";
+				ctx.fillRect(0, 0, 256, 256);
+				const fallbackTexture = new THREE.CanvasTexture(canvas);
+				fallbackTexture.colorSpace = THREE.SRGBColorSpace;
+				resolve(fallbackTexture);
+			};
+			loader.load(face.image, onLoad, undefined, onError);
+		});
+	});
 	const loadedTextures = await Promise.all(texturePromises);
 
 	shapeState.pyramid = buildPyramid(loadedTextures, grainCanvas);
@@ -137,6 +154,7 @@ export async function init() {
 		onPointerMove(e.touches[0].clientX, e.touches[0].clientY),
 	);
 	window.addEventListener("touchend", onPointerUp);
+	window.addEventListener("touchcancel", onPointerUp);
 
 	// Add click event listener for shape interactions
 	container.addEventListener("click", (e) => onShapeClick(e, container));

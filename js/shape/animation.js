@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 import {
 	SHAPE_MOVE_TO_CONTENT_SPEED,
 	SHAPE_RETURN_TO_CENTER_SPEED,
@@ -15,7 +15,11 @@ import { shapeState } from "./shapeState.js";
 
 export function animate() {
 	requestAnimationFrame(animate);
-	if (!shapeState.hasInteracted && shapeState.autoRotateEnabled && !shapeState.debugMode) {
+	if (
+		!shapeState.hasInteracted &&
+		shapeState.autoRotateEnabled &&
+		!shapeState.debugMode
+	) {
 		shapeState.autoRotateMultiplier = Math.min(
 			shapeState.autoRotateMultiplier + 0.01,
 			1,
@@ -42,32 +46,36 @@ export function animate() {
 
 		// Apply the interpolated quaternion back to the pyramid
 		shapeState.pyramid.quaternion.copy(currentQuaternion);
-		shapeState.pyramid.position.x = THREE.MathUtils.lerp(
+
+		// Simple inline lerp: a + (b - a) * t
+		const lerp = (a, b, t) => a + (b - a) * t;
+
+		shapeState.pyramid.position.x = lerp(
 			shapeState.pyramid.position.x,
 			shapeState.targetPosition.x,
 			transitionSpeed,
 		);
-		shapeState.pyramid.position.y = THREE.MathUtils.lerp(
+		shapeState.pyramid.position.y = lerp(
 			shapeState.pyramid.position.y,
 			shapeState.targetPosition.y,
 			transitionSpeed,
 		);
-		shapeState.pyramid.position.z = THREE.MathUtils.lerp(
+		shapeState.pyramid.position.z = lerp(
 			shapeState.pyramid.position.z,
 			shapeState.targetPosition.z,
 			transitionSpeed,
 		);
-		shapeState.pyramid.scale.x = THREE.MathUtils.lerp(
+		shapeState.pyramid.scale.x = lerp(
 			shapeState.pyramid.scale.x,
 			shapeState.targetScale,
 			transitionSpeed,
 		);
-		shapeState.pyramid.scale.y = THREE.MathUtils.lerp(
+		shapeState.pyramid.scale.y = lerp(
 			shapeState.pyramid.scale.y,
 			shapeState.targetScale,
 			transitionSpeed,
 		);
-		shapeState.pyramid.scale.z = THREE.MathUtils.lerp(
+		shapeState.pyramid.scale.z = lerp(
 			shapeState.pyramid.scale.z,
 			shapeState.targetScale,
 			transitionSpeed,
