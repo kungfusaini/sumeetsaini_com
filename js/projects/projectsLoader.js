@@ -177,7 +177,7 @@ function renderProjectDetail(project) {
 			<h3 class="project-info-title">${project.title}</h3>
 
 			<div class="project-carousel">
-				<button class="carousel-fullscreen-btn" title="Fullscreen">⛶</button>
+				${currentImages.length > 1 ? '<button class="carousel-fullscreen-btn" title="Fullscreen">⛶</button>' : ""}
 				<div class="carousel-wrapper">
 					${currentImages.length > 1 ? '<button class="carousel-btn carousel-prev">❮</button>' : ""}
 					<div class="carousel-images">
