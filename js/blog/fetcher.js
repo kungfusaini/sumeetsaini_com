@@ -7,6 +7,10 @@ const BLOG_API_URL =
 
 export async function fetchBlogPosts() {
 	try {
+		// Use cached data if available
+		if (window._blogCache) {
+			return window._blogCache;
+		}
 		const response = await fetch(BLOG_API_URL);
 		if (!response.ok) {
 			throw new Error("Failed to fetch blog posts");

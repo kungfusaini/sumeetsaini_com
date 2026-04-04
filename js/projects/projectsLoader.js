@@ -19,8 +19,14 @@ export async function loadProjectsContent() {
 	const headerHtml = `<h2>Projects</h2>`;
 
 	try {
-		const response = await fetch(API_URL);
-		const data = await response.json();
+		// Use cached data if available, otherwise fetch from API
+		let data;
+		if (window._projectsCache) {
+			data = window._projectsCache;
+		} else {
+			const response = await fetch(API_URL);
+			data = await response.json();
+		}
 
 		if (!data.success || !data.projects) {
 			return (
