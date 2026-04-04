@@ -14,6 +14,18 @@ import {
 } from "./config.js";
 import { shapeState } from "./shapeState.js";
 
+// Cache CSS variable values to avoid repeated getComputedStyle calls
+const cssVarCache = {};
+function getCssVar(name, defaultValue = "") {
+	if (!(name in cssVarCache)) {
+		cssVarCache[name] =
+			getComputedStyle(document.documentElement)
+				.getPropertyValue(name)
+				.trim() || defaultValue;
+	}
+	return cssVarCache[name];
+}
+
 // Shaders for blending grain texture with face texture
 export const vertexShader = `
   varying vec2 vUv;
@@ -124,14 +136,8 @@ export function createTextSprite(text, isSelected = false) {
 	context.textBaseline = "middle";
 
 	// Get colors from CSS variables
-	const normalColor =
-		getComputedStyle(document.documentElement)
-			.getPropertyValue("--label-color-normal")
-			.trim() || "white";
-	const selectedColor =
-		getComputedStyle(document.documentElement)
-			.getPropertyValue("--label-color-selected")
-			.trim() || "#d65d03";
+	const normalColor = getCssVar("--label-color-normal", "white");
+	const selectedColor = getCssVar("--label-color-selected", "#d65d03");
 
 	// Draw text
 	const x = canvas.width / 2;
@@ -139,14 +145,8 @@ export function createTextSprite(text, isSelected = false) {
 
 	if (isSelected) {
 		// Get outline settings from CSS
-		const outlineColor =
-			getComputedStyle(document.documentElement)
-				.getPropertyValue("--label-outline-color")
-				.trim() || "black";
-		const outlineWidth =
-			getComputedStyle(document.documentElement)
-				.getPropertyValue("--label-outline-width")
-				.trim() || "3px";
+		const outlineColor = getCssVar("--label-outline-color", "black");
+		const outlineWidth = getCssVar("--label-outline-width", "3px");
 
 		// Draw outline first
 		context.strokeStyle = outlineColor;
@@ -169,18 +169,9 @@ export function createTextSprite(text, isSelected = false) {
 	const textScale = getResponsiveTextScale(window.innerWidth);
 
 	// Get scale multipliers from CSS variables
-	const normalScale =
-		parseFloat(
-			getComputedStyle(document.documentElement)
-				.getPropertyValue("--label-scale-normal")
-				.trim(),
-		) || 1;
+	const normalScale = parseFloat(getCssVar("--label-scale-normal").trim()) || 1;
 	const selectedScale =
-		parseFloat(
-			getComputedStyle(document.documentElement)
-				.getPropertyValue("--label-scale-selected")
-				.trim(),
-		) || 1.5;
+		parseFloat(getCssVar("--label-scale-selected").trim()) || 1.5;
 
 	const scaleMultiplier = isSelected ? selectedScale : normalScale;
 	sprite.scale.set(
@@ -203,14 +194,8 @@ export function updateTextSprite(sprite, text, isSelected = false) {
 	context.textBaseline = "middle";
 
 	// Get colors from CSS variables
-	const normalColor =
-		getComputedStyle(document.documentElement)
-			.getPropertyValue("--label-color-normal")
-			.trim() || "white";
-	const selectedColor =
-		getComputedStyle(document.documentElement)
-			.getPropertyValue("--label-color-selected")
-			.trim() || "#d65d03";
+	const normalColor = getCssVar("--label-color-normal", "white");
+	const selectedColor = getCssVar("--label-color-selected", "#d65d03");
 
 	// Draw text
 	const x = canvas.width / 2;
@@ -218,14 +203,8 @@ export function updateTextSprite(sprite, text, isSelected = false) {
 
 	if (isSelected) {
 		// Get outline settings from CSS
-		const outlineColor =
-			getComputedStyle(document.documentElement)
-				.getPropertyValue("--label-outline-color")
-				.trim() || "black";
-		const outlineWidth =
-			getComputedStyle(document.documentElement)
-				.getPropertyValue("--label-outline-width")
-				.trim() || "3px";
+		const outlineColor = getCssVar("--label-outline-color", "black");
+		const outlineWidth = getCssVar("--label-outline-width", "3px");
 
 		// Draw outline first
 		context.strokeStyle = outlineColor;
@@ -243,24 +222,21 @@ export function updateTextSprite(sprite, text, isSelected = false) {
 	const texture = new THREE.CanvasTexture(canvas);
 	texture.colorSpace = THREE.SRGBColorSpace;
 	texture.needsUpdate = true;
+
+	// Dispose old texture to prevent memory leak
+	if (sprite.material.map) {
+		sprite.material.map.dispose();
+	}
+
 	sprite.material.map = texture;
 	sprite.material.needsUpdate = true;
 
 	const textScale = getResponsiveTextScale(window.innerWidth);
 
 	// Get scale multipliers from CSS variables
-	const normalScale =
-		parseFloat(
-			getComputedStyle(document.documentElement)
-				.getPropertyValue("--label-scale-normal")
-				.trim(),
-		) || 1;
+	const normalScale = parseFloat(getCssVar("--label-scale-normal").trim()) || 1;
 	const selectedScale =
-		parseFloat(
-			getComputedStyle(document.documentElement)
-				.getPropertyValue("--label-scale-selected")
-				.trim(),
-		) || 1.5;
+		parseFloat(getCssVar("--label-scale-selected").trim()) || 1.5;
 
 	const scaleMultiplier = isSelected ? selectedScale : normalScale;
 	sprite.scale.set(
