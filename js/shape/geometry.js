@@ -47,14 +47,14 @@ export function buildPyramid(loadedTextures, grainCanvas) {
 			colorIndex: 3,
 			isTriangle: true,
 			rotation: -67,
-			size: 950,
+			size: 500,
 		}, // Left face (Now) - larger image
 		{
 			indices: [0, 3, 2, 1],
 			colorIndex: 4,
 			isTriangle: false,
 			rotation: -90,
-			size: 1100,
+			size: 650,
 			offsetY: 0,
 		}, // Base (Projects) - larger image
 	];

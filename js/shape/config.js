@@ -11,10 +11,10 @@ export const TEXT_CANVAS_HEIGHT = 768;
 export const TEXT_FONT =
 	'Bold 128px "ProFontIIx", Menlo, Monaco, "Courier New", monospace';
 export const TEXT_SCALE_BASE = { x: 3, y: 1.5, z: 1 };
-export const FACE_CANVAS_WIDTH = 2048;
-export const FACE_CANVAS_HEIGHT = 2048;
-export const FACE_IMG_SIZE = 850;
-export const FACE_IMG_OFFSET_Y = -700;
+export const FACE_CANVAS_WIDTH = 1024;
+export const FACE_CANVAS_HEIGHT = 1024;
+export const FACE_IMG_SIZE = 450;
+export const FACE_IMG_OFFSET_Y = -360;
 export const TEXT_POS_MULTIPLIER_BASE = 1.1;
 export const PYRAMID_SIZE_MULTIPLIER_BASE = 0.6;
 export const MOBILE_PYRAMID_SIZE_MULTIPLIER = 1.0;
