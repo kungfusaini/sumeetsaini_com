@@ -6,7 +6,7 @@
 
 @font-face {
 	font-family: "ProFontIIx";
-	src: url("../fonts/ProFontIIxNerdFontMono-Regular.woff2") format("woff2");
+	src: url("../fonts/ProFontIIx-subset.woff2") format("woff2");
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
