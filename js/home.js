@@ -60,10 +60,45 @@ const typeInterval = setInterval(() => {
 
 function moveToTop(container) {
 	cursorEl.classList.add("hide");
+
+	// Safari iOS: fade out → move → fade in (bypasses position animation bugs)
+	const isSafariIOS =
+		(/iPhone|iPad|iPod/.test(navigator.userAgent) ||
+			(navigator.userAgent.includes("Mac") && "ontouchend" in document)) &&
+		!/Chrome|Android/.test(navigator.userAgent);
+
+	if (isSafariIOS) {
+		// Fade out at current center position
+		nameEl.style.transition = "opacity 0.3s ease";
+		nameEl.style.opacity = "0";
+
+		setTimeout(() => {
+			// Move to final position while hidden
+			nameEl.style.transition = "none";
+			nameEl.style.left = window.innerWidth <= 600 ? "1rem" : "2rem";
+			nameEl.style.top = window.innerWidth <= 600 ? "1rem" : "1.2rem";
+			nameEl.style.transform = "none";
+			nameEl.style.fontSize = window.innerWidth <= 600 ? "1.2rem" : "";
+
+			// Fade in at final position (sync with shape)
+			requestAnimationFrame(() => {
+				nameEl.style.transition = "opacity 0.3s ease";
+				nameEl.style.opacity = "1";
+			});
+
+			setTimeout(() => {
+				nameEl.style.transition = "";
+				content.classList.remove("hidden");
+				if (container) container.style.opacity = "1";
+			}, 300);
+		}, 300);
+		return;
+	}
+
+	// Standard browsers: use CSS transition
 	nameEl.classList.add("top");
 	setTimeout(() => {
 		content.classList.remove("hidden");
-		// Fade in the shape container with the original 1s transition
 		if (container) {
 			container.style.opacity = "1";
 		}
