@@ -128,7 +128,6 @@ function showProjectDetail(container, project) {
 
 	// Capture current container height BEFORE replacing content
 	const currentHeight = container.offsetHeight + "px";
-	console.log("Captured height:", currentHeight);
 
 	// Get elements to preserve
 	const closeButton = container.querySelector("#close-content");
@@ -158,6 +157,20 @@ function showProjectDetail(container, project) {
 
 		// Apply the captured height to maintain popup size
 		container.style.height = currentHeight;
+
+		// Reset scroll position to top so project loads scrolled to start
+		container.scrollTop = 0;
+		window.scrollTo(0, 0);
+
+		// Fade in the project detail
+		const detail = container.querySelector(".project-detail");
+		if (detail) {
+			detail.style.opacity = "0";
+			requestAnimationFrame(() => {
+				detail.style.transition = "opacity 0.3s ease";
+				detail.style.opacity = "1";
+			});
+		}
 
 		// Initialize carousel
 		initializeCarousel(container, project);
