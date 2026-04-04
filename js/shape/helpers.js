@@ -120,7 +120,7 @@ export const getResponsiveTextScale = (width) => {
 	return TEXT_SCALE_BASE;
 };
 export const getResponsiveTextPosMultiplier = (width) => {
-	if (width <= 768) return TEXT_POS_MULTIPLIER_BASE * 1.0; // Adjusted for smaller pyramid
+	if (width <= 768) return TEXT_POS_MULTIPLIER_BASE * 1.15; // Mobile: slightly farther from pyramid
 	if (width <= 1200) return TEXT_POS_MULTIPLIER_BASE * 0.9;
 	return TEXT_POS_MULTIPLIER_BASE;
 };

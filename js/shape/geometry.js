@@ -294,8 +294,12 @@ export function buildPyramid(loadedTextures, grainCanvas) {
 				window.innerWidth,
 			);
 			// Use smaller multiplier for base face (Projects) since it's already lower
+			// Mobile needs tighter multiplier to counteract increased base distance
+			const projectsMultiplier = window.innerWidth <= 768 ? 0.65 : 0.85;
 			const finalMultiplier =
-				colorIndex === 4 ? textPosMultiplier * 0.85 : textPosMultiplier;
+				colorIndex === 4
+					? textPosMultiplier * projectsMultiplier
+					: textPosMultiplier;
 			center.normalize().multiplyScalar(size * finalMultiplier);
 			textSprite.position.copy(center);
 			group.add(textSprite);
