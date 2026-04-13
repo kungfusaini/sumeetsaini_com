@@ -120,7 +120,10 @@ export function animate() {
 			shapeState.hasInteracted = false;
 			shapeState.autoRotateMultiplier = 0; // Reset auto-rotation to start gradually
 		}
-	} else if (!shapeState.dragging) {
+	} else if (
+		!shapeState.dragging &&
+		(shapeState.userVel.x !== 0 || shapeState.userVel.y !== 0)
+	) {
 		// Use quaternion rotation for consistency with dragging
 		const yawQuaternion = new THREE.Quaternion();
 		yawQuaternion.setFromAxisAngle(

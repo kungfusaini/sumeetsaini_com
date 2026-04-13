@@ -13,6 +13,7 @@ export function onPointerDown(x, y) {
 	shapeState.pointerDown = true;
 	shapeState.wasDragging = false;
 	shapeState.lastPointer = { x, y };
+	shapeState.userVel = { x: 0, y: 0 }; // Reset velocity at start of new drag
 	clearIdleTimer();
 	shapeState.autoRotateMultiplier = 0;
 	if (shapeState.transitioning) {
@@ -36,8 +37,8 @@ export function onPointerMove(x, y) {
 
 	// Always update rotation when dragging for smooth movement
 	// Use quaternion rotation for more consistent behavior
-	const dragY = (x - shapeState.lastPointer.x) * DRAG_SENSITIVITY;
-	const dragX = (y - shapeState.lastPointer.y) * DRAG_SENSITIVITY;
+	const dragY = deltaX * DRAG_SENSITIVITY;
+	const dragX = deltaY * DRAG_SENSITIVITY;
 
 	// Create rotation quaternions for world-space rotation
 	const yawQuaternion = new THREE.Quaternion();
@@ -56,9 +57,11 @@ export function onPointerMove(x, y) {
 		shapeState.pyramid.quaternion,
 	);
 
-	// Update velocity for smooth deceleration when released
-	shapeState.userVel.y = dragY;
-	shapeState.userVel.x = dragX;
+	// Update velocity - use weighted average to smooth out timing variations
+	// This helps with inconsistent mouse/touch event rates
+	const weight = 0.3;
+	shapeState.userVel.y = shapeState.userVel.y * (1 - weight) + dragY * weight;
+	shapeState.userVel.x = shapeState.userVel.x * (1 - weight) + dragX * weight;
 
 	shapeState.lastPointer = { x, y };
 	shapeState.hasInteracted = true;
