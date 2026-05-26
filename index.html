@@ -11,17 +11,165 @@
     <meta property="og:url" content="https://sumeetsaini.com">
 	<meta property="og:image" content="/assets/favicon.png">
 
-	<link rel="canonical" href="https://sumeetsaini.com/"/>
+	<link rel="canonical" href="https://sumeetsaini.com"/>
 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  
+
+  <!-- Blocking script: marks page as JS-enabled before any rendering -->
+  <script>document.documentElement.classList.add('js');</script>
+
   <!-- Preconnect to external APIs for faster connection -->
   <link rel="preconnect" href="https://vulkan.sumeetsaini.com">
   <link rel="preconnect" href="https://arcanecodex.dev">
-  
+
   <!-- Critical CSS (loaded synchronously) -->
   <link rel="stylesheet" href="css/main.css"/>
-  
+
+  <style>
+    :root {
+      --cream: #fbf1c7;
+      --orange: #d65d03;
+      --dark-grey: #282828;
+      --light-grey: #504945;
+      --font-mono: "ProFontIIx", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
+    }
+
+    /* ---- No-JS fallback layout (when `js` class is NOT on <html>) ---- */
+    #fallback-content {
+      margin: 0 auto;
+      padding: 2rem;
+      max-width: 800px;
+      color: var(--cream);
+      font-family: var(--font-mono);
+    }
+    #fallback-content h1 {
+      color: var(--orange);
+      font-size: 2rem;
+      margin: 0 0 0.5rem 0;
+    }
+    #fallback-content .fb-nav {
+      margin-bottom: 2rem;
+      padding: 0.5rem 0 1rem 0;
+      border-bottom: 2px solid var(--orange);
+    }
+    #fallback-content .fb-nav label {
+      margin-right: 1.5rem;
+      color: var(--orange);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    #fallback-content:has(#sel-about:checked) .fb-nav label[for="sel-about"],
+    #fallback-content:has(#sel-contact:checked) .fb-nav label[for="sel-contact"],
+    #fallback-content:has(#sel-blog:checked) .fb-nav label[for="sel-blog"],
+    #fallback-content:has(#sel-now:checked) .fb-nav label[for="sel-now"],
+    #fallback-content:has(#sel-projects:checked) .fb-nav label[for="sel-projects"] {
+      color: var(--cream);
+    }
+    .section-selector {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    #fallback-content .section {
+      display: none;
+      margin: 2rem 0 2.5rem 0;
+      padding: 0 0 2rem 0;
+      border-bottom: 1px solid var(--light-grey);
+    }
+    #fallback-content .section:last-child {
+      border-bottom: none;
+    }
+    #sel-about:checked ~ #about,
+    #sel-contact:checked ~ #contact,
+    #sel-blog:checked ~ #blog,
+    #sel-now:checked ~ #now,
+    #sel-projects:checked ~ #projects {
+      display: block;
+    }
+    #fallback-content h2 {
+      font-size: clamp(1.8rem, 1.2vw + 0.2rem, 2.2rem);
+      margin: 0 0 0.5rem 0;
+      color: var(--orange);
+    }
+    #fallback-content p {
+      margin-bottom: 0.4rem;
+      font-size: clamp(0.85rem, 0.5vw + 0.3rem, 1rem);
+      line-height: 1.5;
+    }
+    #fallback-content a {
+      color: var(--orange);
+      transition: color 0.3s ease;
+    }
+    #fallback-content a:hover {
+      color: var(--cream);
+    }
+    #fallback-content img {
+      max-width: 100%;
+    }
+    #fallback-content iframe {
+      max-width: 100%;
+      display: block;
+    }
+    #fallback-content .face-image {
+      width: clamp(100px, 12vw, 160px);
+      height: clamp(100px, 12vw, 160px);
+      border-radius: 50%;
+      border: 1px solid var(--dark-grey);
+      object-fit: cover;
+      float: right;
+      margin-left: clamp(1rem, 2vw, 2rem);
+      margin-top: clamp(1rem, 2vw, 2rem);
+      margin-bottom: 1rem;
+      transform: scale(1.3);
+    }
+    #fallback-content .link-icon {
+      width: 1rem;
+      height: 1rem;
+      vertical-align: -0.2rem;
+    }
+    .three-box, .shape-guidance, .cursor {
+      display: none;
+    }
+    #name {
+      display: none;
+    }
+    html {
+      overflow-y: auto;
+    }
+    body {
+      overflow: visible;
+      display: block;
+      height: auto;
+      min-height: 100vh;
+      padding: 0;
+      background: var(--dark-grey);
+    }
+
+    /* ---- JS-enabled layout ---- */
+    .js #fallback-content {
+      display: none;
+    }
+    .js #name {
+      display: block;
+    }
+    .js .three-box, .js .shape-guidance {
+      display: block;
+    }
+    .js .cursor {
+      display: inline;
+    }
+    .js body {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+      overflow: hidden;
+      overscroll-behavior: none;
+      padding: 0;
+    }
+  </style>
+
   <!-- Non-critical CSS (deferred) -->
   <link rel="stylesheet" href="css/popup.css" media="print" onload="this.media='all'"/>
   <link rel="stylesheet" href="css/projects.css" media="print" onload="this.media='all'"/>
@@ -46,12 +194,154 @@
   </script>
   <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "name": "Sumeet Saini",
+        "url": "https://sumeetsaini.com",
+        "image": "https://sumeetsaini.com/assets/face.jpg",
+        "description": "Software engineer, creator and digital nomad sharing projects, tech insights, and personal explorations.",
+        "sameAs": [
+          "https://github.com/kungfusaini",
+          "https://www.linkedin.com/in/sumeet-saini-a6048b195/"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "name": "Sumeet Saini | Explorer, Developer, Creator",
+        "url": "https://sumeetsaini.com",
+        "description": "Digital gateway to Sumeet Saini's projects, thoughts, and experiences."
+      }
+    ]
+  }
+  </script>
+
  </head>
 
  <body>
    <h1 id="name" class="center-stage">
      <span class="text"></span><span class="cursor">|</span>
    </h1>
+
+    <div id="fallback-content">
+      <input type="radio" name="section" id="sel-about" checked class="section-selector">
+      <input type="radio" name="section" id="sel-contact" class="section-selector">
+      <input type="radio" name="section" id="sel-blog" class="section-selector">
+      <input type="radio" name="section" id="sel-now" class="section-selector">
+      <input type="radio" name="section" id="sel-projects" class="section-selector">
+      <h1>Sumeet Saini</h1>
+      <div class="fb-nav">
+        <label for="sel-about">About</label>
+        <label for="sel-contact">Contact</label>
+        <label for="sel-blog">Blog</label>
+        <label for="sel-now">Now</label>
+        <label for="sel-projects">Projects</label>
+      </div>
+
+      <div id="about" class="section">
+<h2>About</h2>
+
+<p> Welcome, explorer! </p>
+
+<p>
+<img src="/assets/face.jpg" alt="Sumeet Saini" class="face-image">
+I'm Sumeet Saini, and I created this space to serve as a digital gateway to my projects, thoughts, and experiences.
+</p>
+
+<p>
+I'm a software engineer by trade, living a freelance and remote lifestyle, with a big interest in AI and full-stack development. All my freelance work is through my company,
+<a href="https://reliq.digital" target="_blank" rel="noopener">
+  <img src="/assets/link_icons/reliq-icon.svg" alt="Reliq" class="link-icon">
+	Reliq
+</a>.
+
+I'm available for web development and SEO services via
+<a href="https://reliqstudios.com" target="_blank" rel="noopener">
+  <img src="/assets/link_icons/reliq-icon.svg" alt="Reliq Studios" class="link-icon">
+	Reliq Studios
+</a>
+and more general backend, AI, and consultancy work via
+<a href="https://reliqlabs.com" target="_blank" rel="noopener">
+  <img src="/assets/link_icons/reliq-icon.svg" alt="Reliq Labs" class="link-icon">
+	Reliq Labs
+</a>, so reach out on either site or this page if you'd like to hire me.
+</p>
+
+
+<p>
+To see some code, check out my <a href="https://github.com/kungfusaini" target="_blank" rel="noopener">
+  <img src="/assets/link_icons/github.svg" alt="Github" class="link-icon"> GitHub
+</a>, I'm pretty active over there.
+
+If you're interested to see my professional and education history, here is my <a href="https://www.linkedin.com/in/sumeet-saini-a6048b195/" target="_blank" rel="noopener">
+  <img src="/assets/link_icons/linkedin.svg" alt="Linkedin" class="link-icon"> Linkedin
+</a>
+and
+<a href="/assets/resume_sumeet_saini.pdf" target="_blank" rel="noopener">
+  <img src="/assets/link_icons/cv.svg" alt="CV" class="link-icon"> Resume
+</a>
+</p>
+
+<p>
+Thanks for stopping by my cool little digital space, see you around!
+</p>
+     </div>
+
+     <div id="contact" class="section">
+<h2>Contact</h2>
+<p>Get in touch via <a href="mailto:sumeet@sumeetsaini.com">sumeet@sumeetsaini.com</a> or use the contact form on the interactive version of this site.</p>
+     </div>
+
+     <div id="projects" class="section">
+<h2>Projects</h2>
+
+<p>Here are some of the projects I've worked on.</p>
+
+<p>
+Check out my <a href="https://github.com/kungfusaini" target="_blank" rel="noopener">
+  <img src="/assets/link_icons/github.svg" alt="Github" class="link-icon"> GitHub
+</a>
+for an up-to-date list of projects.
+</p>
+     </div>
+
+     <div id="blog" class="section">
+<h2>Blog</h2>
+<p>I write about tech, travel, and personal projects over on <a href="https://arcanecodex.dev" target="_blank" rel="noopener">Arcane Codex</a>.</p>
+     </div>
+
+     <div id="now" class="section">
+<h2>Now</h2>
+
+<p>May 2026</p>
+
+<p>
+It's been busy! Alongside my AI training work, I've been working hard at the stealth startup I joined last month. I also recently got back from the Netherlands, I had a fantastic trip there seeing the tulip fields!
+</p>
+
+<p>
+It's been very exciting to act as lead developer in the startup. It requires more theory than I expected, as a lot of my work is defining standards and setting objectives, alongside the regular programming tasks. I've gained a lot of experience in DevOps too. There is a lot of work to get done over the next couple of months, but I'm confident in the team's ability to get it done.
+</p>
+
+<p>
+In the little spare time I have, I've been making changes to my own personal AI system. After experimenting with all the different frameworks, I came across
+<a href="https://arxiv.org/abs/2603.16021" target="_blank" rel="noopener">
+	this paper
+</a>
+, which outlines a different methodology of managing AI agents. I'm in the process of doing a full revamp, but will pause this work for the time being.
+</p>
+
+<p>
+Other than that, no major work updates. My focus is on the startup and AI training at the moment, and will be for the next few months.
+</p>
+
+<h4>Song of the Month</h4>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/6YZxrJsE14C7bfyQGFJqqm?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+     </div>
+   </div>
 
    <main id="content" class="hidden"></main>
    <script type="module" src="js/shape.js"></script>

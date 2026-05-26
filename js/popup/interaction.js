@@ -59,12 +59,25 @@ export async function showContent(contentPath, title) {
 				content = '<h2>Projects</h2><p class="projects-error">Unable to load projects</p>';
 			}
 		} else {
-			// Regular HTML file
-			const response = await fetch(contentPath);
-			if (!response.ok) {
-				throw new Error(`Failed to load content: ${contentPath}`);
+			// Read known static content from DOM (avoids HTTP request)
+			const DOM_CONTENT_MAP = {
+				"content/about.html": "about",
+			};
+			const domId = DOM_CONTENT_MAP[contentPath];
+			if (domId) {
+				const el = document.getElementById(domId);
+				if (!el) {
+					throw new Error(`Fallback DOM element not found: #${domId}`);
+				}
+				content = el.innerHTML;
+			} else {
+				// Fall back to fetch for content not in DOM (e.g. contact form)
+				const response = await fetch(contentPath);
+				if (!response.ok) {
+					throw new Error(`Failed to load content: ${contentPath}`);
+				}
+				content = await response.text();
 			}
-			content = await response.text();
 		}
 
 		// Set content directly - let CSS handle sizing
