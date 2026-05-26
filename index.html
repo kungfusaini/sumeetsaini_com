@@ -154,6 +154,45 @@
     #fallback-content a:hover {
       color: var(--cream);
     }
+    #fallback-content ul {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    #fallback-content li {
+      margin-bottom: 0.5rem;
+      font-size: clamp(0.85rem, 0.5vw + 0.3rem, 1rem);
+      line-height: 1.5;
+    }
+    #fallback-content form {
+      margin-top: 1.5rem;
+    }
+    #fallback-content input,
+    #fallback-content textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      background: var(--dark-grey);
+      border: 1px solid var(--orange);
+      color: var(--cream);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    #fallback-content button {
+      background: var(--dark-grey);
+      color: var(--cream);
+      border: 1px solid var(--orange);
+      padding: 0.75rem 2rem;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #fallback-content button:hover {
+      background: var(--orange);
+    }
     #fallback-content img {
       max-width: 100%;
     }
@@ -349,25 +388,66 @@ Thanks for stopping by my cool little digital space, see you around!
 
      <div id="contact" class="section">
 <h2>Contact</h2>
-<p>Get in touch via <a href="mailto:sumeet@sumeetsaini.com">sumeet@sumeetsaini.com</a> or use the contact form on the interactive version of this site.</p>
+<p>Get in touch via <a href="mailto:sumeet@sumeetsaini.com">sumeet@sumeetsaini.com</a> or use the form below.</p>
+
+<form action="/vulkan/web_contact" method="POST">
+<input type="hidden" name="origin" value="sumeetsaini">
+<input type="hidden" name="botcheck" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px">
+<input type="text" name="name" required autocomplete="name" placeholder="Name">
+<input type="email" name="email" required autocomplete="email" placeholder="Email">
+<textarea name="message" required rows="5" placeholder="Your message..."></textarea>
+<button type="submit">Send Message</button>
+</form>
      </div>
 
      <div id="projects" class="section">
 <h2>Projects</h2>
 
-<p>Here are some of the projects I've worked on.</p>
+<ul>
+<li><strong><a href="https://github.com/kungfusaini/aether" target="_blank" rel="noopener">Custom Hosting Infrastructure</a></strong> &mdash; Docker-based VPS hosting with Nginx, CI/CD, and multi-service orchestration</li>
+<li><strong><a href="https://reliq.digital" target="_blank" rel="noopener">Reliq Suite of Sites</a></strong> &mdash; Brand sites for Reliq Studios and Reliq Labs with unified design</li>
+<li><strong><a href="https://blueprintbuilder.co.uk" target="_blank" rel="noopener">Blueprint Builders</a></strong> &mdash; Client website for a construction company with Decap CMS</li>
+<li><strong><a href="https://arcanecodex.dev" target="_blank" rel="noopener">Arcane Codex Blog</a></strong> &mdash; Personal blog built with Hugo, custom themed</li>
+<li><strong>AI Agent Workforce</strong> &mdash; Custom AI agent system with specialized sub-agents on a VPS</li>
+<li><strong><a href="https://github.com/kungfusaini/dotfiles" target="_blank" rel="noopener">Dotfiles</a></strong> &mdash; Zsh, Neovim, and Nix configuration</li>
+<li><strong><a href="https://github.com/kungfusaini/bucket" target="_blank" rel="noopener">Bucket and Well</a></strong> &mdash; Quick-capture CLI and Telegram bot for ideas and tasks</li>
+<li><strong><a href="https://github.com/kungfusaini/goblin" target="_blank" rel="noopener">Goblin</a></strong> &mdash; Finance tracker with Streamlit dashboard</li>
+<li><strong><a href="https://github.com/kungfusaini/spellcheck-mode.nvim" target="_blank" rel="noopener">Spellcheck Mode</a></strong> &mdash; Neovim plugin for faster spell correction</li>
+<li><strong>Market Data Handler</strong> &mdash; Low-latency feed handler for a major Asian stock exchange</li>
+<li><strong>IBM RAPID</strong> &mdash; Rogue wireless access point detection and geolocation system</li>
+<li><strong><a href="https://github.com/kungfusaini/project-grabber" target="_blank" rel="noopener">Project Grabber</a></strong> &mdash; JS library to fetch and display projects from the Vulkan API</li>
+</ul>
 
 <p>
-Check out my <a href="https://github.com/kungfusaini" target="_blank" rel="noopener">
+Browse all projects on <a href="https://github.com/kungfusaini" target="_blank" rel="noopener">
   <img src="/assets/link_icons/github.svg" alt="Github" class="link-icon"> GitHub
-</a>
-for an up-to-date list of projects.
+</a> or use the interactive version of this site for details and media.
 </p>
      </div>
 
      <div id="blog" class="section">
 <h2>Blog</h2>
+
 <p>I write about tech, travel, and personal projects over on <a href="https://arcanecodex.dev" target="_blank" rel="noopener">Arcane Codex</a>.</p>
+
+<h4>Recent Posts</h4>
+
+<ul>
+<li><a href="https://arcanecodex.dev/posts/ai/ai-tech-lead/" target="_blank" rel="noopener">AI Makes You Think Like a Tech Lead</a> &mdash; May 2026</li>
+<li><a href="https://arcanecodex.dev/posts/tech/fixing-markdown-rendering-neovim/" target="_blank" rel="noopener">Markdown Rendering Issue in Neovim</a> &mdash; Apr 2026</li>
+<li><a href="https://arcanecodex.dev/posts/culture/books/metamorphosis/" target="_blank" rel="noopener">Thoughts on 'Metamorphosis'</a> &mdash; Mar 2026</li>
+<li><a href="https://arcanecodex.dev/posts/thoughts/lifechanging-bike/" target="_blank" rel="noopener">How a Motorcycle Changed My Life</a> &mdash; Feb 2026</li>
+<li><a href="https://arcanecodex.dev/posts/thoughts/nomad-prep/" target="_blank" rel="noopener">Preparing for a Nomadic Life</a> &mdash; Feb 2026</li>
+<li><a href="https://arcanecodex.dev/posts/thoughts/living-free/" target="_blank" rel="noopener">Structuring a Free Life</a> &mdash; Jan 2026</li>
+<li><a href="https://arcanecodex.dev/posts/ai/the-right-model/" target="_blank" rel="noopener">The Right Model</a> &mdash; Jan 2026</li>
+<li><a href="https://arcanecodex.dev/posts/thoughts/the-importance-of-having-your-own-tools/" target="_blank" rel="noopener">The Importance of Having Your Own Tools</a> &mdash; Dec 2025</li>
+<li><a href="https://arcanecodex.dev/posts/ai/ai-dev-skills/" target="_blank" rel="noopener">The Missing Skills of Vibe Coders</a> &mdash; Dec 2025</li>
+<li><a href="https://arcanecodex.dev/posts/thoughts/flexibility/" target="_blank" rel="noopener">The Path to a More Flexible Life</a> &mdash; Nov 2025</li>
+<li><a href="https://arcanecodex.dev/posts/ai/the-anatomy-of-ai-agents/" target="_blank" rel="noopener">The Anatomy of AI Agents</a> &mdash; Nov 2025</li>
+<li><a href="https://arcanecodex.dev/posts/aether/building-aether/" target="_blank" rel="noopener">Building Aether: Hosting a Personal Corner of the Internet</a> &mdash; Nov 2025</li>
+</ul>
+
+<p>Read the latest at <a href="https://arcanecodex.dev" target="_blank" rel="noopener">arcanecodex.dev</a>.</p>
      </div>
 
       <div id="now" class="section">
