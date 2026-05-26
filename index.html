@@ -66,6 +66,52 @@
     #fallback-content:has(#sel-projects:checked) .fb-nav label[for="sel-projects"] {
       color: var(--cream);
     }
+    .now-month-selector {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .now-month-content {
+      display: none;
+    }
+    #fallback-content .now-date {
+      font-size: clamp(1rem, 0.6vw + 0.3rem, 1.2rem);
+      color: var(--cream);
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    #fallback-content .now-month-nav {
+      border-top: 1px solid var(--light-grey);
+      margin-top: 1.5rem;
+      padding: 0.5rem 0 0 0;
+    }
+    #fallback-content .now-month-nav label {
+      margin-right: 0.8rem;
+      color: var(--orange);
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    #fallback-content:has(#sel-now-2025-10:checked) .now-month-nav label[for="sel-now-2025-10"],
+    #fallback-content:has(#sel-now-2025-11:checked) .now-month-nav label[for="sel-now-2025-11"],
+    #fallback-content:has(#sel-now-2025-12:checked) .now-month-nav label[for="sel-now-2025-12"],
+    #fallback-content:has(#sel-now-2026-01:checked) .now-month-nav label[for="sel-now-2026-01"],
+    #fallback-content:has(#sel-now-2026-02:checked) .now-month-nav label[for="sel-now-2026-02"],
+    #fallback-content:has(#sel-now-2026-03:checked) .now-month-nav label[for="sel-now-2026-03"],
+    #fallback-content:has(#sel-now-2026-04:checked) .now-month-nav label[for="sel-now-2026-04"],
+    #fallback-content:has(#sel-now-2026-05:checked) .now-month-nav label[for="sel-now-2026-05"] {
+      color: var(--cream);
+    }
+    #fallback-content:has(#sel-now-2025-10:checked) #now-2025-10,
+    #fallback-content:has(#sel-now-2025-11:checked) #now-2025-11,
+    #fallback-content:has(#sel-now-2025-12:checked) #now-2025-12,
+    #fallback-content:has(#sel-now-2026-01:checked) #now-2026-01,
+    #fallback-content:has(#sel-now-2026-02:checked) #now-2026-02,
+    #fallback-content:has(#sel-now-2026-03:checked) #now-2026-03,
+    #fallback-content:has(#sel-now-2026-04:checked) #now-2026-04,
+    #fallback-content:has(#sel-now-2026-05:checked) #now-2026-05 {
+      display: block;
+    }
     .section-selector {
       position: absolute;
       opacity: 0;
@@ -87,6 +133,9 @@
     #sel-now:checked ~ #now,
     #sel-projects:checked ~ #projects {
       display: block;
+    }
+    #fallback-content #now {
+      border-bottom: none;
     }
     #fallback-content h2 {
       font-size: clamp(1.8rem, 1.2vw + 0.2rem, 2.2rem);
@@ -232,6 +281,14 @@
       <input type="radio" name="section" id="sel-blog" class="section-selector">
       <input type="radio" name="section" id="sel-now" class="section-selector">
       <input type="radio" name="section" id="sel-projects" class="section-selector">
+      <input type="radio" name="now-month" id="sel-now-2025-10" class="now-month-selector">
+      <input type="radio" name="now-month" id="sel-now-2025-11" class="now-month-selector">
+      <input type="radio" name="now-month" id="sel-now-2025-12" class="now-month-selector">
+      <input type="radio" name="now-month" id="sel-now-2026-01" class="now-month-selector">
+      <input type="radio" name="now-month" id="sel-now-2026-02" class="now-month-selector">
+      <input type="radio" name="now-month" id="sel-now-2026-03" class="now-month-selector">
+      <input type="radio" name="now-month" id="sel-now-2026-04" class="now-month-selector">
+      <input type="radio" name="now-month" id="sel-now-2026-05" class="now-month-selector" checked>
       <h1>Sumeet Saini</h1>
       <div class="fb-nav">
         <label for="sel-about">About</label>
@@ -313,22 +370,317 @@ for an up-to-date list of projects.
 <p>I write about tech, travel, and personal projects over on <a href="https://arcanecodex.dev" target="_blank" rel="noopener">Arcane Codex</a>.</p>
      </div>
 
-     <div id="now" class="section">
+      <div id="now" class="section">
 <h2>Now</h2>
 
-<p>May 2026</p>
+<div id="now-2025-10" class="now-month-content">
+<p class="now-date">Oct 2025</p>
+<h4>Focus</h4>
 
+<p>My recent focus has been reducing fricition in my work environment and ticking off some major todo list items!
+</p>
+
+<p>I have spent a good chunk of time tweaking my neovim config to make everything just right, as well as introducing new tools such as tmux into my environment. If you want to check out my config take a look on 
+<a href="https://github.com/kungfusaini/dotfiles" target="_blank" rel="noopener"> 
+	GitHub
+  <img src="/assets/link_icons/github.svg" alt="Github" class="link-icon"> 
+</a>
+!
+</p>
+
+<p> I had been meaning to create a personal website and email for a while, so I knocked that up on a VPS. I implemented a reverse proxy, first time!</p>
+
+<h4>Song of the Month</h4>
+
+<iframe class="spotify-widget" data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/2a1iMaoWQ5MnvLFBDv4qkf?utm_source=generator&theme=0" width="100%" height="100" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</div>
+
+<div id="now-2025-11" class="now-month-content">
+<p class="now-date">Nov 2025</p>
+<h4>Focus</h4>
+
+<p>
+Over the last month, I focused on creating my personal website from scratch, and hosting this website, along with a custom API on my newly acquired VPS.
+</p>
+
+<p>
+I decided to deploy with Docker containers, so I leared how these work, and set up a robust deployment pipeline with github actions.
+
+If you want to check out my project "aether" take a look on 
+<a href="https://github.com/kungfusaini/aether" target="_blank" rel="noopener"> 
+	GitHub
+  <img src="/assets/link_icons/github.svg" alt="Github" class="link-icon"> 
+</a>
+!
+</p>
+
+<p>
+Next up is creating creating a blog with 
+
+
+<a href="https://gohugo.io" target="_blank" rel="noopener"> 
+	Hugo
+</a>
+and also hosting this on my VPS!
+
+</p>
+
+<h4>Song of the Month</h4>
+
+<iframe class="spotify-widget" data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/08bnQ31TXHNL0HA4oyG33d?utm_source=generator&theme=0" width="100%" height="100" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</div>
+
+<div id="now-2025-12" class="now-month-content">
+<p class="now-date">Dec 2025</p>
+<h4>Focus</h4>
+
+<p>
+Last month, I built my blog 
+<a href="https://arcanecodex.dev" target="_blank" rel="noopener"> 
+  <img src="/assets/link_icons/arcanecodex.svg" alt="Arcane Codex" class="link-icon"> 
+	Arcane Codex
+</a>
+using the 
+<a href="https://gohugo.io" target="_blank" rel="noopener"> 
+	Hugo
+</a>
+framework. A lot of the time was spent in theming, so I learned a lot about effective use of CSS. Deployment was relatively easy due to having already built infrastructure on my VPS. The most recent posts will be featured on this website in the blog panel.
+</p>
+
+<p>
+Aside from freelancing, I spent the rest of the month partaking in Google's 5 day intensive AI agents course. I have a good grasp on the framework now, building the foundation for future projects to come. You can check out my 
+<a href="https://arcanecodex.dev/posts/ai/the-anatomy-of-ai-agents/" target="_blank" rel="noopener"> 
+  <img src="/assets/link_icons/arcanecodex.svg" alt="Arcane Codex" class="link-icon"> 
+	blog post
+</a>
+on what makes effective AI agents, or check out my
+<a href="https://github.com/kungfusaini/google-ai-agents-course" target="_blank" rel="noopener"> 
+  <img src="/assets/link_icons/github.svg" alt="Github" class="link-icon"> 
+	GitHub
+</a>
+for detailed notes from the course!
+</p>
+
+<p>
+This month I will be focusing on contracting, writing on my blog and experimenting with AI agents. 
+</p>
+
+<h4>Song of the Month</h4>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/4ZD6SiaJi75smnel0d7jl3?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</div>
+
+<div id="now-2026-01" class="now-month-content">
+<p class="now-date">Jan 2026</p>
+<h4>Focus</h4>
+
+<p>
+Happy New Year!
+</p>
+
+<p>
+Recently, I mostly focused on my freelance AI red teaming work, but still had some time to do some other cool stuff!
+
+Freelancing has been a crash course in the "business" side of things—contracts, pricing, and packaging services. I am in the middle of creating a client focused brand, Reliq, which will serve as a hub for my freelance work and new web dev projects, for which I learned a lot about SEO, client hosting and CMS.
+
+Thankfully, the hosting infrastructure I built months ago has made launching these new sites and email accounts incredibly fast.
+</p>
+
+<p>
+I wanted to see how my websites were performing, so I integrated analytics, via
+<a href="https://plausible.io/docs/self-hosting" target="_blank" rel="noopener"> 
+Plausible
+</a>
+. It's been great to see exactly where people are finding my stuff and how they interact with my pages.
+I've noticed increased traffic to this site but especially my blog.
+Speaking of my blog, I created a few new posts on
+<a href="https://arcanecodex.dev" target="_blank" rel="noopener"> 
+  <img src="/assets/link_icons/arcanecodex.svg" alt="Arcane Codex" class="link-icon"> 
+	Arcane Codex
+</a>
+, and was especially proud of the one exploring the missing skills of vibecoders! 
+
+I'm glad people are seeing what I am putting out into the world! 
+</p>
+
+<p>
+For other random stuff, of course my system config
+<a href="https://github.com/kungfusaini/dotfiles" target="_blank" rel="noopener"> 
+  <img src="/assets/link_icons/github.svg" alt="GitHub" class="link-icon"> 
+	system config
+</a>
+gets better by the day, but I also found out about 
+<a href="https://taskwarrior.org/" target="_blank" rel="noopener"> 
+	TaskWarrior
+</a>
+which filled a really massive need for managing my tasks effectively from the terminal. 
+</p>
+
+
+<p>
+I also built a simple tool  and API for capturing thoughts rapidly, which I called 
+<a href="https://github.com/kungfusaini/bucket" target="_blank" rel="noopener"> 
+  <img src="/assets/link_icons/github.svg" alt="GitHub" class="link-icon"> 
+	bucket
+</a>
+and a telegram bot 
+<a href="https://github.com/kungfusaini/bucketbot" target="_blank" rel="noopener"> 
+  <img src="/assets/link_icons/github.svg" alt="GitHub" class="link-icon"> 
+	bucketbot
+</a>
+so I can have the same functionality from my phone too. It works great for me and helps me follow the 
+<a href="https://gettingthingsdone.com/" target="_blank" rel="noopener"> 
+	GTD philosophy.
+</a>
+</p>
+
+<p>
+Finally, I started work on a new finance dashboard because I got tired of using Excel and remembered I can do everything in python instead (wink!). The 
+<a href="https://streamlit.io/" target="_blank" rel="noopener"> 
+	streamlit
+</a>
+framework is amazing, handling all the front end, and I can just focus on data manipulation!
+</p>
+
+<p>
+I'm sure I'm forgetting a few things but it's been a great month! This month I will be building client websites, my own professional brand, and finishing up some of the projects mentioned above! Thanks for stopping by.
+</p>
+
+<h4>Song of the Month</h4>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/6KtLECDztnah63TNmV4Plw?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</div>
+
+<div id="now-2026-02" class="now-month-content">
+<p class="now-date">Feb 2026</p>
+<h4>Focus</h4>
+
+<p>
+The start of the year has been busy, with a lot of exploration and experimentation.
+</p>
+
+<p>
+I recently started freelance web development, and completed my first client project. It's a change of pace from the AI red teaming I have been working on. I learned a lot about the more professional aspects of client work, like consent managment, CMS platforms and how to handle payments and billing. It was a legnthy project that took a good chunk of the month, but I a very proud with the result. I hope to work on more web projects along side my AI work in the future, so reach out if you need some work done!
+</p>
+
+<p>
+I have also been experimenting a lot with my AI workflow. 
+<a href="https://opencode.ai" target="_blank" rel="noopener"> 
+	Opencode
+</a>
+has been by tool of choice, but I was not seeing the results I wanted using it raw with even models as powerful as Claude Opus 4.5. I had heard about 
+<a href="https://github.com/code-yeongyu/oh-my-opencode" target="_blank" rel="noopener"> 
+	Oh My Opencode
+</a>
+and wanted to give it a shot, but wanted to tailor the agent and LLM pairings to be hyper specialised.
+<a href="https://nano-gpt.com" target="_blank" rel="noopener"> 
+	Nano GPT
+</a>
+is a great service I found that has a very generous subscription model that allowed me to experiment a lot, and I now have a system I am very happy with. I will be writing a post on my blog
+<a href="https://arcanecodex.dev" target="_blank" rel="noopener"> 
+  <img src="/assets/link_icons/arcanecodex.svg" alt="Arcane Codex" class="link-icon"> 
+	Arcane Codex
+</a>
+soon detailing my findings.
+</p>
+
+<p>
+Speaking of my blog, I'm getting more and more readers every month! Even though my goal was never to gain an audience, I am very happy to see people checking it out, so if you have, thanks! If you haven't, check it out 
+<a href="https://arcanecodex.dev" target="_blank" rel="noopener"> 
+  <img src="/assets/link_icons/arcanecodex.svg" alt="Arcane Codex" class="link-icon"> 
+ here!
+</a>
+</p>
+
+<p>
+I've made some tweaks to the finance system I created last month and it has really been helping me manage the In's and Out's of freelancing with confidence. Finally, I have been sitting on an idea for quite heavily modifying my guitar with full MIDI support for a while. I have been tinkering with my Raspbery Pi, and hopefully I'll have something I can share and take on stage pretty soon!
+</p>
+
+<p>
+This month I will continue working on my AI red teaming work, and furthering my learning in AI and AI agents. 
+</p>
+
+<h4>Song of the Month</h4>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/2wBnZdVWa5jVpvYRfGU7rP?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</div>
+
+<div id="now-2026-03" class="now-month-content">
+<p class="now-date">Mar 2026</p>
+<p>
+The theme of this month has been connection, as many people have reached out to me, most of them curious how life looks like on the other side! It's great to see them doing well and sharing what I have been up to!
+</p>
+
+<p>
+So, what have I been up to? Well, my AI freelancing has been accelerated this month. I got to work on some cool projects, comparing and trying to break Gemini 3, Opus 4.6 and Codex 5.2. These things are getting smart! I really feel like I am developing expertise in LLM's and AI in general. 
+</p>
+
+<p>
+Two other AI updates. I have started attending a weekly AI meetup in where we research topics and discuss our findings in an informal setting. It's a great way to not get overwhelmed with the sheer amount of progress in the field. I have also been quite inspired by OpenClaw, and wanted to build my own AI agent. I was not too excited by OpenClaw itself, as it's got a lot of bloat, but then I discovered NanoBot. I set up a fresh VPS and will be sharing what me and my agent get up too in the coming months!
+</p>
+
+<p>
+I have also launched
+<a href="https://reliqstudios.com" target="_blank" rel="noopener"> 
+  <img src="/assets/link_icons/reliq-icon.svg" alt="Reliq Studios" class="link-icon"> 
+	Reliq Studios
+</a>
+. I wanted to have a more client centric portal for web development, beside this personal website, now that I have a few client projects under my belt (as well as some cool websites of my own!). As I needed a way to show off projects, I thought it would be good to build a project system that all my sites can use, rather than duplicating content. I now have my API serving projects write-ups that any site can use, neat!
+
+I've also extended this site to have a project section, which will be live soon (or maybe now if you are from the future!). It was a challenge to add another face to this 3D object but I am really happy with the result.
+</p>
+
+<p>
+This month I'll be travelling! I'm going to India, spending 1 week in Punjab, a couple weeks visiting Varanasi, Lucknow and Ayodyha, and finally a week in Mumbai. Along the way, I'll work on filling out my project portfolio with previous work, and continue to work on my super agent. See you!
+</p>
+
+
+<h4>Song of the Month</h4>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/7K3Lc3TfSR14aTOjIH7TUj?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</div>
+
+<div id="now-2026-04" class="now-month-content">
+<p class="now-date">Apr 2026</p>
+<p>
+Recently I've been travelling all over India! I toured all over Punjab, visited Chandigarh and spent the rest of my time in Mumbai. That being said, I do have a few updates to share.
+</p>
+
+<p>
+I experimented a lot with AI agent on my trip. Because I didn't always have access to my laptop, I wanted to build a solution for coding on the go, and I think I have cracked it! I experimented a lot with OpenClaw and NanoBot, but in the end I have settled on hosting an opencode instance on a VPS. I then linked this up to a domain with the opencode web GUI and now I really can code from my phone. I just finished implementing VibaKanban into the infrastructure as well, so now I have a fully autonomous and AI-friendly project managements system I can use from anywhere. Big success!
+</p>
+
+<p>
+Another big task I completed was writing up and capturing media for all of my projects. I knew I had done a lot of stuff in the past, but it's so easy to forget the details. I spent a good long while combing through my files and recalling my work experience, but I think I caught all the good ones at least. As my API Vulkan is serving all these projects, my 
+<a href="https://reliqs.digital" target="_blank" rel="noopener"> 
+  <img src="/assets/link_icons/reliq-icon.svg" alt="Reliq" class="link-icon"> 
+	Reliq 
+</a>
+sites also feature these projects where appropriate, just with more professional project descriptions. Neat!
+</p>
+
+<p>
+Looking to the future, I've recently been approached by a stealth startup, and I will be joining their team for the next few months. I'm really excited about the project, and this will be taking the majority of my time, as well as my ongoing AI freelancing.
+</p>
+
+<p>
+It's going to be a period of deep work now that I'm back in the UK. I'm ready to get going!
+</p>
+
+
+<h4>Song of the Month</h4>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/42T2QQv3xgBlpQxaSP7lnK?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</div>
+
+<div id="now-2026-05" class="now-month-content">
+<p class="now-date">May 2026</p>
 <p>
 It's been busy! Alongside my AI training work, I've been working hard at the stealth startup I joined last month. I also recently got back from the Netherlands, I had a fantastic trip there seeing the tulip fields!
 </p>
 
 <p>
-It's been very exciting to act as lead developer in the startup. It requires more theory than I expected, as a lot of my work is defining standards and setting objectives, alongside the regular programming tasks. I've gained a lot of experience in DevOps too. There is a lot of work to get done over the next couple of months, but I'm confident in the team's ability to get it done.
+It's been very exciting to act as lead developer in the startup. It requires more theory than I expected, as a lot of my work is defining standards and setting objectives, alongside the regular programming tasks. I've gained a lot of experience in DevOps too. There is a lot of work to get done over the next couple of months, but I'm confident in the team's ability to get it done. 
 </p>
 
 <p>
 In the little spare time I have, I've been making changes to my own personal AI system. After experimenting with all the different frameworks, I came across
-<a href="https://arxiv.org/abs/2603.16021" target="_blank" rel="noopener">
+<a href="https://arxiv.org/abs/2603.16021" target="_blank" rel="noopener"> 
 	this paper
 </a>
 , which outlines a different methodology of managing AI agents. I'm in the process of doing a full revamp, but will pause this work for the time being.
@@ -340,7 +692,19 @@ Other than that, no major work updates. My focus is on the startup and AI traini
 
 <h4>Song of the Month</h4>
 <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/6YZxrJsE14C7bfyQGFJqqm?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-     </div>
+</div>
+
+<div class="now-month-nav">
+<label for="sel-now-2025-10">Oct 2025</label>
+<label for="sel-now-2025-11">Nov 2025</label>
+<label for="sel-now-2025-12">Dec 2025</label>
+<label for="sel-now-2026-01">Jan 2026</label>
+<label for="sel-now-2026-02">Feb 2026</label>
+<label for="sel-now-2026-03">Mar 2026</label>
+<label for="sel-now-2026-04">Apr 2026</label>
+<label for="sel-now-2026-05">May 2026</label>
+</div>
+      </div>
    </div>
 
    <main id="content" class="hidden"></main>
