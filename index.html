@@ -137,6 +137,35 @@
     #fallback-content #now {
       border-bottom: none;
     }
+    #fallback-content details {
+      margin-bottom: 0.25rem;
+    }
+    #fallback-content details[open] {
+      margin-bottom: 0.75rem;
+    }
+    #fallback-content summary {
+      cursor: pointer;
+      color: var(--cream);
+      font-size: clamp(0.85rem, 0.5vw + 0.3rem, 1rem);
+      padding: 0.15rem 0;
+      transition: color 0.3s ease;
+    }
+    #fallback-content summary:hover {
+      color: var(--orange);
+    }
+    #fallback-content summary code {
+      color: var(--light-grey);
+      font-size: 0.8em;
+    }
+    #fallback-content details[open] summary {
+      margin-bottom: 0.5rem;
+    }
+    #fallback-content details p {
+      margin-left: 1.2rem;
+    }
+    #fallback-content details a {
+      margin-left: 1.2rem;
+    }
     #fallback-content h2 {
       font-size: clamp(1.8rem, 1.2vw + 0.2rem, 2.2rem);
       margin: 0 0 0.5rem 0;
@@ -400,32 +429,93 @@ Thanks for stopping by my cool little digital space, see you around!
 </form>
      </div>
 
-     <div id="projects" class="section">
+      <div id="projects" class="section">
 <h2>Projects</h2>
 
-<ul>
-<li><strong>AI Agent Workforce</strong> <span style="color:var(--light-grey)">[Python, AI Agents, Docker]</span><br>Custom AI agent system with specialized sub-agents</li>
-<li><strong><a href="https://github.com/kungfusaini/aether" target="_blank" rel="noopener">Custom Hosting Infrastructure</a></strong> <span style="color:var(--light-grey)">[Docker, Nginx, Github Actions]</span><br>Docker hosting configuration with DevOps support</li>
-<li><strong><a href="https://reliq.digital" target="_blank" rel="noopener">Reliq Suite of Sites</a></strong> <span style="color:var(--light-grey)">[HTML, CSS, JavaScript]</span><br>Sites for Reliq Studios and Reliq Labs</li>
-<li><strong>AI Model Training</strong> <span style="color:var(--light-grey)">[Python, LLMs, AI]</span><br>Helping build the next generation of frontier models</li>
-<li><strong><a href="https://github.com/kungfusaini/dotfiles" target="_blank" rel="noopener">Dotfiles</a></strong> <span style="color:var(--light-grey)">[Shell, Zsh, Nix]</span><br>Custom configuration for my development environment</li>
-<li><strong><a href="https://github.com/kungfusaini/project-grabber" target="_blank" rel="noopener">Project Grabber</a></strong> <span style="color:var(--light-grey)">[JavaScript]</span><br>JS library to fetch and display projects from the API</li>
-<li><strong><a href="https://blueprintbuilder.co.uk" target="_blank" rel="noopener">Blueprint Builders Website</a></strong> <span style="color:var(--light-grey)">[JavaScript, CSS, HTML]</span><br>Client site for a construction company with CMS</li>
-<li><strong><a href="https://github.com/kungfusaini/goblin" target="_blank" rel="noopener">Goblin</a></strong> <span style="color:var(--light-grey)">[Python, Streamlit]</span><br>Finance tracker with Streamlit dashboard</li>
-<li><strong><a href="https://github.com/kungfusaini/bucket" target="_blank" rel="noopener">Bucket and Well</a></strong> <span style="color:var(--light-grey)">[Python, JavaScript, Rest]</span><br>Quick-capture CLI and Telegram bot</li>
-<li><strong><a href="https://github.com/kungfusaini/spellcheck-mode.nvim" target="_blank" rel="noopener">Spellcheck Mode</a></strong> <span style="color:var(--light-grey)">[Lua, Neovim]</span><br>Neovim plugin for faster spell correction</li>
-<li><strong><a href="https://arcanecodex.dev" target="_blank" rel="noopener">Arcane Codex Blog</a></strong> <span style="color:var(--light-grey)">[JavaScript, CSS, HTML]</span><br>Personal blog built with Hugo</li>
-<li><strong><a href="https://sumeetsaini.com" target="_blank" rel="noopener">Individual Portfolio</a></strong> <span style="color:var(--light-grey)">[JavaScript, CSS, HTML]</span><br>Personal portfolio with Three.js and 3D navigation</li>
-<li><strong>Live Market Data Handler</strong> <span style="color:var(--light-grey)">[C++, Python, Linux]</span><br>Low-latency feed handler for Asian stock exchange</li>
-<li><strong><a href="https://masspeople.org" target="_blank" rel="noopener">MassPeople Digital Platform</a></strong> <span style="color:var(--light-grey)">[JavaScript, CSS, HTML]</span><br>Platform for autonomous maritime operations standards</li>
-<li><strong>SkySmart</strong> <span style="color:var(--light-grey)">[Python, AWS Lambda, Prophet ML]</span><br>Airport parking optimization with ML forecasting</li>
-<li><strong><a href="https://github.com/kungfusaini/spotify-playlist-song-extractor" target="_blank" rel="noopener">Match-A-Mood Spotify Competition</a></strong> <span style="color:var(--light-grey)">[Python, Spotify API, Machine Learning]</span><br>Kaggle competition for music emotion recognition</li>
-<li><strong>KCL AI Society Welcome Demo</strong> <span style="color:var(--light-grey)">[Python, Stable Diffusion, Hugging Face]</span><br>Stable Diffusion AI art demo for society fair</li>
-<li><strong>KCL AI Society Events</strong> <span style="color:var(--light-grey)">[Event Organizing, Public Speaking]</span><br>Hosted prominent AI events with industry speakers</li>
-<li><strong>IBM Wild Blue</strong> <span style="color:var(--light-grey)">[Python, React, Leaflet Maps]</span><br>Biodiversity tracking system with gamification</li>
-<li><strong>IBM RAPID</strong> <span style="color:var(--light-grey)">[Python, React, Cisco DNA API]</span><br>Rogue wireless AP detection and geolocation</li>
-<li><strong><a href="https://thelondonfinancial.com/scitech/attacks-on-deep-learning-models" target="_blank" rel="noopener">Published Technical Writer</a></strong> <span style="color:var(--light-grey)">[Technical Writing, AI]</span><br>AI articles in The London Financial</li>
-</ul>
+<details>
+  <summary><strong>AI Agent Workforce</strong> <code>Python</code> <code>AI Agents</code> <code>Docker</code> <code>Nginx</code></summary>
+  <p>Custom AI agent system with specialized sub-agents, powered by nanobot and deployed on a self-hosted VPS. Includes specialized sub-agents for schedule planning, research, obsidian management, and an opencode instance accessible from my phone.</p>
+</details>
+<details>
+  <summary><strong>Custom Hosting Infrastructure</strong> <code>Docker</code> <code>Nginx</code> <code>Github Actions</code> <code>Python</code></summary>
+  <p>Docker-based hosting infrastructure for my VPS with Nginx reverse proxy, systemd service management, and docker-compose setups. Features a robust CI/CD pipeline via GitHub Actions, hosting all websites, email domains, and the Vulkan API.</p><p><a href="https://github.com/kungfusaini/aether" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
+<details>
+  <summary><strong>Reliq Suite of Sites</strong> <code>HTML</code> <code>CSS</code> <code>JavaScript</code> <code>Docker</code></summary>
+  <p>A unified brand presence for Reliq Studios (web development) and Reliq Labs (backend/AI services) with an umbrella site at reliq.digital. Each site clearly communicates what each arm of the business offers.</p><p><a href="https://reliq.digital" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
+<details>
+  <summary><strong>AI Model Training</strong> <code>Python</code> <code>LLMs</code> <code>AI</code></summary>
+  <p>Helping both established tech companies and stealth startups improve their frontier models. Work involves breaking models to find poor responses, then developing ideal responses for training. A blend of creative and technical work on super niche programming problems.</p>
+</details>
+<details>
+  <summary><strong>Dotfiles</strong> <code>Shell</code> <code>Zsh</code> <code>Nix</code></summary>
+  <p>A complex configuration system for my development environment including .zshenv, stow-managed configs, custom scripts, nix configurations, and a finely-tuned Neovim setup covering documentation, coding, and everything in between.</p><p><a href="https://github.com/kungfusaini/dotfiles" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
+<details>
+  <summary><strong>Project Grabber</strong> <code>JavaScript</code></summary>
+  <p>A lightweight JavaScript library that fetches project write-ups from the Vulkan API and displays them across multiple websites. Enables centralized project management with filtering, avoiding content duplication across codebases.</p><p><a href="https://github.com/kungfusaini/project-grabber" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
+<details>
+  <summary><strong>Blueprint Builders Website</strong> <code>JavaScript</code> <code>CSS</code> <code>HTML</code> <code>Hugo</code></summary>
+  <p>A conversion-focused client website for a premium construction company. Built with Hugo and Decap CMS for easy content management, featuring dynamic project carousels, lead-generation contact systems, and a full blog. Blueprint-themed design throughout.</p><p><a href="https://blueprintbuilder.co.uk" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
+<details>
+  <summary><strong>Goblin</strong> <code>Python</code> <code>Streamlit</code></summary>
+  <p>A finance tracking system that replaced my Excel workflow. Financial data is stored via the 'Well' on my VPS (inputted via CLI or Telegram bot) and visualized through a Streamlit dashboard for budgeting and financial tracking.</p><p><a href="https://github.com/kungfusaini/goblin" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
+<details>
+  <summary><strong>Bucket and Well</strong> <code>Python</code> <code>JavaScript</code> <code>Rest</code></summary>
+  <p>A quick-capture system for ideas and resources. 'Well' stores data on my VPS behind the Vulkan API. 'Bucket' provides a CLI tool for desktop and a Telegram bot for mobile, making it easy to capture and revisit thoughts from anywhere.</p><p><a href="https://github.com/kungfusaini/bucket" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
+<details>
+  <summary><strong>Spellcheck Mode</strong> <code>Lua</code> <code>Neovim</code></summary>
+  <p>A Neovim plugin that enables a custom spell checker mode for faster spelling correction. Written in Lua, integrates deeply with Neovim's spell-checking for an improved editing experience.</p><p><a href="https://github.com/kungfusaini/spellcheck-mode.nvim" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
+<details>
+  <summary><strong>Arcane Codex Blog</strong> <code>JavaScript</code> <code>CSS</code> <code>HTML</code> <code>Hugo</code></summary>
+  <p>A personal blog built with Hugo, themed around 'Techno-Sorcery'. Features smooth animations for post filtering, custom emphasis styles, and a unique visual identity bridging editorial design with a dark aesthetic.</p><p><a href="https://arcanecodex.dev" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
+<details>
+  <summary><strong>Individual Portfolio</strong> <code>JavaScript</code> <code>CSS</code> <code>HTML</code> <code>Three JS</code></summary>
+  <p>This website! A unique personal portfolio with Three.js 3D navigation, complex animations, and a distinctive interactive experience built from scratch.</p><p><a href="https://sumeetsaini.com" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
+<details>
+  <summary><strong>Live Market Data Handler</strong> <code>C++</code> <code>Python</code> <code>Linux</code></summary>
+  <p>Led development of a market data feed handler for a major Asian stock exchange at Mako Trading. Handles aggregated and tick-by-tick data with decompression, gap recovery via UDP/TCP, and a robust orderbook. Full ownership from broker talks to production deployment.</p>
+</details>
+<details>
+  <summary><strong>MassPeople Digital Platform</strong> <code>JavaScript</code> <code>CSS</code> <code>HTML</code></summary>
+  <p>A high-performance digital platform for the world leaders in autonomous maritime operations standards. Bridges complex academic research with industry application, providing a secure environment for global collaboration.</p><p><a href="https://masspeople.org" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
+<details>
+  <summary><strong>SkySmart</strong> <code>Python</code> <code>AWS Lambda</code> <code>Prophet ML</code> <code>AWS S3</code></summary>
+  <p>Built in partnership with Bristol Airport and AWS. An airport parking optimization system with real-time analytics dashboard, ML demand forecasting (89% accuracy 7 days ahead), and automated data pipeline from Azure API to AWS S3/Lambda/DynamoDB.</p>
+</details>
+<details>
+  <summary><strong>Match-A-Mood Spotify Competition</strong> <code>Python</code> <code>Spotify API</code> <code>Machine Learning</code> <code>Random Forest</code></summary>
+  <p>Organized the KCL AI Society Kaggle competition for music emotion recognition. Built a Spotify data extraction tool pulling from the million playlist dataset. Winning solution used Random Forest with artist-based modeling.</p><p><a href="https://github.com/kungfusaini/spotify-playlist-song-extractor" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
+<details>
+  <summary><strong>KCL AI Society Welcome Demo</strong> <code>Python</code> <code>Stable Diffusion</code> <code>Hugging Face</code> <code>Flask</code></summary>
+  <p>A web app for the KCL AI Society welcome fair. Students could input their email and generate AI art via Stable Diffusion on Hugging Face. Images were emailed and displayed on site. Brought huge crowds and sign-ups during the early gen AI wave.</p>
+</details>
+<details>
+  <summary><strong>KCL AI Society Events</strong> <code>Event Organizing</code> <code>Public Speaking</code></summary>
+  <p>As President of KCL AI Society, organized and hosted high-profile AI events featuring Dr Tommy Thompson (AI in Games), NVIDIA, and Dr David Watson (AI explainability). Brought 100+ attendees and established the society as an AI learning hub.</p>
+</details>
+<details>
+  <summary><strong>IBM Wild Blue</strong> <code>Python</code> <code>React</code> <code>Leaflet Maps</code></summary>
+  <p>1st place at IBM LabHack 2022. A biodiversity tracking system using gamification — scan flora/fauna with your phone camera, AI identifies species and health, earn 'Wild Points' for rewards like tree saplings. Real-time dashboard with interactive map and species alerts.</p>
+</details>
+<details>
+  <summary><strong>IBM RAPID</strong> <code>Python</code> <code>React</code> <code>Cisco DNA API</code> <code>ML</code></summary>
+  <p>Industry-first rogue wireless access point detection system at IBM. Built backend with Python/Cisco DNA Center API and a React dashboard. Uses ML-based device classification and triangulation to locate unauthorized APs. Absorbed into IBM SevOne product for commercialization.</p>
+</details>
+<details>
+  <summary><strong>Published Technical Writer</strong> <code>Technical Writing</code> <code>AI</code></summary>
+  <p>Featured writer for The London Financial, a leading UK financial publication. Wrote technical articles on AI and deep learning for their Science & Tech section, including 'Attacks on Deep Learning Models' and 'Self-Driving Vehicles: Where Are They?'</p><p><a href="https://thelondonfinancial.com/scitech/attacks-on-deep-learning-models" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+</details>
 
 <p>
 Browse all projects on <a href="https://github.com/kungfusaini" target="_blank" rel="noopener">
