@@ -19,6 +19,42 @@
   <script>
 (function() {
   document.documentElement.classList.add('js');
+  window._loadProgress = 0;
+  window._loadTarget = 0;
+  var _displayed = 0;
+  function renderProgress() {
+    var el = document.getElementById('cool-loading-pct');
+    if (el) el.textContent = Math.round(_displayed);
+  }
+  // Smoothly interpolate displayed progress toward target each frame.
+  (function tick() {
+    var diff = window._loadTarget - _displayed;
+    if (Math.abs(diff) > 0.05) {
+      _displayed += diff * 0.08;
+      window._loadProgress = _displayed;
+      renderProgress();
+    }
+    requestAnimationFrame(tick);
+  })();
+  // Fake creep up to 25% while three.js + shape.js are downloading and parsing
+  // (no real signal available during this window).
+  var _creep = setInterval(function() {
+    if (window._loadTarget < 25) {
+      window._loadTarget = Math.min(25, window._loadTarget + 0.6);
+    } else {
+      clearInterval(_creep);
+    }
+  }, 100);
+  window.updateLoadProgress = function(pct) {
+    if (pct > window._loadTarget) window._loadTarget = pct;
+    if (pct >= 100) {
+      window._loadTarget = 100;
+      // Snap to 100 instantly on completion
+      _displayed = 100;
+      window._loadProgress = 100;
+      renderProgress();
+    }
+  };
   var c = navigator.connection;
   var ct = c ? c.effectiveType : 'unknown';
   var isSlow = c && (c.saveData || ct === 'slow-2g' || ct === '2g' || ct === '3g');
@@ -36,6 +72,7 @@
     if (closeBtn) closeBtn.click();
     document.documentElement.classList.add('simple-mode');
     document.documentElement.classList.remove('slow-connection');
+    document.documentElement.classList.remove('loading-cool');
     document.documentElement.style.overflow = '';
     document.body.style.overflow = '';
     if (window.completeTypewriterNow) window.completeTypewriterNow();
@@ -44,7 +81,30 @@
     }, 600);
   };
   window.switchToCool = function() {
-    document.documentElement.classList.remove('simple-mode');
+    var inSimple = document.documentElement.classList.contains('simple-mode');
+    if (!window._introComplete) {
+      document.documentElement.classList.add('loading-cool');
+      var el = document.getElementById('cool-loading-pct');
+      if (el) el.textContent = Math.round(window._loadProgress || 0);
+    }
+    if (inSimple) {
+      document.documentElement.classList.add('cool-transitioning');
+      setTimeout(function() {
+        document.documentElement.classList.remove('simple-mode');
+        document.documentElement.classList.remove('cool-transitioning');
+        var box = document.querySelector('.three-box');
+        if (box) {
+          box.style.opacity = '0';
+          requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+              box.style.opacity = '1';
+            });
+          });
+        }
+      }, 400);
+    } else {
+      document.documentElement.classList.remove('simple-mode');
+    }
   };
   window.toggleMode = function() {
     if (document.documentElement.classList.contains('simple-mode')) {
@@ -277,6 +337,23 @@
       max-width: 100%;
       display: block;
     }
+    #cool-loading {
+      display: none;
+    }
+    .js.loading-cool #cool-loading {
+      display: block;
+      position: fixed;
+      top: calc(50% + clamp(2.5rem, 5vw, 4rem));
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--cream);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      opacity: 0.6;
+      z-index: 5;
+      pointer-events: none;
+      white-space: nowrap;
+    }
     #mode-toggle {
       display: none;
     }
@@ -370,9 +447,16 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
+    @keyframes fadeOutSimple {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
     .js.simple-mode #fallback-content {
       display: block;
       animation: fadeInSimple 0.6s ease forwards;
+    }
+    .js.simple-mode.cool-transitioning #fallback-content {
+      animation: fadeOutSimple 0.4s ease forwards;
     }
     .js.simple-mode .three-box,
     .js.simple-mode .shape-guidance {
@@ -507,6 +591,7 @@
       <span>Slow internet?</span>
       <button onclick="switchToSimple()">View simple version</button>
     </div>
+    <div id="cool-loading">Loading <span id="cool-loading-pct">0</span>%</div>
     <button id="mode-toggle" type="button" onclick="toggleMode()">
       <span class="mode-cool">cool</span>
       <span class="sep">/</span>

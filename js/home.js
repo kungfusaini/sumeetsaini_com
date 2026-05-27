@@ -105,6 +105,8 @@ window.completeIntro = (container) => {
 	window._introComplete = true;
 	clearTimeout(window._slowTimer);
 	document.documentElement.classList.remove('slow-connection');
+	document.documentElement.classList.remove('loading-cool');
+	if (window.updateLoadProgress) window.updateLoadProgress(100);
 	// If the user already switched to simple mode while 3D was loading,
 	// the name is already in its final state — don't replay the intro.
 	if (document.documentElement.classList.contains('simple-mode')) {

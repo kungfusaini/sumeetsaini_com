@@ -96,10 +96,20 @@ export async function init() {
 	shapeState.scene.add(directionalLight);
 
 	// Load textures with error handling and fallback
+	if (window.updateLoadProgress) window.updateLoadProgress(30);
+	let loadedCount = 0;
+	const totalFaces = FACES.length;
+	const reportProgress = () => {
+		loadedCount += 1;
+		if (window.updateLoadProgress) {
+			window.updateLoadProgress(30 + (loadedCount / totalFaces) * 65);
+		}
+	};
 	const texturePromises = FACES.map((face) => {
 		return new Promise((resolve) => {
 			const onLoad = (texture) => {
 				texture.colorSpace = THREE.SRGBColorSpace;
+				reportProgress();
 				resolve(texture);
 			};
 			const onError = () => {
@@ -112,6 +122,7 @@ export async function init() {
 				ctx.fillRect(0, 0, 256, 256);
 				const fallbackTexture = new THREE.CanvasTexture(canvas);
 				fallbackTexture.colorSpace = THREE.SRGBColorSpace;
+				reportProgress();
 				resolve(fallbackTexture);
 			};
 			loader.load(face.image, onLoad, undefined, onError);
