@@ -109,8 +109,10 @@ window.completeIntro = (container) => {
 	if (window.updateLoadProgress) window.updateLoadProgress(100);
 	// If the user already switched to simple mode while 3D was loading,
 	// the name is already in its final state — don't replay the intro.
+	// Flag the cool toggle as ready so it can flash + show a dot.
 	if (document.documentElement.classList.contains('simple-mode')) {
 		if (container) container.style.opacity = "1";
+		document.documentElement.classList.add('cool-ready');
 		return;
 	}
 	// Only proceed if typing is complete
