@@ -42,6 +42,15 @@ const typeInterval = setInterval(() => {
 	}
 }, TYPE_SPEED);
 
+// Snap typewriter to its final state (used when switching to simple mode early)
+window.completeTypewriterNow = () => {
+	clearInterval(typeInterval);
+	textEl.textContent = NAME;
+	typingComplete = true;
+	cursorEl.classList.add("hide");
+	nameEl.classList.add("top");
+};
+
 function moveToTop(container) {
 	cursorEl.classList.add("hide");
 
@@ -74,6 +83,7 @@ function moveToTop(container) {
 				nameEl.style.transition = "";
 				content.classList.remove("hidden");
 				if (container) container.style.opacity = "1";
+				document.documentElement.classList.add("intro-done");
 			}, 300);
 		}, 300);
 		return;
@@ -86,6 +96,7 @@ function moveToTop(container) {
 		if (container) {
 			container.style.opacity = "1";
 		}
+		document.documentElement.classList.add("intro-done");
 	}, 600);
 }
 
