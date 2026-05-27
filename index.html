@@ -509,6 +509,20 @@
     .js.simple-mode #fallback-content {
       padding-top: 4.5rem;
     }
+    .js.simple-mode::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3.8rem;
+      background: var(--dark-grey);
+      z-index: 15;
+      pointer-events: none;
+    }
+    .js.simple-mode #name {
+      z-index: 16;
+    }
     .js.simple-mode,
     .js.simple-mode body {
       display: block;
