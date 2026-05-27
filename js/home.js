@@ -105,6 +105,12 @@ window.completeIntro = (container) => {
 	window._introComplete = true;
 	clearTimeout(window._slowTimer);
 	document.documentElement.classList.remove('slow-connection');
+	// If the user already switched to simple mode while 3D was loading,
+	// the name is already in its final state — don't replay the intro.
+	if (document.documentElement.classList.contains('simple-mode')) {
+		if (container) container.style.opacity = "1";
+		return;
+	}
 	// Only proceed if typing is complete
 	if (typingComplete) {
 		moveToTop(container);
