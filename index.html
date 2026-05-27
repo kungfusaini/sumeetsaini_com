@@ -44,6 +44,13 @@
   window.switchToCool = function() {
     document.documentElement.classList.remove('simple-mode');
   };
+  window.toggleMode = function() {
+    if (document.documentElement.classList.contains('simple-mode')) {
+      window.switchToCool();
+    } else {
+      window.switchToSimple();
+    }
+  };
   window.dismissBanner = function() {
     document.documentElement.classList.remove('slow-connection');
   };
@@ -276,27 +283,23 @@
       top: 1.5rem;
       right: 2rem;
       z-index: 20;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      font-family: var(--font-mono);
-      font-size: clamp(0.9rem, 0.5vw + 0.7rem, 1.1rem);
-      opacity: 0;
-      animation: fadeInSimple 0.5s ease forwards;
-    }
-    #mode-toggle button {
       background: none;
       border: none;
-      padding: 0;
+      padding: 0.3rem 0.5rem;
       cursor: pointer;
-      font-family: inherit;
-      font-size: inherit;
+      font-family: var(--font-mono);
+      font-size: clamp(0.9rem, 0.5vw + 0.7rem, 1.1rem);
       color: var(--cream);
-      opacity: 0.55;
-      transition: opacity 0.2s ease, color 0.2s ease;
+      opacity: 0;
+      animation: fadeInSimple 0.5s ease forwards;
+      transition: opacity 0.2s ease;
     }
-    #mode-toggle button:hover {
-      opacity: 1;
+    #mode-toggle .mode-cool,
+    #mode-toggle .mode-simple {
+      transition: color 0.4s ease, opacity 0.4s ease;
     }
     #mode-toggle .sep {
       color: var(--cream);
@@ -305,6 +308,10 @@
     #mode-toggle .mode-cool {
       color: var(--orange);
       opacity: 1;
+    }
+    #mode-toggle .mode-simple {
+      color: var(--cream);
+      opacity: 0.55;
     }
     .js.simple-mode #mode-toggle .mode-cool {
       color: var(--cream);
@@ -498,11 +505,11 @@
       <span>Slow internet?</span>
       <button onclick="switchToSimple()">View simple version</button>
     </div>
-    <div id="mode-toggle">
-      <button class="mode-cool" onclick="switchToCool()">cool</button>
+    <button id="mode-toggle" type="button" onclick="toggleMode()">
+      <span class="mode-cool">cool</span>
       <span class="sep">/</span>
-      <button class="mode-simple" onclick="switchToSimple()">simple</button>
-    </div>
+      <span class="mode-simple">simple</span>
+    </button>
     <h1 id="name" class="center-stage">
      <span class="text"></span><span class="cursor">|</span>
    </h1>
