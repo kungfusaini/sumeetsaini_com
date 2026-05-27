@@ -70,6 +70,7 @@
   window.switchToSimple = function() {
     var closeBtn = document.getElementById('close-content');
     if (closeBtn) closeBtn.click();
+    document.documentElement.classList.add('is-simple');
     document.documentElement.classList.add('simple-mode');
     document.documentElement.classList.remove('slow-connection');
     document.documentElement.classList.remove('loading-cool');
@@ -82,6 +83,7 @@
   };
   window.switchToCool = function() {
     var inSimple = document.documentElement.classList.contains('simple-mode');
+    document.documentElement.classList.remove('is-simple');
     if (!window._introComplete) {
       document.documentElement.classList.add('loading-cool');
       var el = document.getElementById('cool-loading-pct');
@@ -337,6 +339,38 @@
       max-width: 100%;
       display: block;
     }
+    #popup-loading-spinner {
+      display: none;
+    }
+    @keyframes popupSpin {
+      to { transform: rotate(360deg); }
+    }
+    .js #popup-loading-spinner {
+      display: block;
+      position: fixed;
+      top: calc(50% - 1.25rem);
+      right: max(5rem, calc(25% - 1.25rem));
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 2px solid rgba(251, 241, 199, 0.15);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+      animation: popupSpin 0.9s linear infinite;
+      z-index: 15;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .js.popup-loading #popup-loading-spinner {
+      opacity: 1;
+    }
+    @media (max-width: 600px) {
+      .js #popup-loading-spinner {
+        top: auto;
+        bottom: 25vh;
+        right: calc(50% - 1.25rem);
+      }
+    }
     #cool-loading {
       display: none;
     }
@@ -357,6 +391,10 @@
     #mode-toggle {
       display: none;
     }
+    @keyframes fadeInToggle {
+      from { opacity: 0; }
+      to { opacity: 0.65; }
+    }
     .js.intro-done #mode-toggle {
       position: fixed;
       top: 1.5rem;
@@ -373,8 +411,11 @@
       font-size: clamp(0.9rem, 0.5vw + 0.7rem, 1.1rem);
       color: var(--cream);
       opacity: 0;
-      animation: fadeInSimple 0.5s ease forwards;
+      animation: fadeInToggle 0.5s ease forwards;
       transition: opacity 0.2s ease;
+    }
+    .js.intro-done #mode-toggle:hover {
+      opacity: 1;
     }
     #mode-toggle .mode-cool,
     #mode-toggle .mode-simple {
@@ -392,11 +433,11 @@
       color: var(--cream);
       opacity: 0.55;
     }
-    .js.simple-mode #mode-toggle .mode-cool {
+    .js.is-simple #mode-toggle .mode-cool {
       color: var(--cream);
       opacity: 0.55;
     }
-    .js.simple-mode #mode-toggle .mode-simple {
+    .js.is-simple #mode-toggle .mode-simple {
       color: var(--orange);
       opacity: 1;
     }
@@ -592,6 +633,7 @@
       <button onclick="switchToSimple()">View simple version</button>
     </div>
     <div id="cool-loading">Loading <span id="cool-loading-pct">0</span>%</div>
+    <div id="popup-loading-spinner" aria-hidden="true"></div>
     <button id="mode-toggle" type="button" onclick="toggleMode()">
       <span class="mode-cool">cool</span>
       <span class="sep">/</span>

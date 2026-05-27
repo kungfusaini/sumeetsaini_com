@@ -29,6 +29,10 @@ export async function showContent(contentPath, title) {
 		await fadeOutPopup();
 	}
 
+	// Show a standalone loading spinner overlay while content is fetched.
+	// The popup itself stays hidden until the content is ready.
+	document.documentElement.classList.add("popup-loading");
+
 	try {
 		let content;
 
@@ -127,6 +131,9 @@ export async function showContent(contentPath, title) {
 		console.error("Error loading content:", error);
 		main.innerHTML = `${closeButton}<h2>${title}</h2><p>Content could not be loaded.</p>`;
 	}
+
+	// Content is loaded — hide the loading spinner overlay.
+	document.documentElement.classList.remove("popup-loading");
 
 	// Ensure popup is visible (but still opacity 0) for layout calculation
 	main.style.visibility = "visible";
