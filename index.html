@@ -32,6 +32,8 @@
     }, 5000);
   }
   window.switchToSimple = function() {
+    var closeBtn = document.getElementById('close-content');
+    if (closeBtn) closeBtn.click();
     document.documentElement.classList.add('simple-mode');
     document.documentElement.classList.remove('slow-connection');
     document.documentElement.style.overflow = '';
