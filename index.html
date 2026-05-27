@@ -360,6 +360,13 @@
     #fallback-content button:hover {
       background: var(--orange);
     }
+    #fallback-content #fallback-contact-result {
+      margin-top: 1rem;
+      padding: 1rem;
+      border: 1px solid var(--orange);
+      color: var(--orange);
+      font-family: var(--font-mono);
+    }
     #fallback-content img {
       max-width: 100%;
     }
@@ -791,7 +798,7 @@ Thanks for stopping by my cool little digital space, see you around!
 <h2>Contact</h2>
 <p>Get in touch via <a href="mailto:sumeet@sumeetsaini.com">sumeet@sumeetsaini.com</a> or use the form below.</p>
 
-<form action="/vulkan/web_contact" method="POST">
+<form id="fallback-contact-form" action="/vulkan/web_contact" method="POST">
 <input type="hidden" name="origin" value="sumeetsaini">
 <input type="hidden" name="botcheck" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px">
 <input type="text" name="name" required autocomplete="name" placeholder="Name">
@@ -799,6 +806,48 @@ Thanks for stopping by my cool little digital space, see you around!
 <textarea name="message" required rows="5" placeholder="Your message..."></textarea>
 <button type="submit">Send Message</button>
 </form>
+<div id="fallback-contact-result" hidden></div>
+<script>
+(function() {
+  var form = document.getElementById('fallback-contact-form');
+  var result = document.getElementById('fallback-contact-result');
+  if (!form) return;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var btn = form.querySelector('button[type="submit"]');
+    var originalLabel = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    fetch(form.action, {
+      method: 'POST',
+      body: new URLSearchParams(new FormData(form)).toString(),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+      }
+    })
+      .then(function(res) { return res.json().catch(function() { return {}; }).then(function(data) { return { ok: res.ok, data: data }; }); })
+      .then(function(r) {
+        if (r.ok) {
+          form.hidden = true;
+          result.hidden = false;
+          result.textContent = "Thanks for reaching out — I'll get back to you soon.";
+        } else {
+          btn.disabled = false;
+          btn.textContent = originalLabel;
+          result.hidden = false;
+          result.textContent = (r.data && r.data.error) || "Something went wrong. Please email me directly.";
+        }
+      })
+      .catch(function() {
+        btn.disabled = false;
+        btn.textContent = originalLabel;
+        result.hidden = false;
+        result.textContent = "Network error. Please email me directly.";
+      });
+  });
+})();
+</script>
      </div>
 
       <div id="projects" class="section">
