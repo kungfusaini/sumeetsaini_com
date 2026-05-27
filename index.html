@@ -169,6 +169,22 @@
       cursor: pointer;
       transition: color 0.3s ease;
     }
+    @media (max-width: 600px) {
+      #fallback-content .fb-nav {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem 1rem;
+        justify-items: start;
+      }
+      #fallback-content .fb-nav label {
+        margin: 0;
+        font-size: 0.9rem;
+      }
+      #fallback-content details summary strong::after {
+        content: "\A";
+        white-space: pre;
+      }
+    }
     #fallback-content:has(#sel-about:checked) .fb-nav label[for="sel-about"],
     #fallback-content:has(#sel-contact:checked) .fb-nav label[for="sel-contact"],
     #fallback-content:has(#sel-blog:checked) .fb-nav label[for="sel-blog"],
@@ -232,10 +248,13 @@
       display: none;
       margin: 2rem 0 2.5rem 0;
       padding: 0 0 2rem 0;
+    }
+    #fallback-content #now {
       border-bottom: 1px solid var(--light-grey);
     }
-    #fallback-content .section:last-child {
-      border-bottom: none;
+    @keyframes sectionFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     #sel-about:checked ~ #about,
     #sel-contact:checked ~ #contact,
@@ -243,12 +262,15 @@
     #sel-now:checked ~ #now,
     #sel-projects:checked ~ #projects {
       display: block;
-    }
-    #fallback-content #now {
-      border-bottom: none;
+      animation: sectionFadeIn 0.4s ease;
     }
     #fallback-content details {
       margin-bottom: 0.25rem;
+    }
+    #fallback-content #projects > p {
+      border-top: 1px solid var(--light-grey);
+      padding-top: 1.5rem;
+      margin-top: 1.5rem;
     }
     #fallback-content details[open] {
       margin-bottom: 0.75rem;
@@ -271,9 +293,6 @@
       margin-bottom: 0.5rem;
     }
     #fallback-content details p {
-      margin-left: 1.2rem;
-    }
-    #fallback-content details a {
       margin-left: 1.2rem;
     }
     #fallback-content h2 {
@@ -338,6 +357,9 @@
     #fallback-content iframe {
       max-width: 100%;
       display: block;
+    }
+    #fallback-content h4 + iframe {
+      margin-top: 1rem;
     }
     #popup-loading-spinner {
       display: none;
@@ -549,6 +571,9 @@
       height: 1rem;
       vertical-align: -0.2rem;
     }
+    #fallback-content a:has(.link-icon) {
+      white-space: nowrap;
+    }
     .three-box, .shape-guidance, .cursor {
       display: none;
     }
@@ -674,10 +699,10 @@
       <h1>Sumeet Saini</h1>
       <div class="fb-nav">
         <label for="sel-about">About</label>
-        <label for="sel-contact">Contact</label>
-        <label for="sel-blog">Blog</label>
         <label for="sel-now">Now</label>
         <label for="sel-projects">Projects</label>
+        <label for="sel-blog">Blog</label>
+        <label for="sel-contact">Contact</label>
       </div>
 
       <div id="about" class="section">
@@ -832,9 +857,9 @@ Thanks for stopping by my cool little digital space, see you around!
 </details>
 
 <p>
-Browse all projects on <a href="https://github.com/kungfusaini" target="_blank" rel="noopener">
+Check out my <a href="https://github.com/kungfusaini" target="_blank" rel="noopener">
   <img src="/assets/link_icons/github.svg" alt="Github" class="link-icon"> GitHub
-</a> or use the interactive version of this site for details and media.
+</a> to see what I'm up to, or use the "cool" version of the site for details and media.
 </p>
      </div>
 
