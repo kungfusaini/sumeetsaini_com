@@ -108,8 +108,9 @@ async function buildProjects() {
 			const longText = p.text?.sumeetsaini || p.description || "";
 			// Strip markdown-ish stuff lightly: keep the first paragraph.
 			const desc = escapeHtml(longText.split(/\n\s*\n/)[0].trim());
-			const link = p.link
-				? `<p><a href="${escapeHtml(p.link)}" target="_blank" rel="noopener">Visit Project &rarr;</a></p>`
+			const linkHref = p.link && p.link !== "null" ? p.link : null;
+			const link = linkHref
+				? `<p><a href="${escapeHtml(linkHref)}" target="_blank" rel="noopener">Visit Project &rarr;</a></p>`
 				: "";
 			return `<details>
   <summary><strong>${title}</strong>${tech ? " " + tech : ""}</summary>
