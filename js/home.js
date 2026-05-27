@@ -2,32 +2,16 @@ const NAME = "Sumeet Saini";
 const TYPE_SPEED = 100;
 const CURSOR_PAUSE = 1300;
 
-// Prefetch projects and blog in background for faster popup loading
+// Prefetch projects and blog data in background for faster popup loading
+// (Only fetches metadata — images/videos load on demand when user opens a project)
 (function prefetchAPIs() {
-	// Prefetch projects from vulkan API
 	fetch("https://vulkan.sumeetsaini.com/projects/")
 		.then((res) => res.json())
 		.then((data) => {
 			window._projectsCache = data;
-			// Also prefetch all project images in background
-			if (data.projects) {
-				data.projects.forEach((project) => {
-					if (project.image) {
-						const img = new Image();
-						img.src = project.image;
-					}
-					if (project.video) {
-						// Preload video metadata
-						const video = document.createElement("video");
-						video.preload = "metadata";
-						video.src = project.video;
-					}
-				});
-			}
 		})
 		.catch(() => {});
 
-	// Prefetch blog posts from arcanecodex
 	fetch("https://arcanecodex.dev/index.json")
 		.then((res) => res.json())
 		.then((data) => {
@@ -107,6 +91,9 @@ function moveToTop(container) {
 
 // Make function available globally for shape module to call
 window.completeIntro = (container) => {
+	window._introComplete = true;
+	clearTimeout(window._slowTimer);
+	document.documentElement.classList.remove('slow-connection');
 	// Only proceed if typing is complete
 	if (typingComplete) {
 		moveToTop(container);

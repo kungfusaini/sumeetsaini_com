@@ -15,12 +15,44 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-  <!-- Blocking script: marks page as JS-enabled before any rendering -->
-  <script>document.documentElement.classList.add('js');</script>
+  <!-- Blocking script: marks page as JS-enabled, detects slow connections, boots 3D -->
+  <script>
+(function() {
+  document.documentElement.classList.add('js');
+  var c = navigator.connection;
+  var ct = c ? c.effectiveType : 'unknown';
+  var isSlow = c && (c.saveData || ct === 'slow-2g' || ct === '2g' || ct === '3g');
+  if (location.search.includes('slow')) isSlow = true;
+  console.log('[speed] effectiveType: ' + ct + ', saveData: ' + (c ? c.saveData : 'n/a') + ', isSlow: ' + isSlow);
+  if (isSlow) {
+    window._slowTimer = setTimeout(function() {
+      if (!window._introComplete) {
+        document.documentElement.classList.add('slow-connection');
+      }
+    }, 5000);
+  }
+  window.switchToSimple = function() {
+    document.documentElement.classList.add('simple-mode');
+    document.documentElement.classList.remove('slow-connection');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+  };
+  window.dismissBanner = function() {
+    document.documentElement.classList.remove('slow-connection');
+  };
+  var s = document.createElement('script');
+  s.type = 'module';
+  s.src = 'js/shape.js';
+  document.head.appendChild(s);
+})();
+</script>
 
   <!-- Preconnect to external APIs for faster connection -->
   <link rel="preconnect" href="https://vulkan.sumeetsaini.com">
   <link rel="preconnect" href="https://arcanecodex.dev">
+
+  <!-- Preload font so it starts downloading before CSS is parsed -->
+  <link rel="preload" href="/fonts/ProFontIIx-subset.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Critical CSS (loaded synchronously) -->
   <link rel="stylesheet" href="css/main.css"/>
@@ -229,6 +261,63 @@
       max-width: 100%;
       display: block;
     }
+    .slow-banner {
+      position: fixed;
+      left: 50%;
+      top: calc(50% + clamp(2.5rem, 5vw, 4rem));
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--cream);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+    .slow-connection .slow-banner {
+      opacity: 0.6;
+      pointer-events: auto;
+    }
+    .slow-banner button {
+      background: none;
+      color: var(--cream);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .slow-banner button:hover {
+      color: var(--orange);
+    }
+    @keyframes fadeInSimple {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .js.simple-mode #fallback-content {
+      display: block;
+      animation: fadeInSimple 0.6s ease forwards;
+    }
+    .js.simple-mode .three-box,
+    .js.simple-mode .shape-guidance,
+    .js.simple-mode #name {
+      display: none;
+    }
+    .js.simple-mode,
+    .js.simple-mode body {
+      display: block;
+      height: auto;
+      min-height: 100vh;
+      overflow: visible;
+      overflow-y: auto;
+      overscroll-behavior: auto;
+    }
     #fallback-content .face-image {
       width: clamp(100px, 12vw, 160px);
       height: clamp(100px, 12vw, 160px);
@@ -338,8 +427,12 @@
 
  </head>
 
- <body>
-   <h1 id="name" class="center-stage">
+  <body>
+    <div class="slow-banner">
+      <span>Slow internet?</span>
+      <button onclick="switchToSimple()">View simple version</button>
+    </div>
+    <h1 id="name" class="center-stage">
      <span class="text"></span><span class="cursor">|</span>
    </h1>
 
@@ -890,7 +983,6 @@ Other than that, no major work updates. My focus is on the startup and AI traini
    </div>
 
    <main id="content" class="hidden"></main>
-   <script type="module" src="js/shape.js"></script>
    <script src="js/home.js"></script>
 </body>
 </html>
