@@ -225,6 +225,7 @@
       font-size: 0.85rem;
       cursor: pointer;
     }
+    /* BEGIN:fallback-now-css */
     #fallback-content:has(#sel-now-2025-10:checked) .now-month-nav label[for="sel-now-2025-10"],
     #fallback-content:has(#sel-now-2025-11:checked) .now-month-nav label[for="sel-now-2025-11"],
     #fallback-content:has(#sel-now-2025-12:checked) .now-month-nav label[for="sel-now-2025-12"],
@@ -245,6 +246,7 @@
     #fallback-content:has(#sel-now-2026-05:checked) #now-2026-05 {
       display: block;
     }
+/* END:fallback-now-css */
     .section-selector {
       position: absolute;
       opacity: 0;
@@ -717,6 +719,7 @@
       <input type="radio" name="section" id="sel-blog" class="section-selector">
       <input type="radio" name="section" id="sel-now" class="section-selector">
       <input type="radio" name="section" id="sel-projects" class="section-selector">
+      <!-- BEGIN:fallback-now-radios -->
       <input type="radio" name="now-month" id="sel-now-2025-10" class="now-month-selector">
       <input type="radio" name="now-month" id="sel-now-2025-11" class="now-month-selector">
       <input type="radio" name="now-month" id="sel-now-2025-12" class="now-month-selector">
@@ -725,6 +728,7 @@
       <input type="radio" name="now-month" id="sel-now-2026-03" class="now-month-selector">
       <input type="radio" name="now-month" id="sel-now-2026-04" class="now-month-selector">
       <input type="radio" name="now-month" id="sel-now-2026-05" class="now-month-selector" checked>
+<!-- END:fallback-now-radios -->
       <h1>Sumeet Saini</h1>
       <div class="fb-nav">
         <label for="sel-about">About</label>
@@ -800,90 +804,113 @@ Thanks for stopping by my cool little digital space, see you around!
       <div id="projects" class="section">
 <h2>Projects</h2>
 
+<!-- BEGIN:fallback-projects -->
 <details>
-  <summary><strong>AI Agent Workforce</strong> <code>Python</code> <code>AI Agents</code> <code>Docker</code> <code>Nginx</code></summary>
-  <p>Custom AI agent system with specialized sub-agents, powered by nanobot and deployed on a self-hosted VPS. Includes specialized sub-agents for schedule planning, research, obsidian management, and an opencode instance accessible from my phone.</p>
+  <summary><strong>AI Agent Workforce</strong> <code>Python</code> <code>AI Agents</code> <code>Docker</code> <code>Nginx</code> <code>Systemd</code></summary>
+  <p>Argus is my custom AI agent system featuring specialized sub-agents. I set up this system from scratch on a VPS and it's mostly using nanobot as the core agent technology. Not only do I have agents running to assist me with my daily affairs (schedule planning, research tasks, obsidian vault management etc), but I also have an opencode instance that I can interact with from my phone. My productivity has improved immensely now that I essentially have a team of employees around me, and I can talk to them wherever and whenever.</p>
 </details>
 <details>
   <summary><strong>Custom Hosting Infrastructure</strong> <code>Docker</code> <code>Nginx</code> <code>Github Actions</code> <code>Python</code></summary>
-  <p>Docker-based hosting infrastructure for my VPS with Nginx reverse proxy, systemd service management, and docker-compose setups. Features a robust CI/CD pipeline via GitHub Actions, hosting all websites, email domains, and the Vulkan API.</p><p><a href="https://github.com/kungfusaini/aether" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <p>I built Aether, a Docker-based hosting infrastructure for my VPS. It includes Nginx reverse proxy configuration, systemd service management, and docker-compose setups for various services I run. It has a robust testing and deployment pipeline via GitHub Actions and Workflows. It hosts all my websites, email domains, my personal API Vulkan and a lot more. It's been crucial for managing all the online stuff I do, and really is the backbone of my digital life. Check it out [here](https://github.com/kungfusaini/aether)!</p>
+  <p><a href="null" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
-  <summary><strong>Reliq Suite of Sites</strong> <code>HTML</code> <code>CSS</code> <code>JavaScript</code> <code>Docker</code></summary>
-  <p>A unified brand presence for Reliq Studios (web development) and Reliq Labs (backend/AI services) with an umbrella site at reliq.digital. Each site clearly communicates what each arm of the business offers.</p><p><a href="https://reliq.digital" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <summary><strong>Reliq Suite of Sites</strong> <code>HTML</code> <code>CSS</code> <code>JavaScript</code> <code>Docker</code> <code>Nginx</code></summary>
+  <p>I built the Reliq suite of site to showcase both my businesses - [Reliq Studios](https://reliqstudios.com) for web development and [Reliq Labs](https://reliqlabs.com) for backend and AI services. I also built an [umbrella site](https://reliq.digital). It was important to have a unified brand presence that could clearly communicate what each arm of my business offers.</p>
+  <p><a href="https://reliq.digital" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>AI Model Training</strong> <code>Python</code> <code>LLMs</code> <code>AI</code></summary>
-  <p>Helping both established tech companies and stealth startups improve their frontier models. Work involves breaking models to find poor responses, then developing ideal responses for training. A blend of creative and technical work on super niche programming problems.</p>
+  <p>Both large, established tech companies and stealth startups are looking to increase the effectiveness of their models. What I do is first figure out how to break these models so they give poor responses, and then develop an ideal response that can be used for training. This usually involves creating super niche and technical programming problems/scenarios. Models are so smart these days that finding failures is much harder than writing the complex solution yourself. It's the perfect blend of creative and technical work.</p>
+  <p><a href="null" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>Dotfiles</strong> <code>Shell</code> <code>Zsh</code> <code>Nix</code></summary>
-  <p>A complex configuration system for my development environment including .zshenv, stow-managed configs, custom scripts, nix configurations, and a finely-tuned Neovim setup covering documentation, coding, and everything in between.</p><p><a href="https://github.com/kungfusaini/dotfiles" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <p>My dotfiles setup is a complex configuration system for my development environment. It includes .zshenv, stow-managed configs, custom scripts, nix configurations and the nvim setup of my dreams. It covers my entire development workflow from documentation to writing code and everything in between.</p>
+  <p><a href="https://github.com/kungfusaini/dotfiles" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>Project Grabber</strong> <code>JavaScript</code></summary>
-  <p>A lightweight JavaScript library that fetches project write-ups from the Vulkan API and displays them across multiple websites. Enables centralized project management with filtering, avoiding content duplication across codebases.</p><p><a href="https://github.com/kungfusaini/project-grabber" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <p>I have a few different websites now, both professional, and personal. Some projects, I want to feature on multiple sites and I wasn't too keen on having projects being duplicated needlessly across codebases. So, I built the Project Grabber.
+Projects are written up in Markdown format together with their assets (like videos and images), and then served from my Vulkan API.</p>
+  <p><a href="https://github.com/kungfusaini/project-grabber" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
-  <summary><strong>Blueprint Builders Website</strong> <code>JavaScript</code> <code>CSS</code> <code>HTML</code> <code>Hugo</code></summary>
-  <p>A conversion-focused client website for a premium construction company. Built with Hugo and Decap CMS for easy content management, featuring dynamic project carousels, lead-generation contact systems, and a full blog. Blueprint-themed design throughout.</p><p><a href="https://blueprintbuilder.co.uk" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <summary><strong>Blueprint Builders Website</strong> <code>JavaScript</code> <code>CSS</code> <code>HTML</code> <code>Hugo</code> <code>Decap</code></summary>
+  <p>This was a client website I built for a premium construction company. I built them a robust company platform, with Decap CMS, so they can manage the content on their site easily. The website has full blog functionality, a project portfolio with various carousels and ways to feature projects, testimonials, contact forms etc. It was exciting as I got a lot of freedom over the design of the website, incorporating the theme of blueprints across the site.</p>
+  <p><a href="https://blueprintbuilder.co.uk" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>Goblin</strong> <code>Python</code> <code>Streamlit</code></summary>
-  <p>A finance tracking system that replaced my Excel workflow. Financial data is stored via the 'Well' on my VPS (inputted via CLI or Telegram bot) and visualized through a Streamlit dashboard for budgeting and financial tracking.</p><p><a href="https://github.com/kungfusaini/goblin" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <p>I was tired of the standard approach to budgeting (Excel) as I felt it was slow and I can't build anything else off it, so I built something new. Goblin is the name of this system. I use the &quot;Well&quot; on my VPS to store financial transactions (either inputted via CLI or telegram bot). From this raw financial data, I then built a Streamlit UI for visualization. I now exclusively use this system for financial tracking and budgeting.</p>
+  <p><a href="https://github.com/kungfusaini/goblin" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>Bucket and Well</strong> <code>Python</code> <code>JavaScript</code> <code>Rest</code></summary>
-  <p>A quick-capture system for ideas and resources. 'Well' stores data on my VPS behind the Vulkan API. 'Bucket' provides a CLI tool for desktop and a Telegram bot for mobile, making it easy to capture and revisit thoughts from anywhere.</p><p><a href="https://github.com/kungfusaini/bucket" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <p>I kept loosing ideas and resources because either I didn't write them down, or they would get lost in my obsidian vault. I built a simple system called &quot;Well&quot;, that stores ideas, tasks, and resources in an easy to place and retrieve manner. Well lives on my VPS, sitting behind my personal API, Vulkan. I built &quot;Bucket&quot; to interact with Well, which comprises of a CLI tool for desktop and a telegram bot for mobile. I have found that I actually revisit ideas and resources much more frequently than my previous quick capture systems enabled. The evolution of this would be to have AI agents able to interact with these Well entries to do my bidding!</p>
+  <p><a href="https://github.com/kungfusaini/bucket" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>Spellcheck Mode</strong> <code>Lua</code> <code>Neovim</code></summary>
-  <p>A Neovim plugin that enables a custom spell checker mode for faster spelling correction. Written in Lua, integrates deeply with Neovim's spell-checking for an improved editing experience.</p><p><a href="https://github.com/kungfusaini/spellcheck-mode.nvim" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <p>Spellcheck Mode is a Neovim plugin I built that enables a custom spell checker mode for faster spelling correction. It's written in Lua and integrates deeply with Neovim's spell-checking capabilities to improve the editing experience. I write all my notes, blog posts and even journal entries in nvim, so the speed is much appreciated!</p>
+  <p><a href="https://github.com/kungfusaini/spellcheck-mode.nvim" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>Arcane Codex Blog</strong> <code>JavaScript</code> <code>CSS</code> <code>HTML</code> <code>Hugo</code></summary>
-  <p>A personal blog built with Hugo, themed around 'Techno-Sorcery'. Features smooth animations for post filtering, custom emphasis styles, and a unique visual identity bridging editorial design with a dark aesthetic.</p><p><a href="https://arcanecodex.dev" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <p>In making my personal blog, I learned about Hugo, a static site generator. It's something I use all the time now, and I really like the framework it provides. I wanted to lean into theme of &quot;Techno-Sorcery&quot; for this project. A lot of time was spent in unique features, like the smooth animations for filtering of posts, and the custom emphasis style.</p>
+  <p><a href="https://arcanecodex.dev" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>Individual Portfolio</strong> <code>JavaScript</code> <code>CSS</code> <code>HTML</code> <code>Three JS</code></summary>
-  <p>This website! A unique personal portfolio with Three.js 3D navigation, complex animations, and a distinctive interactive experience built from scratch.</p><p><a href="https://sumeetsaini.com" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <p>This website! I wanted to create a unique personal website that would stand out. I learned a lot about Three JS and JavaScript in general from this project. The animations and user interaction took a long time to get right, but it was a rewarding project and I am very happy with the final result.</p>
+  <p><a href="https://sumeetsaini.com" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>Live Market Data Handler</strong> <code>C++</code> <code>Python</code> <code>Linux</code></summary>
-  <p>Led development of a market data feed handler for a major Asian stock exchange at Mako Trading. Handles aggregated and tick-by-tick data with decompression, gap recovery via UDP/TCP, and a robust orderbook. Full ownership from broker talks to production deployment.</p>
+  <p>I led the development of a market data feed handler for a major Asian stock exchange while at Mako Trading. The system handles aggregated and tick-by-tick data feeds, with full decompression handling and gaps recovery via UDP Snapshots and TCP gap filling. This enabled the firm to injest live data into their trading infrastructure to build strategies and trade in a previously untapped market. Not only did this involve creating processing financial instruments, but building a robust orderbook. The market processor was able to handle the simple massive volume of data in real-time, which was an essential requirement.</p>
+  <p><a href="null" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>MassPeople Digital Platform</strong> <code>JavaScript</code> <code>CSS</code> <code>HTML</code></summary>
-  <p>A high-performance digital platform for the world leaders in autonomous maritime operations standards. Bridges complex academic research with industry application, providing a secure environment for global collaboration.</p><p><a href="https://masspeople.org" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <p>I built a website for MassPeople to support their mission in developing autonomous maritime standards. I engineered a high-performance, on-brand digital platform that serves as the central command center for their global operations. This site bridges the gap between complex academic research and industry application, providing a secure, streamlined environment for collaboration and knowledge sharing.</p>
+  <p><a href="https://masspeople.org" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
-  <summary><strong>SkySmart</strong> <code>Python</code> <code>AWS Lambda</code> <code>Prophet ML</code> <code>AWS S3</code></summary>
-  <p>Built in partnership with Bristol Airport and AWS. An airport parking optimization system with real-time analytics dashboard, ML demand forecasting (89% accuracy 7 days ahead), and automated data pipeline from Azure API to AWS S3/Lambda/DynamoDB.</p>
+  <summary><strong>Bristol City Airport: SkySmart</strong> <code>Python</code> <code>Pandas</code> <code>NumPy</code> <code>Matplotlib</code> <code>AWS S3</code> <code>AWS Lambda</code> <code>AWS DynamoDB</code> <code>Azure API</code> <code>Prophet ML</code></summary>
+  <p>I worked in partnership with Bristol Airport and AWS to build an airport parking optimization system called SkySmart.</p>
+  <p><a href="null" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>Match-A-Mood Spotify Competition</strong> <code>Python</code> <code>Spotify API</code> <code>Machine Learning</code> <code>Random Forest</code></summary>
-  <p>Organized the KCL AI Society Kaggle competition for music emotion recognition. Built a Spotify data extraction tool pulling from the million playlist dataset. Winning solution used Random Forest with artist-based modeling.</p><p><a href="https://github.com/kungfusaini/spotify-playlist-song-extractor" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <p>I organized the KCL AI Society &quot;Match-A-Mood&quot; Kaggle competition - a challenge to build an AI model capable of categorizing Spotify songs into different musical emotions.</p>
+  <p><a href="https://github.com/kungfusaini/spotify-playlist-song-extractor" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>KCL AI Society Welcome Demo</strong> <code>Python</code> <code>Stable Diffusion</code> <code>Hugging Face</code> <code>Flask</code></summary>
-  <p>A web app for the KCL AI Society welcome fair. Students could input their email and generate AI art via Stable Diffusion on Hugging Face. Images were emailed and displayed on site. Brought huge crowds and sign-ups during the early gen AI wave.</p>
+  <p>I built this web app as a demo for the KCL AI Society welcome fair. Students could input their email to join the mailing list, then enter a sentence which generated AI art using Stable Diffusion via Hugging Face. The images were sent to them via email and displayed on the page for browsing. This is when gen AI was something new and hot, so this brought a huge crowd and lots of sign-ups for us!</p>
+  <p><a href="null" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
   <summary><strong>KCL AI Society Events</strong> <code>Event Organizing</code> <code>Public Speaking</code></summary>
-  <p>As President of KCL AI Society, organized and hosted high-profile AI events featuring Dr Tommy Thompson (AI in Games), NVIDIA, and Dr David Watson (AI explainability). Brought 100+ attendees and established the society as an AI learning hub.</p>
+  <p>As President of KCL AI Society, I organized and hosted several high-profile AI events featuring leading experts in the field.</p>
+  <p><a href="null" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
-  <summary><strong>IBM Wild Blue</strong> <code>Python</code> <code>React</code> <code>Leaflet Maps</code></summary>
-  <p>1st place at IBM LabHack 2022. A biodiversity tracking system using gamification — scan flora/fauna with your phone camera, AI identifies species and health, earn 'Wild Points' for rewards like tree saplings. Real-time dashboard with interactive map and species alerts.</p>
+  <summary><strong>IBM Wild Blue</strong> <code>Python</code> <code>React</code> <code>HTML/JS</code> <code>Leaflet Maps</code></summary>
+  <p>Me and my team won 1st place at IBM LabHack 2022 with &quot;Wild Blue&quot; - an innovative biodiversity tracking system for IBM Hursley. The project used gamification techniques to encourage employees to track and improve biodiversity around the Hursley site.</p>
+  <p><a href="null" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
-  <summary><strong>IBM RAPID</strong> <code>Python</code> <code>React</code> <code>Cisco DNA API</code> <code>ML</code></summary>
-  <p>Industry-first rogue wireless access point detection system at IBM. Built backend with Python/Cisco DNA Center API and a React dashboard. Uses ML-based device classification and triangulation to locate unauthorized APs. Absorbed into IBM SevOne product for commercialization.</p>
+  <summary><strong>IBM RAPID</strong> <code>Python</code> <code>React</code> <code>Cisco DNA API</code> <code>REST APIs</code> <code>ML</code> <code>D3</code></summary>
+  <p>During my time at IBM, me and 3 other led the end-to-end development of RAPID (Rogue Access Point Identification and Detection) - an industry-first solution to identify and locate rogue wireless access points across IBM global sites.</p>
+  <p><a href="null" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
 <details>
-  <summary><strong>Published Technical Writer</strong> <code>Technical Writing</code> <code>AI</code></summary>
-  <p>Featured writer for The London Financial, a leading UK financial publication. Wrote technical articles on AI and deep learning for their Science & Tech section, including 'Attacks on Deep Learning Models' and 'Self-Driving Vehicles: Where Are They?'</p><p><a href="https://thelondonfinancial.com/scitech/attacks-on-deep-learning-models" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
+  <summary><strong>Published Technical Writer</strong> <code>Technical Writing</code> <code>AI</code> <code>Deep Learning</code></summary>
+  <p>I was a featured writer for The London Financial, a leading UK-based financial publication. I wrote technical articles on AI and deep learning topics for their Science &amp; Tech section.</p>
+  <p><a href="https://thelondonfinancial.com/scitech/attacks-on-deep-learning-models" target="_blank" rel="noopener">Visit Project &rarr;</a></p>
 </details>
+<!-- END:fallback-projects -->
 
 <p>
 Check out my <a href="https://github.com/kungfusaini" target="_blank" rel="noopener">
@@ -895,15 +922,18 @@ Check out my <a href="https://github.com/kungfusaini" target="_blank" rel="noope
      <div id="blog" class="section">
 <h2>Blog</h2>
 
-<p>I write about tech, travel, and personal projects over on <a href="https://arcanecodex.dev" target="_blank" rel="noopener">Arcane Codex</a>.</p>
+<p>I write about tech, travel, and personal projects over on <a href="https://arcanecodex.dev" target="_blank" rel="noopener">
+  <img src="/assets/link_icons/arcanecodex.svg" alt="Arcane Codex" class="link-icon"> Arcane Codex
+</a>.</p>
 
 <h4>Recent Posts</h4>
 
+<!-- BEGIN:fallback-blog -->
 <ul>
 <li><a href="https://arcanecodex.dev/posts/ai/ai-tech-lead/" target="_blank" rel="noopener">AI Makes You Think Like a Tech Lead</a> &mdash; May 2026</li>
 <li><a href="https://arcanecodex.dev/posts/tech/fixing-markdown-rendering-neovim/" target="_blank" rel="noopener">Markdown Rendering Issue in Neovim</a> &mdash; Apr 2026</li>
 <li><a href="https://arcanecodex.dev/posts/culture/books/metamorphosis/" target="_blank" rel="noopener">Thoughts on 'Metamorphosis'</a> &mdash; Mar 2026</li>
-<li><a href="https://arcanecodex.dev/posts/thoughts/lifechanging-bike/" target="_blank" rel="noopener">How a Motorcycle Changed My Life</a> &mdash; Feb 2026</li>
+<li><a href="https://arcanecodex.dev/posts/thoughts/lifechanging-bike/" target="_blank" rel="noopener">How a Motorcyle Changed My Life</a> &mdash; Feb 2026</li>
 <li><a href="https://arcanecodex.dev/posts/thoughts/nomad-prep/" target="_blank" rel="noopener">Preparing for a Nomadic Life</a> &mdash; Feb 2026</li>
 <li><a href="https://arcanecodex.dev/posts/thoughts/living-free/" target="_blank" rel="noopener">Structuring a Free Life</a> &mdash; Jan 2026</li>
 <li><a href="https://arcanecodex.dev/posts/culture/movies/the-shining/" target="_blank" rel="noopener">Thoughts on 'The Shining'</a> &mdash; Jan 2026</li>
@@ -912,17 +942,22 @@ Check out my <a href="https://github.com/kungfusaini" target="_blank" rel="noope
 <li><a href="https://arcanecodex.dev/posts/ai/ai-dev-skills/" target="_blank" rel="noopener">The Missing Skills of Vibe Coders</a> &mdash; Dec 2025</li>
 <li><a href="https://arcanecodex.dev/posts/culture/books/the-alchemist/" target="_blank" rel="noopener">Thoughts on 'The Alchemist'</a> &mdash; Dec 2025</li>
 <li><a href="https://arcanecodex.dev/posts/aether/nginx-aether/" target="_blank" rel="noopener">Building Aether: Nginx Reverse Proxy</a> &mdash; Nov 2025</li>
+<li><a href="https://arcanecodex.dev/about/" target="_blank" rel="noopener">About</a> &mdash; Nov 2025</li>
 <li><a href="https://arcanecodex.dev/posts/aether/building-aether/" target="_blank" rel="noopener">Building Aether: Hosting a Personal Corner of the Internet</a> &mdash; Nov 2025</li>
 <li><a href="https://arcanecodex.dev/posts/thoughts/flexibility/" target="_blank" rel="noopener">The Path to a More Flexible Life</a> &mdash; Nov 2025</li>
 <li><a href="https://arcanecodex.dev/posts/ai/the-anatomy-of-ai-agents/" target="_blank" rel="noopener">The Anatomy of AI Agents</a> &mdash; Nov 2025</li>
 </ul>
+<!-- END:fallback-blog -->
 
-<p>Read the latest at <a href="https://arcanecodex.dev" target="_blank" rel="noopener">arcanecodex.dev</a>.</p>
+<p>Read the latest at <a href="https://arcanecodex.dev" target="_blank" rel="noopener">
+  <img src="/assets/link_icons/arcanecodex.svg" alt="Arcane Codex" class="link-icon"> arcanecodex.dev
+</a></p>
      </div>
 
       <div id="now" class="section">
 <h2>Now</h2>
 
+<!-- BEGIN:fallback-now-section -->
 <div id="now-2025-10" class="now-month-content">
 <p class="now-date">Oct 2025</p>
 <h4>Focus</h4>
@@ -973,6 +1008,7 @@ Next up is creating creating a blog with
 </a>
 and also hosting this on my VPS!
 
+</p>
 </p>
 
 <h4>Song of the Month</h4>
@@ -1254,6 +1290,7 @@ Other than that, no major work updates. My focus is on the startup and AI traini
 <label for="sel-now-2026-04">Apr 2026</label>
 <label for="sel-now-2026-05">May 2026</label>
 </div>
+<!-- END:fallback-now-section -->
       </div>
    </div>
 

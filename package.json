@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Personal website frontend",
   "scripts": {
-    "dev": "live-server --port=8080 --host=0.0.0.0"
+    "dev": "live-server --port=8080 --host=0.0.0.0",
+    "build-fallback": "node scripts/build-fallback.mjs"
   },
   "devDependencies": {
     "live-server": "^1.2.2"
