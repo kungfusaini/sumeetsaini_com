@@ -5,7 +5,7 @@ A tactile personal portfolio built around a draggable 3D tetrahedron. Each face 
 <p>
   <a href="https://sumeetsaini.com"><strong>Explore the live site →</strong></a>
   ·
-  <a href="docs/site-demo.mp4"><strong>Watch the full demo</strong></a>
+  <a href="docs/site-demo.mp4"><strong>Watch the full 60 FPS demo</strong></a>
 </p>
 
 [![Interactive demo of sumeetsaini.com](docs/site-demo.gif)](https://sumeetsaini.com)
