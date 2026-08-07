@@ -12,6 +12,7 @@ const AVAILABLE_MONTHS = [
 	{ month: 5, year: 2026, filename: "05-2026.html" },
 	{ month: 6, year: 2026, filename: "06-2026.html" },
 	{ month: 7, year: 2026, filename: "07-2026.html" },
+	{ month: 8, year: 2026, filename: "08-2026.html" },
 	// Add new months here as they're created
 ];
 
